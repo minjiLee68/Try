@@ -10,6 +10,10 @@ import SwiftUI
 struct HomeView: View {
     //MARK: View Properties
     @State var currentTab: Tab = .home
+    @Namespace var animation
+    
+    //MARK: Carousel Properties
+    @State var currentIndex: Int = 0
     
     var body: some View {
         VStack(spacing: 15) {
@@ -18,9 +22,19 @@ struct HomeView: View {
             SearchBar()
             
             // MARK: Custom Carousel
-            GeometryReader { _ in
-                
+            CustomCarousel(index: $currentIndex, items: goalContents, cardPadding: 150, id: \.id) { contents, cardSize in
+                // MARK: YOUR CUSTOM CELL VIEW
+                RoundedRectangle(cornerRadius: 15, style: .continuous)
+                    .fill(.black.opacity(0.5))
+                    .frame(width: cardSize.width, height: cardSize.height)
+                    .overlay(
+                        Text(contents.content)
+                            .foregroundColor(.white)
+                            .fontWeight(.bold)
+                    )
             }
+            .padding(.horizontal, -15)
+            .padding(.vertical)
             
             TabBar()
         }
@@ -53,6 +67,14 @@ extension HomeView {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 28, height: 28)
                         .foregroundColor(currentTab == tab ? .white : .gray.opacity(0.6))
+                    
+                    if currentTab == tab {
+                        Circle()
+                            .fill(.white)
+                            .frame(width: 5, height: 5)
+                            .offset(y: 10)
+                            .matchedGeometryEffect(id: "TAB", in: animation)
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 .contentShape(Rectangle())

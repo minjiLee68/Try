@@ -14,6 +14,7 @@
 		0AC9504428DB5C1B005B5774 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AC9504328DB5C1B005B5774 /* Preview Assets.xcassets */; };
 		0AC9504B28DB64B8005B5774 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC9504A28DB64B8005B5774 /* ContentView.swift */; };
 		0AEC496628E3405000917C53 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC496528E3405000917C53 /* Tab.swift */; };
+		0AEC496828E491FC00917C53 /* CustomCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC496728E491FC00917C53 /* CustomCarousel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		0AC9504328DB5C1B005B5774 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0AC9504A28DB64B8005B5774 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0AEC496528E3405000917C53 /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
+		0AEC496728E491FC00917C53 /* CustomCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCarousel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				0AC9503E28DB5C18005B5774 /* HomeVIew.swift */,
+				0AEC496728E491FC00917C53 /* CustomCarousel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -164,6 +167,7 @@
 			files = (
 				0AC9503F28DB5C18005B5774 /* HomeVIew.swift in Sources */,
 				0AC9503D28DB5C18005B5774 /* JointGoal_SwiftUIApp.swift in Sources */,
+				0AEC496828E491FC00917C53 /* CustomCarousel.swift in Sources */,
 				0AEC496628E3405000917C53 /* Tab.swift in Sources */,
 				0AC9504B28DB64B8005B5774 /* ContentView.swift in Sources */,
 				0A633E1528E1E532002AC1E3 /* Contents.swift in Sources */,
