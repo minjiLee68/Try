@@ -21,16 +21,26 @@ struct HomeView: View {
             
             SearchBar()
             
+            (Text("Featured")
+                .fontWeight(.semibold) +
+             Text(" Test")
+            )
+            .font(.title2)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 15)
+            
             // MARK: Custom Carousel
             CustomCarousel(index: $currentIndex, items: goalContents, cardPadding: 150, id: \.id) { contents, cardSize in
                 // MARK: YOUR CUSTOM CELL VIEW
                 RoundedRectangle(cornerRadius: 15, style: .continuous)
-                    .fill(.black.opacity(0.5))
+                    .fill(.gray)
                     .frame(width: cardSize.width, height: cardSize.height)
                     .overlay(
-                        Text(contents.content)
-                            .foregroundColor(.white)
-                            .fontWeight(.bold)
+                        VStack {
+                            Text(contents.content)
+                                .foregroundColor(.white)
+                                .fontWeight(.bold)
+                        }
                     )
             }
             .padding(.horizontal, -15)
@@ -42,6 +52,21 @@ struct HomeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background {
             GeometryReader { proxy in
+//                TabView(selection: $currentIndex) {
+//                    ForEach(0..<7, id: \.self) { index in
+//                        Image(image)
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fill)
+//                            .frame(width: size.width, height: size.height)
+//                            .clipped()
+//                    }
+//                }
+//                .tabViewStyle(.page(indexDisplayMode: .never)) // Add .tag(index) here
+//                .animation(.easeInOut, value: currentIndex)
+//                
+//                Rectangle()
+//                    .fill(.ultraThinMaterial)
+                
                 //MARK: Image Will  Come Once We Implement Custom Carousel
                 LinearGradient(colors: [
                     .clear,
