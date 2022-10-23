@@ -8,7 +8,7 @@
 import SwiftUI
 
 // MARK: Contents - 각 사람들과 나에 목표에 대한 컨텐츠
-//
+
 struct Contents: Identifiable, Equatable {
     var id = UUID().uuidString
     var content: String // 목표 내용

@@ -63,7 +63,7 @@ struct HomeView: View {
 //                }
 //                .tabViewStyle(.page(indexDisplayMode: .never)) // Add .tag(index) here
 //                .animation(.easeInOut, value: currentIndex)
-//                
+//
 //                Rectangle()
 //                    .fill(.ultraThinMaterial)
                 
