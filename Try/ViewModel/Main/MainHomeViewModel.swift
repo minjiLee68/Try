@@ -14,10 +14,11 @@ class MainHomeViewModel: ObservableObject {
     @Published var userInfoData: UserInfo?
     @Published var goalContents = [Contents]()
     
+    let db = Firestore.firestore()
+    let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
+    
     func userInfoFetchData() {
-        let db = Firestore.firestore()
-        let docRef = db.collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
-        docRef.addSnapshotListener { (docSnapshot, error) in
+        self.docRef.addSnapshotListener { (docSnapshot, error) in
             guard let document = docSnapshot else { return }
             do {
                 self.userInfoData = try document.data(as: UserInfo.self)
@@ -25,6 +26,15 @@ class MainHomeViewModel: ObservableObject {
             } catch {
                 print("error -> \(error.localizedDescription)")
             }
+        }
+    }
+    
+    func addContent(contents: Contents) {
+        let addRef = self.docRef.collection(CollectionName.Goal.rawValue)
+        do {
+            let _ = try addRef.addDocument(from: contents)
+        } catch {
+            print("error")
         }
     }
 }

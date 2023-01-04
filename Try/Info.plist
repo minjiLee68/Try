@@ -21,6 +21,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>CN</key>
+	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>naversearchthirdlogin</string>

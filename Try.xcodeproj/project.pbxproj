@@ -8,7 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		0A3543152965503200E9B2FE /* CardContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3543142965503200E9B2FE /* CardContentView.swift */; };
-		0A428417290191F900E93E2B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A428416290191F900E93E2B /* MainView.swift */; };
+		0A35431A29658F6F00E9B2FE /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A35431929658F6F00E9B2FE /* View.swift */; };
+		0A35431D2965901800E9B2FE /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A35431C2965901800E9B2FE /* Font.swift */; };
+		0A3543202965936000E9B2FE /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A35431F2965936000E9B2FE /* MyPageView.swift */; };
+		0A3543232965A8D100E9B2FE /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3543222965A8D100E9B2FE /* MyPageViewModel.swift */; };
+		0A3543262965A9A000E9B2FE /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3543252965A9A000E9B2FE /* Contact.swift */; };
+		0A3543292965B29400E9B2FE /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3543282965B29400E9B2FE /* MainView.swift */; };
+		0A428417290191F900E93E2B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A428416290191F900E93E2B /* HomeView.swift */; };
 		0A42841A2901989700E93E2B /* CustomCarousel_new.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4284192901989700E93E2B /* CustomCarousel_new.swift */; };
 		0A4EC88F295AC98400A4BB86 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4EC88E295AC98400A4BB86 /* UserInfo.swift */; };
 		0A56538A295BF286003BA18F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A565389295BF286003BA18F /* GoogleService-Info.plist */; };
@@ -47,7 +53,13 @@
 
 /* Begin PBXFileReference section */
 		0A3543142965503200E9B2FE /* CardContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContentView.swift; sourceTree = "<group>"; };
-		0A428416290191F900E93E2B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		0A35431929658F6F00E9B2FE /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		0A35431C2965901800E9B2FE /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		0A35431F2965936000E9B2FE /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
+		0A3543222965A8D100E9B2FE /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
+		0A3543252965A9A000E9B2FE /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		0A3543282965B29400E9B2FE /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		0A428416290191F900E93E2B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		0A4284192901989700E93E2B /* CustomCarousel_new.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCarousel_new.swift; sourceTree = "<group>"; };
 		0A4EC88E295AC98400A4BB86 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		0A565389295BF286003BA18F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -109,12 +121,54 @@
 			path = Card;
 			sourceTree = "<group>";
 		};
-		0A4284182901987B00E93E2B /* MainView */ = {
+		0A35431829658F6300E9B2FE /* Extenstion */ = {
+			isa = PBXGroup;
+			children = (
+				0A35431929658F6F00E9B2FE /* View.swift */,
+			);
+			path = Extenstion;
+			sourceTree = "<group>";
+		};
+		0A35431E2965935400E9B2FE /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				0A35431F2965936000E9B2FE /* MyPageView.swift */,
+			);
+			path = MyPage;
+			sourceTree = "<group>";
+		};
+		0A3543212965A8C700E9B2FE /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				0A3543222965A8D100E9B2FE /* MyPageViewModel.swift */,
+			);
+			path = MyPage;
+			sourceTree = "<group>";
+		};
+		0A3543242965A99600E9B2FE /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				0A3543252965A9A000E9B2FE /* Contact.swift */,
+			);
+			path = MyPage;
+			sourceTree = "<group>";
+		};
+		0A3543272965B26500E9B2FE /* HomeView */ = {
 			isa = PBXGroup;
 			children = (
 				0A3543132965502600E9B2FE /* Card */,
 				0A84710C2960187600CB3432 /* DetailCard */,
-				0A428416290191F900E93E2B /* MainView.swift */,
+				0A428416290191F900E93E2B /* HomeView.swift */,
+			);
+			path = HomeView;
+			sourceTree = "<group>";
+		};
+		0A4284182901987B00E93E2B /* MainView */ = {
+			isa = PBXGroup;
+			children = (
+				0A3543272965B26500E9B2FE /* HomeView */,
+				0A35431E2965935400E9B2FE /* MyPage */,
+				0A3543282965B29400E9B2FE /* MainView.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -162,6 +216,7 @@
 		0A61418F295ADBF300A8EFBB /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				0A3543212965A8C700E9B2FE /* MyPage */,
 				0A60F6C8295EB719004F56B9 /* Main */,
 				0A60F6C7295DF446004F56B9 /* Auth */,
 			);
@@ -187,6 +242,7 @@
 		0A633E1128E1E443002AC1E3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0A3543242965A99600E9B2FE /* MyPage */,
 				0A7D5569295C484900EB2A6F /* enum */,
 				0A633E1428E1E532002AC1E3 /* Contents.swift */,
 				0A4EC88E295AC98400A4BB86 /* UserInfo.swift */,
@@ -225,20 +281,13 @@
 			path = Picture;
 			sourceTree = "<group>";
 		};
-		0A7D5562295C44C900EB2A6F /* Color */ = {
-			isa = PBXGroup;
-			children = (
-				0A7D5563295C452300EB2A6F /* background */,
-			);
-			path = Color;
-			sourceTree = "<group>";
-		};
-		0A7D5563295C452300EB2A6F /* background */ = {
+		0A7D5562295C44C900EB2A6F /* ViewModifier */ = {
 			isa = PBXGroup;
 			children = (
 				0A7D5564295C453400EB2A6F /* AppBackgroundColor.swift */,
+				0A35431C2965901800E9B2FE /* Font.swift */,
 			);
-			path = background;
+			path = ViewModifier;
 			sourceTree = "<group>";
 		};
 		0A7D5566295C47FE00EB2A6F /* Overlap */ = {
@@ -309,8 +358,9 @@
 		0AC9503B28DB5C18005B5774 /* Try */ = {
 			isa = PBXGroup;
 			children = (
+				0A35431829658F6300E9B2FE /* Extenstion */,
 				0A7D556A295C4A2B00EB2A6F /* Common */,
-				0A7D5562295C44C900EB2A6F /* Color */,
+				0A7D5562295C44C900EB2A6F /* ViewModifier */,
 				0A61418F295ADBF300A8EFBB /* ViewModel */,
 				0A633E1328E1E48D002AC1E3 /* View */,
 				0A633E1128E1E443002AC1E3 /* Model */,
@@ -473,23 +523,29 @@
 				0A7D5565295C453400EB2A6F /* AppBackgroundColor.swift in Sources */,
 				0A7D5577295C4B3700EB2A6F /* ImageView.swift in Sources */,
 				0A7D556F295C4A4A00EB2A6F /* Constant.swift in Sources */,
-				0A428417290191F900E93E2B /* MainView.swift in Sources */,
+				0A428417290191F900E93E2B /* HomeView.swift in Sources */,
 				0A7D5579295C4B4F00EB2A6F /* ImageLoader.swift in Sources */,
 				0AC9503D28DB5C18005B5774 /* TryApp.swift in Sources */,
 				0A614193295ADD6B00A8EFBB /* CollectionName.swift in Sources */,
+				0A35431D2965901800E9B2FE /* Font.swift in Sources */,
 				0A7D5568295C483300EB2A6F /* NavigationCustomBar.swift in Sources */,
+				0A35431A29658F6F00E9B2FE /* View.swift in Sources */,
 				0A614191295ADC3100A8EFBB /* MainHomeViewModel.swift in Sources */,
 				0A7D557E295CA52400EB2A6F /* ShareVar.swift in Sources */,
 				0A7D5572295C4A9900EB2A6F /* WebImageView.swift in Sources */,
 				0A7D5558295C2A3500EB2A6F /* SignUpView.swift in Sources */,
 				0AEC496628E3405000917C53 /* Enums.swift in Sources */,
+				0A3543202965936000E9B2FE /* MyPageView.swift in Sources */,
 				0A7D5561295C38D600EB2A6F /* SignUpViewModel.swift in Sources */,
 				0A42841A2901989700E93E2B /* CustomCarousel_new.swift in Sources */,
 				0AC9504B28DB64B8005B5774 /* ContentView.swift in Sources */,
 				0A3543152965503200E9B2FE /* CardContentView.swift in Sources */,
+				0A3543262965A9A000E9B2FE /* Contact.swift in Sources */,
+				0A3543232965A8D100E9B2FE /* MyPageViewModel.swift in Sources */,
 				0A4EC88F295AC98400A4BB86 /* UserInfo.swift in Sources */,
 				0A84710E2960188400CB3432 /* DetailCardView.swift in Sources */,
 				0A7D5555295C23DD00EB2A6F /* LoginView.swift in Sources */,
+				0A3543292965B29400E9B2FE /* MainView.swift in Sources */,
 				0A7D5553295C227A00EB2A6F /* LoginViewModel.swift in Sources */,
 				0A7D555E295C324000EB2A6F /* ProfilePicturePickerView.swift in Sources */,
 				0A633E1528E1E532002AC1E3 /* Contents.swift in Sources */,
@@ -630,6 +686,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Try/Info.plist;
+				INFOPLIST_KEY_NSContactsUsageDescription = "전화번호 권한 요청";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 권한 요청";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -661,6 +718,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Try/Info.plist;
+				INFOPLIST_KEY_NSContactsUsageDescription = "전화번호 권한 요청";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 권한 요청";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

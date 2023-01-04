@@ -19,3 +19,9 @@ enum Tab: String, CaseIterable {
 enum NaviType {
     case signUp
 }
+
+// MARK: Search Mode
+enum searchMode {
+    case filtering
+    case allList
+}
