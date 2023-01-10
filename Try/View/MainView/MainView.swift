@@ -8,25 +8,34 @@
 import SwiftUI
 
 struct MainView: View {
+    @EnvironmentObject var environmentViewModel: EnvironmentViewModel
     @State var currentTab: Tab = .home
     @State var currentIndex: Int = 0
     
     @Namespace var animation
     
     var body: some View {
-        ZStack {
-            TabView(selection: $currentTab) {
+        NavigationView {
+            ZStack {
                 HomeView()
-                    .tag(Tab.home)
-                
-                MyPageView()
-                    .tag(Tab.profile)
+                    .modifier(AppBackgroundColor())
+//                TabView(selection: $currentTab) {
+//                    HomeView()
+//                        .tag(Tab.home)
+//                        .modifier(AppBackgroundColor())
+//
+//                    MyPageView()
+//                        .tag(Tab.profile)
+//                        .modifier(AppBackgroundColor())
+//                }
+//
+//                VStack {
+//                    Spacer()
+//
+//                    tabBar()
+//                }
             }
-            
-            VStack(spacing: 0) {
-                Spacer()
-                tabBar()
-            }
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
 }
@@ -63,5 +72,6 @@ extension MainView {
         }
         .padding(.horizontal)
         .padding(.bottom, 10)
+        .zIndex(-10)
     }
 }

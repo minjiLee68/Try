@@ -18,10 +18,18 @@ enum Tab: String, CaseIterable {
 // MARK: Navi Enum
 enum NaviType {
     case signUp
+    case detail
+    case mypage
 }
 
 // MARK: Search Mode
 enum searchMode {
     case filtering
     case allList
+}
+
+// MARK: popup
+enum PopupMode {
+    case isBox
+    case isnonBox
 }

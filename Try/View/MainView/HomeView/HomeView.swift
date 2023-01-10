@@ -21,18 +21,13 @@ struct HomeView: View {
             .onAppear {
                 mainViewModel.userInfoFetchData()
             }
-            .modifier(AppBackgroundColor())
     }
     
     var mainView: some View {
         VStack(spacing: 15) {
             HeaderView()
             
-            if !mainViewModel.goalContents.isEmpty {
-                customCard
-            } else {
-                ifNotThereContent
-            }
+            customCard
         }
         .padding([.horizontal, .top], 15)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -54,10 +49,10 @@ struct HomeView: View {
                     // MARK: Applying Matched Geometry
                     if isTabCard && selectGoalContent?.id == contents.id {
                         // 카드 안에 들어갈 내용
-                        CardContentView()
+                        cardContentView(content: contents)
                     } else {
                         // 카드 안에 들어갈 내용
-                        CardContentView()
+                        cardContentView(content: contents)
                             .matchedGeometryEffect(id: contents.id, in: smooth)
                     }
                 }
@@ -74,27 +69,29 @@ struct HomeView: View {
         .opacity(isTabCard ? 0 : 1)
     }
     
-    // MARK: Not Card Content
-    var ifNotThereContent: some View {
-        RoundedRectangle(cornerRadius: 15, style: .continuous)
-            .fill(Color.black)
-            .frame(width: device.widthScale(270), height: device.heightScale(474))
-            .shadow(color: .white.opacity(0.2), radius: 6)
-            .overlay {
-                VStack(spacing: 0) {
-                    Spacer()
-                    Text("추가하기")
-                        .foregroundColor(.white)
-                    Spacer()
-                }
-                .opacity(isTabCard ? 0 : 1)
+    // MARK: 카드 안에 들어갈 내용
+    @ViewBuilder
+    func cardContentView(content: Contents) -> some View {
+        VStack(spacing: 8) {
+            if content.profile.count != 0 {
+                WebImageView(url: content.profile, width: device.widthScale(120), height: device.heightScale(120))
+                    .clipShape(Circle())
+                    .id(content.id)
             }
-            .onTapGesture {
-                withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
-                    isTabCard = true
-                }
+            if content.nickName.count != 0 {
+                Text(content.nickName)
+                    .foregroundColor(.white)
+                    .defaultFont(size: 16)
+                    .frame(minWidth: .infinity, alignment: .center)
             }
-            .scaleEffect(isTabCard ? 1.8 : 1, anchor: .center)
+            
+            if content.id == "0" {
+                Text("추가하기")
+                    .foregroundColor(.white)
+                    .defaultFont(size: 16)
+                    .frame(maxHeight: .infinity, alignment: .center)
+            }
+        }
     }
 }
 
@@ -114,14 +111,11 @@ extension HomeView {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Button {
-                    
-                } label: {
+                NavigationLink(destination: MyPageView()) {
                     WebImageView(url: "\(mainViewModel.userInfoData?.userProfile ?? "")", width: device.widthScale(50), height: device.heightScale(50))
                         .clipShape(Circle())
                         .id(mainViewModel.userInfoData?.uid ?? "")
                 }
-
             }
             
             Text(mainViewModel.userInfoData?.introduce ?? "")

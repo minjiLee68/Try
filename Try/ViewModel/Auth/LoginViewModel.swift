@@ -21,7 +21,9 @@ class LoginViewModel: NSObject, ObservableObject {
     @Published var isLoggedIn = false
     @AppStorage("userUid") var userUid = ""
     @AppStorage("isMember") var isMember = false
+    @AppStorage("recommendCode") var recommendCode = ""
     
+    let db = Firestore.firestore()
     
     func login(email: String, password: String) {
         // 파이어베이스 유저 생성 (이메일로 회원가입)
@@ -33,9 +35,22 @@ class LoginViewModel: NSObject, ObservableObject {
             } else {
                 print("파이어베이스 사용자 생성")
             }
-            self.isMember = true
             self.userUid = Auth.auth().currentUser?.uid ?? ""
             ShareVar.userUid = Auth.auth().currentUser?.uid ?? ""
+            
+            self.db.collection(CollectionName.UserInfo.rawValue).getDocuments { (querySnapshot, error) in
+                if let error {
+                    print("get document error : \(error.localizedDescription)")
+                } else {
+                    if let querySnapshot {
+                        for doc in querySnapshot.documents {
+                            if self.userUid == doc.documentID {
+                                self.isMember = true
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -54,10 +69,8 @@ extension LoginViewModel {
                     if let error = error {
                         print("에러",error)
                     } else {
-                        if let token = oauthToken {
-                            print("loginWithKakaoTalk success \(token)")
-                            self.loginFirebase()
-                        }
+                        self.loginFirebase()
+                        _ = oauthToken
                     }
                 }
             } else {
@@ -66,10 +79,8 @@ extension LoginViewModel {
                     if let error = error {
                         print("에러",error)
                     } else {
-                        if let token = oauthToken {
-                            print("loginWithKakaoTalk success \(token)")
-                            self.loginFirebase()
-                        }
+                        self.loginFirebase()
+                        _ = oauthToken
                     }
                 }
             }
@@ -103,6 +114,7 @@ extension LoginViewModel {
             if let error = error {
                 print("kakao user info error \(error.localizedDescription)")
             } else {
+                print("kakao user info \(user?.kakaoAccount?.email ?? ""), \(String(describing: user?.id))")
                 self.login(email: (user?.kakaoAccount?.email ?? ""), password: "\(String(describing: user?.id))")
             }
         }
@@ -114,47 +126,61 @@ extension LoginViewModel: NaverThirdPartyLoginConnectionDelegate {
     func naverLoginDelegate() {
         self.naverLoginInstance?.delegate = self
     }
-    //로그인 성공시 naver userInfo 가져오기
-    func getUserInfo() {
-        guard let tokenType = NaverThirdPartyLoginConnection.getSharedInstance().tokenType else { return }
-        guard let accessToken = NaverThirdPartyLoginConnection.getSharedInstance().accessToken else { return }
-        let url = "https://openapi.naver.com/v1/nid/me"
-        
-        AF.request(url, method: .get, encoding: JSONEncoding.default, headers: ["Authorization": "\(tokenType) \(accessToken)"]
-        ).responseJSON { [weak self] response in
-            guard let result = response.value as? [String: Any] else { return }
-            guard let object = result["response"] as? [String: Any] else { return }
-            
-            guard let email = object["email"] as? String else { return }
-            guard let uid = object["Uid"] as? String else { return }
-            
-            // 파이어베이스 유저 생성 (이메일로 회원가입)
-            self?.login(email: email, password: uid)
-        }
-    }
     
+    //로그인 성공시 naver userInfo 가져오기
     private func getNaverInfo() {
-        self.isLogin = true
         guard let isValidAccessToken = self.naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
         
         if !isValidAccessToken {
+            print("Token Invalid")
             return
+            
         }
         
         guard let tokenType = naverLoginInstance?.tokenType else { return }
         guard let accessToken = naverLoginInstance?.accessToken else { return }
         let authorization = "\(tokenType) \(accessToken)"
+        
+        LoginService.naverLogin(authorization: authorization, type: response_naver_login.self) { res in
+            switch res {
+            case is response_naver_login:
+                let model = res as! response_naver_login
+                let email = model.response.email
+//                let signupType = "naver"
+                let socialID = model.response.id
+                self.login(email: email, password: socialID)
+                
+                print("Naver Login Success \(model.message)")
+                print("Naver Login Info:\(email) \(socialID)")
+                
+            case is FailResponse:
+                let fail = res as! FailResponse
+//                self.alertType = LoginAlerts(id: .Naver)
+                print("Naver Login Fail \(fail.message)")
+                
+            default:
+                print("Naver Login Fail")
+                
+            }
+        }
     }
+    
+//    private func getNaverInfo() {
+//        guard let isValidAccessToken = self.naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
+//
+//        if !isValidAccessToken {
+//            return
+//        }
+//
+//        guard let tokenType = naverLoginInstance?.tokenType else { return }
+//        guard let accessToken = naverLoginInstance?.accessToken else { return }
+//        let authorization = "\(tokenType) \(accessToken)"
+//    }
     
     // 로그인에 성공한 경우 호출
     func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
-        if self.isMember {
-            ShareVar.userUid = self.userUid
-            self.isLogin = true
-        } else {
-            print("Success login")
-            getUserInfo()
-        }
+        print("Success login")
+        getNaverInfo()
     }
     
     // referesh token

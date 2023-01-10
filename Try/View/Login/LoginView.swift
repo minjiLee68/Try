@@ -12,10 +12,14 @@ struct LoginView: View {
     
     var body: some View {
         ZStack {
-            if viewModel.isLogin {
-                SignUpView()
+            if viewModel.isMember {
+                MainView()
             } else {
-                loginView
+                if viewModel.isLogin {
+                    SignUpView()
+                } else {
+                    loginView
+                }
             }
         }
         .frame(width: device.screenWidth)
@@ -31,7 +35,6 @@ struct LoginView: View {
             } label: {
                 Image("kakaoLogin")
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
                     .frame(width: device.widthScale(350), height: device.heightScale(50))
             }
             .padding(.top, 30)
@@ -41,7 +44,15 @@ struct LoginView: View {
             } label: {
                 Image("NaverLogin")
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .frame(width: device.widthScale(350), height: device.heightScale(50))
+            }
+            .padding(.top, 30)
+            
+            Button {
+//                viewModel.naverLoginInstance?.requestThirdPartyLogin()
+            } label: {
+                Image("AppleLogin")
+                    .resizable()
                     .frame(width: device.widthScale(350), height: device.heightScale(50))
             }
             .padding(.top, 30)

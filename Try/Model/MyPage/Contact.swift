@@ -11,4 +11,5 @@ struct Contact: Codable {
     let id: String
     let name: String
     let phoneNumber: String
+    let code: String
 }

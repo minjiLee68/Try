@@ -13,4 +13,6 @@ struct UserInfo: Codable {
     var nickName: String
     var userProfile: String
     var introduce: String
+    var reCommendCode: String
+    var myCode: String = ""
 }

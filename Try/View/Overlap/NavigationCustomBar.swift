@@ -8,26 +8,64 @@
 import SwiftUI
 
 struct NavigationCustomBar: View {
+    @Environment(\.dismiss) private var dismiss
     @State var naviType: NaviType
+    @Binding var isButton: Bool
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
             switch naviType {
             case .signUp:
                 naviContents(title: "회원가입")
+            case .detail:
+                naviContents(leadingBtn: "취소")
+            case .mypage:
+                naviContents(leadingBtn: "취소")
             }
         }
-        .padding([.horizontal, .vertical], 20)
+        .padding(.vertical, 20)
         .frame(width: device.screenWidth)
-        .background(Color.white.opacity(0.1))
+        .background(Color.clear)
+        .navigationBarHidden(true)
     }
     
     @ViewBuilder
-    func naviContents(title: String) -> some View {
+    func naviContents(leadingBtn: String = "", title: String = "", trailingBtn: String = "") -> some View {
         HStack(spacing: 0) {
+            Button {
+                if naviType == .detail {
+                    withAnimation(.easeOut(duration: 0.35)) {
+                        isButton = false
+                    }
+                } else {
+                    dismiss()
+                }
+            } label: {
+                Text(leadingBtn)
+            }
+            
+            Spacer()
+            
             Text(title)
                 .foregroundColor(.white)
                 .fontWeight(.bold)
+            
+            Spacer()
+            
+            Button {
+                
+            } label: {
+                Text(trailingBtn)
+            }
+        }
+        .padding(.horizontal, 20)
+    }
+    
+    @ViewBuilder
+    func naviImageBar(image: String) -> some View {
+        HStack(spacing: 0) {
+            Image(image)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }

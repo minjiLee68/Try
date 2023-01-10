@@ -16,13 +16,17 @@ struct SignUpView: View {
     
     @State var nickName = ""
     @State var introduce = ""
+    @State var reCommend = ""
+    
     @State var nickNameField = "최소 4자 ~ 8자 입력 가능"
     @State var introduceField = "우리의 목표달성을 위한, 우리의 노력에 대한"
+    @State var reCommendField = "추천 코드가 있나요?"
     
     @State private var userImage: UIImage = UIImage()
     
     let nickNameMaxCount = Int(8)
     let introduceMaxCount = Int(24)
+    let reCommendedCount = Int(6)
     
     var body: some View {
         if signUpViewModel.isLogin {
@@ -36,16 +40,16 @@ struct SignUpView: View {
     var signUpView: some View {
         VStack(spacing: 0) {
             ZStack {
-                NavigationCustomBar(naviType: .signUp)
+                NavigationCustomBar(naviType: .signUp, isButton: .constant(false))
                 
                 Button {
-                    signUpViewModel.setUserData(image: userImage, nickName: nickName, introduce: introduce)
+                    signUpViewModel.setUserData(image: userImage, nickName: nickName, introduce: introduce, code: reCommend)
                     print("완료")
                 } label: {
                     Text("완료")
                         .foregroundColor(nickName.count >= 4 ? .white : .gray)
                 }
-                .disabled(nickName.count >= 4 ? false : true)
+                .disabled(nickName.count >= 3 ? false : true)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(.trailing, 20)
             }
@@ -62,6 +66,8 @@ struct SignUpView: View {
             signUpContent
             
             oneLineIntroduce
+            
+            reCommendedCode
             
             Spacer()
         }
@@ -126,6 +132,29 @@ struct SignUpView: View {
                 .onChange(of: introduce) { newValue in
                     if introduce.count > introduceMaxCount {
                         introduce = String(introduce.prefix(introduceMaxCount))
+                    }
+                }
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 30)
+    }
+    
+    // MARK: 추천인 코드
+    var reCommendedCode: some View {
+        VStack {
+            Text("추천코드")
+                .foregroundColor(.white)
+                .fontWeight(.medium)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            TextField(reCommendField, text: $reCommend)
+                .padding(12)
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(6)
+                .foregroundColor(Color.white)
+                .onChange(of: reCommend) { newValue in
+                    if reCommend.count > reCommendedCount {
+                        reCommend = String(reCommend.prefix(reCommendedCount))
                     }
                 }
         }

@@ -11,4 +11,9 @@ extension View {
     func defaultFont(size: Int) -> some View {
         self.modifier(Font(size: size))
     }
+    
+    func hideKeyboard() {
+        let resign = #selector(UIResponder.resignFirstResponder)
+        UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
+    }
 }

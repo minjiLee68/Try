@@ -10,10 +10,11 @@ import Firebase
 import KakaoSDKCommon
 import KakaoSDKAuth
 import NaverThirdPartyLogin
-
+import BackgroundTasks
 
 @main
 struct TryApp: App {
+    @StateObject var environmentViewModel = EnvironmentViewModel()
     @AppStorage("userUid") var userUid = ""
     @AppStorage("isLogin") var isLogin = false
     
@@ -48,14 +49,15 @@ struct TryApp: App {
                         _ = AuthController.handleOpenUrl(url: url)
                     }
                     if (NaverThirdPartyLoginConnection
-                        .getSharedInstance() != nil) {
-                        // Token 발급 요청
+                        .getSharedInstance() != nil)
+                    {
                         NaverThirdPartyLoginConnection
                             .getSharedInstance()
                             .receiveAccessToken(url)
                     }
                 }
                 .preferredColorScheme(.dark)
+                .environmentObject(environmentViewModel)
         }
     }
 }
