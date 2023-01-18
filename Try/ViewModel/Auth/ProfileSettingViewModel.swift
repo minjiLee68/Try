@@ -11,9 +11,9 @@ import FirebaseFirestoreSwift
 import FirebaseAuth
 import FirebaseStorage
 
-class SignUpViewModel: ObservableObject {
+class ProfileSettingViewModel: ObservableObject {
     @Published var profileImage = ""
-    @AppStorage("isLogin") var isLogin = false
+    @AppStorage("isProfile") var isProfile = false
     @AppStorage("recommendCode") var recommendCode = ""
     
     let db = Firestore.firestore()
@@ -30,7 +30,6 @@ class SignUpViewModel: ObservableObject {
                 reCommendCode: code,
                 myCode: self.recommendCode
             ))
-            isLogin = true
         } catch {
             print("error")
         }

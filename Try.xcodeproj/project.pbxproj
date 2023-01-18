@@ -17,6 +17,7 @@
 		0A35432D2966B3C000E9B2FE /* ReCommendedCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A35432C2966B3C000E9B2FE /* ReCommendedCodeView.swift */; };
 		0A428417290191F900E93E2B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A428416290191F900E93E2B /* HomeView.swift */; };
 		0A42841A2901989700E93E2B /* CustomCarousel_new.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4284192901989700E93E2B /* CustomCarousel_new.swift */; };
+		0A435E8B297537C0000A042A /* RxKakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 0A435E8A297537C0000A042A /* RxKakaoSDK */; };
 		0A4EC88F295AC98400A4BB86 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4EC88E295AC98400A4BB86 /* UserInfo.swift */; };
 		0A56538A295BF286003BA18F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A565389295BF286003BA18F /* GoogleService-Info.plist */; };
 		0A614186295AD4E000A8EFBB /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0A614185295AD4E000A8EFBB /* FirebaseFirestoreSwift */; };
@@ -30,10 +31,10 @@
 		0A633E1528E1E532002AC1E3 /* Contents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A633E1428E1E532002AC1E3 /* Contents.swift */; };
 		0A7D5553295C227A00EB2A6F /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D5552295C227A00EB2A6F /* LoginViewModel.swift */; };
 		0A7D5555295C23DD00EB2A6F /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D5554295C23DC00EB2A6F /* LoginView.swift */; };
-		0A7D5558295C2A3500EB2A6F /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D5557295C2A3500EB2A6F /* SignUpView.swift */; };
+		0A7D5558295C2A3500EB2A6F /* ProfileSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D5557295C2A3500EB2A6F /* ProfileSettingView.swift */; };
 		0A7D555B295C304B00EB2A6F /* YPImagePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 0A7D555A295C304B00EB2A6F /* YPImagePicker */; };
 		0A7D555E295C324000EB2A6F /* ProfilePicturePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D555D295C324000EB2A6F /* ProfilePicturePickerView.swift */; };
-		0A7D5561295C38D600EB2A6F /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D5560295C38D600EB2A6F /* SignUpViewModel.swift */; };
+		0A7D5561295C38D600EB2A6F /* ProfileSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D5560295C38D600EB2A6F /* ProfileSettingViewModel.swift */; };
 		0A7D5565295C453400EB2A6F /* AppBackgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D5564295C453400EB2A6F /* AppBackgroundColor.swift */; };
 		0A7D5568295C483300EB2A6F /* NavigationCustomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D5567295C483300EB2A6F /* NavigationCustomBar.swift */; };
 		0A7D556F295C4A4A00EB2A6F /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D556E295C4A4A00EB2A6F /* Constant.swift */; };
@@ -54,6 +55,7 @@
 		0ACD84452967F30C00DDF990 /* FailResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD84442967F30C00DDF990 /* FailResponseModel.swift */; };
 		0ACD84482967F3D000DDF990 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD84472967F3D000DDF990 /* LoginService.swift */; };
 		0ACD844B2967F43F00DDF990 /* NaverLoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD844A2967F43F00DDF990 /* NaverLoginModel.swift */; };
+		0ACD844E296FC99600DDF990 /* ProfileEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD844D296FC99600DDF990 /* ProfileEditorView.swift */; };
 		0AEC496628E3405000917C53 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC496528E3405000917C53 /* Enums.swift */; };
 		A34026DFCAC0609AF95E13B3 /* Pods_Try.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56ABA32DCD6DB90FA0EB03A6 /* Pods_Try.framework */; };
 /* End PBXBuildFile section */
@@ -78,9 +80,9 @@
 		0A7D5551295C21BF00EB2A6F /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		0A7D5552295C227A00EB2A6F /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		0A7D5554295C23DC00EB2A6F /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		0A7D5557295C2A3500EB2A6F /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		0A7D5557295C2A3500EB2A6F /* ProfileSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingView.swift; sourceTree = "<group>"; };
 		0A7D555D295C324000EB2A6F /* ProfilePicturePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePicturePickerView.swift; sourceTree = "<group>"; };
-		0A7D5560295C38D600EB2A6F /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		0A7D5560295C38D600EB2A6F /* ProfileSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewModel.swift; sourceTree = "<group>"; };
 		0A7D5564295C453400EB2A6F /* AppBackgroundColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundColor.swift; sourceTree = "<group>"; };
 		0A7D5567295C483300EB2A6F /* NavigationCustomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCustomBar.swift; sourceTree = "<group>"; };
 		0A7D556E295C4A4A00EB2A6F /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 		0ACD84442967F30C00DDF990 /* FailResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailResponseModel.swift; sourceTree = "<group>"; };
 		0ACD84472967F3D000DDF990 /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		0ACD844A2967F43F00DDF990 /* NaverLoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginModel.swift; sourceTree = "<group>"; };
+		0ACD844D296FC99600DDF990 /* ProfileEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditorView.swift; sourceTree = "<group>"; };
 		0AEC496528E3405000917C53 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		56ABA32DCD6DB90FA0EB03A6 /* Pods_Try.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Try.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		787404724E8190271A5B28C1 /* Pods-Try.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Try.release.xcconfig"; path = "Target Support Files/Pods-Try/Pods-Try.release.xcconfig"; sourceTree = "<group>"; };
@@ -115,6 +118,7 @@
 				0A61418C295AD4EF00A8EFBB /* FirebaseStorage in Frameworks */,
 				0AA9A0922966CA5C00909C29 /* PopupView in Frameworks */,
 				0A614195295B238100A8EFBB /* FirebaseAnalytics in Frameworks */,
+				0A435E8B297537C0000A042A /* RxKakaoSDK in Frameworks */,
 				0A7D5575295C4AD700EB2A6F /* CachedAsyncImage in Frameworks */,
 				0A61418E295AD53C00A8EFBB /* FirebaseMessaging in Frameworks */,
 				0A614186295AD4E000A8EFBB /* FirebaseFirestoreSwift in Frameworks */,
@@ -208,7 +212,7 @@
 			children = (
 				0ACD84462967F3C600DDF990 /* Service */,
 				0A7D5552295C227A00EB2A6F /* LoginViewModel.swift */,
-				0A7D5560295C38D600EB2A6F /* SignUpViewModel.swift */,
+				0A7D5560295C38D600EB2A6F /* ProfileSettingViewModel.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -273,6 +277,7 @@
 		0A633E1328E1E48D002AC1E3 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				0ACD844C296FC3D500DDF990 /* Profile */,
 				0A7D5566295C47FE00EB2A6F /* Overlap */,
 				0A7D555C295C322900EB2A6F /* Picture */,
 				0A7D5556295C2A2B00EB2A6F /* SignUp */,
@@ -287,7 +292,6 @@
 		0A7D5556295C2A2B00EB2A6F /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
-				0A7D5557295C2A3500EB2A6F /* SignUpView.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -432,6 +436,15 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
+		0ACD844C296FC3D500DDF990 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				0A7D5557295C2A3500EB2A6F /* ProfileSettingView.swift */,
+				0ACD844D296FC99600DDF990 /* ProfileEditorView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		FBA8E0ECCC17FFB0B34A5A15 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -470,6 +483,7 @@
 				0A7D5574295C4AD700EB2A6F /* CachedAsyncImage */,
 				0A7D557B295C87E000EB2A6F /* FirebaseAuth */,
 				0AA9A0912966CA5C00909C29 /* PopupView */,
+				0A435E8A297537C0000A042A /* RxKakaoSDK */,
 			);
 			productName = JointGoal_SwiftUI;
 			productReference = 0AC9503928DB5C18005B5774 /* Try.app */;
@@ -504,6 +518,7 @@
 				0A7D5559295C304B00EB2A6F /* XCRemoteSwiftPackageReference "YPImagePicker" */,
 				0A7D5573295C4AD700EB2A6F /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				0AA9A0902966CA5C00909C29 /* XCRemoteSwiftPackageReference "PopupView" */,
+				0A435E89297537C0000A042A /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
 			);
 			productRefGroup = 0AC9503A28DB5C18005B5774 /* Products */;
 			projectDirPath = "";
@@ -590,15 +605,16 @@
 				0A614191295ADC3100A8EFBB /* MainHomeViewModel.swift in Sources */,
 				0A7D557E295CA52400EB2A6F /* ShareVar.swift in Sources */,
 				0A7D5572295C4A9900EB2A6F /* WebImageView.swift in Sources */,
-				0A7D5558295C2A3500EB2A6F /* SignUpView.swift in Sources */,
+				0A7D5558295C2A3500EB2A6F /* ProfileSettingView.swift in Sources */,
 				0AEC496628E3405000917C53 /* Enums.swift in Sources */,
 				0ACD84482967F3D000DDF990 /* LoginService.swift in Sources */,
 				0A3543202965936000E9B2FE /* MyPageView.swift in Sources */,
-				0A7D5561295C38D600EB2A6F /* SignUpViewModel.swift in Sources */,
+				0A7D5561295C38D600EB2A6F /* ProfileSettingViewModel.swift in Sources */,
 				0A42841A2901989700E93E2B /* CustomCarousel_new.swift in Sources */,
 				0AC9504B28DB64B8005B5774 /* ContentView.swift in Sources */,
 				0A3543152965503200E9B2FE /* CardContentView.swift in Sources */,
 				0ACD84432967F26300DDF990 /* Constant+URL.swift in Sources */,
+				0ACD844E296FC99600DDF990 /* ProfileEditorView.swift in Sources */,
 				0A3543262965A9A000E9B2FE /* Contact.swift in Sources */,
 				0A3543232965A8D100E9B2FE /* MyPageViewModel.swift in Sources */,
 				0A4EC88F295AC98400A4BB86 /* UserInfo.swift in Sources */,
@@ -822,6 +838,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0A435E89297537C0000A042A /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk-rx";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		0A4EC893295ACBD200A4BB86 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -857,6 +881,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0A435E8A297537C0000A042A /* RxKakaoSDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0A435E89297537C0000A042A /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */;
+			productName = RxKakaoSDK;
+		};
 		0A614185295AD4E000A8EFBB /* FirebaseFirestoreSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 0A4EC893295ACBD200A4BB86 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

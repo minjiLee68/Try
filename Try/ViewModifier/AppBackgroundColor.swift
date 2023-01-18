@@ -8,18 +8,37 @@
 import SwiftUI
 
 struct AppBackgroundColor: ViewModifier {
+    @StateObject var viewModel = MainHomeViewModel()
+    @Binding var currentIndex: Int
+    
     func body(content: Content) -> some View {
         content
             .background {
                 GeometryReader { proxy in
+                    let size = proxy.size
+                    
+                    TabView(selection: $currentIndex) {
+                        ForEach(viewModel.goalContents.indices, id: \.self) { index in
+                            Image(viewModel.goalContents[currentIndex].profile)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: size.width, height: size.height)
+                                .clipped()
+                        }
+                    }
+                    .tabViewStyle(.page(indexDisplayMode: .never))
+                    .animation(.easeInOut, value: currentIndex)
+                    
+                    Rectangle()
+                        .fill(.ultraThinMaterial)
+                    
                     LinearGradient(colors: [
-                        Color.black,
-                        Color.white.opacity(0.06),
-                        Color.white.opacity(0.08)
+                        .clear,
+                        Color.black.opacity(0.7),
+                        Color.black.opacity(0.9)
                     ], startPoint: .top, endPoint: .bottom)
                 }
-                .edgesIgnoringSafeArea(.bottom)
-//                .ignoresSafeArea(.all)
+                .ignoresSafeArea()
             }
     }
 }

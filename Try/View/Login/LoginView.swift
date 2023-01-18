@@ -8,22 +8,21 @@
 import SwiftUI
 
 struct LoginView: View {
+    @EnvironmentObject var environmentViewModel: EnvironmentViewModel
     @StateObject var viewModel = LoginViewModel()
     
     var body: some View {
         ZStack {
-            if viewModel.isMember {
-                MainView()
-            } else {
-                if viewModel.isLogin {
-                    SignUpView()
-                } else {
-                    loginView
-                }
-            }
+            loginView
         }
         .frame(width: device.screenWidth)
-        .modifier(AppBackgroundColor())
+        .overlay {
+            if viewModel.isMember {
+                MainView()
+            } else if viewModel.isLoggedIn && !viewModel.isMember {
+                ProfileSettingView()
+            }
+        }
     }
     
     var loginView: some View {
@@ -32,6 +31,7 @@ struct LoginView: View {
             
             Button {
                 viewModel.handleKakaoLogin()
+                environmentViewModel.loginType = LoginType.kakao.rawValue
             } label: {
                 Image("kakaoLogin")
                     .resizable()
@@ -40,7 +40,9 @@ struct LoginView: View {
             .padding(.top, 30)
             
             Button {
+                viewModel.naverLoginDelegate()
                 viewModel.naverLoginInstance?.requestThirdPartyLogin()
+                environmentViewModel.loginType = LoginType.naver.rawValue
             } label: {
                 Image("NaverLogin")
                     .resizable()
@@ -49,7 +51,7 @@ struct LoginView: View {
             .padding(.top, 30)
             
             Button {
-//                viewModel.naverLoginInstance?.requestThirdPartyLogin()
+                environmentViewModel.loginType = LoginType.apple.rawValue
             } label: {
                 Image("AppleLogin")
                     .resizable()

@@ -15,12 +15,14 @@ struct NavigationCustomBar: View {
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
             switch naviType {
-            case .signUp:
-                naviContents(title: "회원가입")
+            case .profileSetting:
+                naviContents(title: "프로필 설정")
             case .detail:
                 naviContents(leadingBtn: "취소")
             case .mypage:
                 naviContents(leadingBtn: "취소")
+            case .profileEditor:
+                naviContents(leadingBtn: "취소", title: "프로필 변경")
             }
         }
         .padding(.vertical, 20)

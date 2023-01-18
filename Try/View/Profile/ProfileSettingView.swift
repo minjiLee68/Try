@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct SignUpView: View {
-    @StateObject var signUpViewModel = SignUpViewModel()
+struct ProfileSettingView: View {
+    @StateObject var profileViewModel = ProfileSettingViewModel()
     
     @State var isPickers = false
     @State var isImageChanged = false
@@ -29,7 +29,7 @@ struct SignUpView: View {
     let reCommendedCount = Int(6)
     
     var body: some View {
-        if signUpViewModel.isLogin {
+        if profileViewModel.isProfile {
             MainView()
         } else {
             signUpView
@@ -40,11 +40,11 @@ struct SignUpView: View {
     var signUpView: some View {
         VStack(spacing: 0) {
             ZStack {
-                NavigationCustomBar(naviType: .signUp, isButton: .constant(false))
+                NavigationCustomBar(naviType: .profileSetting, isButton: .constant(false))
                 
                 Button {
-                    signUpViewModel.setUserData(image: userImage, nickName: nickName, introduce: introduce, code: reCommend)
-                    print("완료")
+                    profileViewModel.setUserData(image: userImage, nickName: nickName, introduce: introduce, code: reCommend)
+                    profileViewModel.isProfile = true
                 } label: {
                     Text("완료")
                         .foregroundColor(nickName.count >= 4 ? .white : .gray)
@@ -59,8 +59,8 @@ struct SignUpView: View {
                     ProfilePicturePickerView(imageUpload: $userImage, isImageChanged: $isImageChanged)
                 }
                 .onChange(of: userImage) { newValue in
-                    signUpViewModel.uploadImage(image: newValue)
-                    signUpViewModel.imageUrl()
+                    profileViewModel.uploadImage(image: newValue)
+                    profileViewModel.imageUrl()
                 }
             
             signUpContent

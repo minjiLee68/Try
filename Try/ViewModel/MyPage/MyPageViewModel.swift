@@ -9,6 +9,8 @@ import SwiftUI
 import FirebaseFirestoreSwift
 import FirebaseFirestore
 import Contacts
+import KakaoSDKAuth
+import KakaoSDKUser
 
 class MyPageViewModel: ObservableObject {
     @Published var userInfoData: UserInfo?
@@ -22,7 +24,9 @@ class MyPageViewModel: ObservableObject {
     let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
     
     @AppStorage("recommendCode") var recommendCode = ""
+    @AppStorage("isMember") var isMember = UserDefaults.standard.bool(forKey: "isMember")
     
+    // MARK: 내 정보 가져오기
     func userInfoFetchData() {
         self.docRef.addSnapshotListener { (docSnapshot, error) in
             guard let document = docSnapshot else { return }
@@ -35,6 +39,7 @@ class MyPageViewModel: ObservableObject {
         }
     }
     
+    //MARK: 친구 리스트 가져오기
     func setContactData(contact: Contact) {
         let ref = db.collection(CollectionName.Contact.rawValue)
         do {
@@ -72,6 +77,30 @@ class MyPageViewModel: ObservableObject {
         for i in 0..<self.contacts.count {
             if self.contacts[i].id == id {
                 completion(i)
+            }
+        }
+    }
+    
+    // 로그아웃
+    func handleKakaoLogout() async -> Bool {
+        await withCheckedContinuation({ continuation in
+            UserApi.shared.logout { error in
+                if let error = error {
+                    print(error)
+                    continuation.resume(returning: false)
+                } else {
+                    continuation.resume(returning: true)
+                }
+            }
+        })
+    }
+    
+    func kakaoLogout() {
+        Task {
+            if await handleKakaoLogout() {
+                DispatchQueue.main.async {
+                    self.isMember = false
+                }
             }
         }
     }

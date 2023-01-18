@@ -32,7 +32,7 @@ typedef enum {
     OK
 } OAuthLoginState;
 
-#define kServiceAppUrlScheme    @"com.minji.Try"
+#define kServiceAppUrlScheme    @"try"
 
 #define kConsumerKey            @"dF4X86oVV2Uwvo6Cv6tU"
 #define kConsumerSecret         @"IVEy9TuFKb"

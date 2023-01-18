@@ -21,14 +21,34 @@ struct MyPageView: View {
         VStack(spacing: 0) {
             NavigationCustomBar(naviType: .mypage, isButton: $environmentViewModel.isSideBtn)
             
-            WebImageView(url: myPageViewModel.userInfoData?.userProfile ?? "", width: device.widthScale(120), height: device.heightScale(120))
-                .clipShape(Circle())
-                .id(myPageViewModel.userInfoData?.uid ?? "")
-                .padding(.top, 30)
+            VStack(spacing: 8) {
+                if myPageViewModel.userInfoData?.userProfile == "" {
+                    Image("profile")
+                        .mask(Circle().frame(width: device.widthScale(120), height: device.heightScale(120)))
+                        .frame(width: device.widthScale(120), height: device.heightScale(120))
+                        .padding(.top, 30)
+                } else {
+                    WebImageView(url: myPageViewModel.userInfoData?.userProfile ?? "", width: device.widthScale(120), height: device.heightScale(120))
+                        .clipShape(Circle())
+                        .id(myPageViewModel.userInfoData?.uid ?? "")
+                        .padding(.top, 30)
+                }
+                
+                NavigationLink(destination: ProfileEditorView(
+                    nickName: myPageViewModel.userInfoData?.nickName ?? "",
+                    introduce: myPageViewModel.userInfoData?.introduce ?? "",
+                    reCommend: myPageViewModel.userInfoData?.reCommendCode ?? "")
+                ) {
+                    Text("프로필 편집")
+                        .defaultFont(size: 14)
+                }
+            }
             
             reCommendCodeView
             
             myFriendList
+            
+            logoutView
         }
         .onAppear {
             myPageViewModel.userInfoFetchData()
@@ -82,5 +102,25 @@ struct MyPageView: View {
                 .padding(.top, 50)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
+    }
+    
+    // MARK: 로그아웃
+    var logoutView: some View {
+        Button {
+            switch environmentViewModel.loginType {
+            case LoginType.kakao.rawValue:
+                myPageViewModel.kakaoLogout()
+            case LoginType.naver.rawValue:
+                print("네이버")
+            case LoginType.apple.rawValue:
+                print("애플")
+            default:
+                myPageViewModel.kakaoLogout()
+                print("default")
+            }
+        } label: {
+            Text("로그아웃 하기")
+        }
+        .padding(.top, 15)
     }
 }

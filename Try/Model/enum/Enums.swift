@@ -17,9 +17,10 @@ enum Tab: String, CaseIterable {
 
 // MARK: Navi Enum
 enum NaviType {
-    case signUp
+    case profileSetting
     case detail
     case mypage
+    case profileEditor
 }
 
 // MARK: Search Mode
@@ -32,4 +33,12 @@ enum searchMode {
 enum PopupMode {
     case isBox
     case isnonBox
+}
+
+// MARK: Login Type
+enum LoginType: String {
+    case kakao = "kakao"
+    case naver = "naver"
+    case apple = "apple"
+    case defaults = "default"
 }

@@ -18,7 +18,6 @@ struct MainView: View {
         NavigationView {
             ZStack {
                 HomeView()
-                    .modifier(AppBackgroundColor())
 //                TabView(selection: $currentTab) {
 //                    HomeView()
 //                        .tag(Tab.home)

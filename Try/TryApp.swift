@@ -6,17 +6,30 @@
 //
 
 import SwiftUI
+import UIKit
 import Firebase
 import KakaoSDKCommon
 import KakaoSDKAuth
+import RxKakaoSDKAuth
 import NaverThirdPartyLogin
 import BackgroundTasks
+
+// no changes in your AppDelegate class
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        print(">> your code here !!")
+        return true
+    }
+}
 
 @main
 struct TryApp: App {
     @StateObject var environmentViewModel = EnvironmentViewModel()
     @AppStorage("userUid") var userUid = ""
-    @AppStorage("isLogin") var isLogin = false
+    @AppStorage("isMember") var isMember = UserDefaults.standard.bool(forKey: "isMember")
+    
+    // inject into SwiftUI life-cycle via adaptor !!!
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     init() {
         FirebaseApp.configure()
@@ -38,19 +51,18 @@ struct TryApp: App {
         NaverThirdPartyLoginConnection.getSharedInstance().appName = kServiceAppName
         
         ShareVar.userUid = userUid
-        ShareVar.isMember = isLogin
+        ShareVar.isMember = isMember
     }
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .onOpenURL { url in
+                    let _ = print("naver login \(url)")
                     if (AuthApi.isKakaoTalkLoginUrl(url)) {
                         _ = AuthController.handleOpenUrl(url: url)
-                    }
-                    if (NaverThirdPartyLoginConnection
-                        .getSharedInstance() != nil)
-                    {
+                    } else if (NaverThirdPartyLoginConnection.getSharedInstance() != nil) {
+                        let _ = print("naver login \(url)")
                         NaverThirdPartyLoginConnection
                             .getSharedInstance()
                             .receiveAccessToken(url)

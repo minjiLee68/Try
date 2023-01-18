@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DetailCardView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject var mainViewModel = MainHomeViewModel()
+    @StateObject var mainViewModel: MainHomeViewModel
     
     @State var contents: Contents?
     @State var defaultProfile = "profile"
@@ -108,12 +108,16 @@ struct DetailCardView: View {
             NavigationCustomBar(naviType: .detail, isButton: $isTab)
             
             Button {
-                mainViewModel.addShareContent(content: [firstContent, secondContent, thirdContent])
+                mainViewModel.addShareContent(nickName: self.defaultNickName, content: [firstContent, secondContent, thirdContent])
+                isTab.toggle()
             } label: {
                 Text("확인")
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.trailing, 20)
+        }
+        .onChange(of: isTab) { newValue in
+            hideKeyboard()
         }
     }
 }
@@ -121,7 +125,7 @@ struct DetailCardView: View {
 // MARK: 친구 선택, 목표 설정
 extension DetailCardView {
     var goalListSetting: some View {
-        VStack {
+        VStack(spacing: 0) {
             HStack {
                 VStack(spacing: 8) {
                     WebImageView(url: mainViewModel.userInfoData?.userProfile ?? "", width: device.widthScale(60), height: device.heightScale(60))
@@ -139,7 +143,7 @@ extension DetailCardView {
             }
             .padding(.horizontal, 20)
             
-            VStack(spacing: 12) {
+            VStack(spacing: 20) {
                 TextField("첫번째 목표", text: $firstContent)
                     .padding()
                     .padding(.leading, 6)
@@ -161,7 +165,7 @@ extension DetailCardView {
                     .cornerRadius(6)
                     .foregroundColor(Color.white)
             }
-            .frame(maxHeight: .infinity, alignment: .center)
+            .padding(.top, 40)
         }
     }
 }

@@ -28,7 +28,7 @@ struct ReCommendedCodeView: View {
         .onAppear {
             myPageViewModel.getContacts()
         }
-        .modifier(AppBackgroundColor())
+//        .modifier(AppBackgroundColor())
     }
     
     @ViewBuilder

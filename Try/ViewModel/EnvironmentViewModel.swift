@@ -9,4 +9,5 @@ import SwiftUI
 
 class EnvironmentViewModel: ObservableObject {
     @Published var isSideBtn = false
+    @AppStorage("loginType") var loginType = (UserDefaults.standard.string(forKey: "loginType") ?? "")
 }

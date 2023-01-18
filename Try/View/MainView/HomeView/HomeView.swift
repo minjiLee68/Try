@@ -21,6 +21,7 @@ struct HomeView: View {
             .onAppear {
                 mainViewModel.userInfoFetchData()
             }
+            .modifier(AppBackgroundColor(currentIndex: $currentIndex))
     }
     
     var mainView: some View {
@@ -33,7 +34,7 @@ struct HomeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .overlay {
             if isTabCard {
-                DetailCardView(contentId: selectGoalContent?.id ?? "", isTab: $isTabCard, animation: smooth)
+                DetailCardView(mainViewModel: mainViewModel, contentId: selectGoalContent?.id ?? "", isTab: $isTabCard, animation: smooth)
             }
         }
     }
@@ -41,27 +42,18 @@ struct HomeView: View {
     // MARK: Card View
     var customCard: some View {
         CustomCarousel_new(index: $currentIndex, items: mainViewModel.goalContents, cardPadding: 150) { contents, cardSize in
-            RoundedRectangle(cornerRadius: 15, style: .continuous)
-                .fill(Color.black)
-                .frame(width: device.widthScale(cardSize.width), height: device.heightScale(cardSize.height))
+            cardContentView(content: contents)
+                .frame(width: device.widthScale(cardSize.width), height: device.heightScale(cardSize.height - 50))
+                .background(Color.black)
+                .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
                 .shadow(color: .white.opacity(0.2), radius: 6)
-                .overlay {
-                    // MARK: Applying Matched Geometry
-                    if isTabCard && selectGoalContent?.id == contents.id {
-                        // 카드 안에 들어갈 내용
-                        cardContentView(content: contents)
-                    } else {
-                        // 카드 안에 들어갈 내용
-                        cardContentView(content: contents)
-                            .matchedGeometryEffect(id: contents.id, in: smooth)
-                    }
-                }
                 .onTapGesture {
                     withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
                         selectGoalContent = contents
                         isTabCard = true
                     }
                 }
+                .matchedGeometryEffect(id: contents.id, in: smooth)
                 .scaleEffect(mainViewModel.goalContents[currentIndex].id == contents.id && isTabCard ? 1.8 : 1, anchor: .center)
         }
         .padding(.horizontal, -30)
@@ -72,25 +64,32 @@ struct HomeView: View {
     // MARK: 카드 안에 들어갈 내용
     @ViewBuilder
     func cardContentView(content: Contents) -> some View {
-        VStack(spacing: 8) {
-            if content.profile.count != 0 {
-                WebImageView(url: content.profile, width: device.widthScale(120), height: device.heightScale(120))
+        ZStack {
+            VStack(spacing: 0) {
+    //            if content.profile != "" {
+    //                WebImageView(url: content.profile, width: device.widthScale(120), height: device.heightScale(120))
+    //                    .clipShape(Circle())
+    //                    .id(content.id)
+    //            } else {
+    //                Image(content.profile)
+    //                    .resizable()
+    //                    .aspectRatio(contentMode: .fill)
+    //                    .frame(width: device.widthScale(120), height: device.heightScale(120))
+    //                    .clipShape(Circle())
+    //            }
+                Image(content.profile)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: device.widthScale(120), height: device.heightScale(120))
                     .clipShape(Circle())
-                    .id(content.id)
-            }
-            if content.nickName.count != 0 {
-                Text(content.nickName)
-                    .foregroundColor(.white)
-                    .defaultFont(size: 16)
-                    .frame(minWidth: .infinity, alignment: .center)
+                    .frame(maxHeight: .infinity, alignment: .top)
+                    .padding(.top, 50)
             }
             
-            if content.id == "0" {
-                Text("추가하기")
-                    .foregroundColor(.white)
-                    .defaultFont(size: 16)
-                    .frame(maxHeight: .infinity, alignment: .center)
-            }
+            Text(content.nickName)
+                .foregroundColor(.white)
+                .defaultFont(size: 18)
+                .frame(maxHeight: .infinity, alignment: .center)
         }
     }
 }
@@ -112,9 +111,15 @@ extension HomeView {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 NavigationLink(destination: MyPageView()) {
-                    WebImageView(url: "\(mainViewModel.userInfoData?.userProfile ?? "")", width: device.widthScale(50), height: device.heightScale(50))
-                        .clipShape(Circle())
-                        .id(mainViewModel.userInfoData?.uid ?? "")
+                    if mainViewModel.userInfoData?.userProfile == "" {
+                        Image("profile")
+                            .mask(Circle().frame(width: device.widthScale(50), height: device.heightScale(50)))
+                            .frame(width: device.widthScale(50), height: device.heightScale(50))
+                    } else {
+                        WebImageView(url: "\(mainViewModel.userInfoData?.userProfile ?? "")", width: device.widthScale(50), height: device.heightScale(50))
+                            .clipShape(Circle())
+                            .id(mainViewModel.userInfoData?.uid ?? "")
+                    }
                 }
             }
             
@@ -125,5 +130,6 @@ extension HomeView {
                 .padding(.vertical, 15)
         }
         .opacity(isTabCard ? 0 : 1)
+        .padding(.top, 20)
     }
 }
