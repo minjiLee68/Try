@@ -21,7 +21,7 @@ import Alamofire
 class LoginViewModel: NSObject, ObservableObject {
     @Published var naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
     @Published var isLoggedIn = false
-    @AppStorage("userUid") var userUid = ""
+    @AppStorage("userUid") var userUid = (UserDefaults.standard.string(forKey: "userUid") ?? "")
     @AppStorage("recommendCode") var recommendCode = ""
     @AppStorage("isMember") var isMember = UserDefaults.standard.bool(forKey: "isMember")
     
@@ -38,21 +38,22 @@ class LoginViewModel: NSObject, ObservableObject {
                 print("파이어베이스 사용자 생성")
             }
             self.userUid = Auth.auth().currentUser?.uid ?? ""
-            ShareVar.userUid = Auth.auth().currentUser?.uid ?? ""
-            self.ifUserDocuments()
+            ShareVar.userUid = self.userUid
+            self.ifUserDocuments(userUid: Auth.auth().currentUser?.uid ?? "")
             self.isLoggedIn = true
         }
     }
     
     // MARK: 유저 정보가 있는가?
-    func ifUserDocuments() {
+    func ifUserDocuments(userUid: String) {
         self.db.collection(CollectionName.UserInfo.rawValue).getDocuments { (querySnapshot, error) in
             if let error {
                 print("get document error : \(error.localizedDescription)")
             } else {
                 if let querySnapshot {
                     for doc in querySnapshot.documents {
-                        if self.userUid == doc.documentID {
+                        if userUid == doc.documentID {
+                            print("docId \(doc.documentID)")
                             self.isMember = true
                         }
                     }
@@ -186,17 +187,11 @@ extension LoginViewModel: UIApplicationDelegate, NaverThirdPartyLoginConnectionD
                 let socialID = model.response.id
                 self.login(email: email, password: socialID)
                 
-                print("Naver Login Success \(model.message)")
-                print("Naver Login Info:\(email) \(socialID)")
-                
             case is FailResponse:
                 let fail = res as! FailResponse
-//                self.alertType = LoginAlerts(id: .Naver)
-                print("Naver Login Fail \(fail.message)")
-                
+                print("Naver Login FailResponse \(fail)")
             default:
                 print("Naver Login Fail")
-                
             }
         }
     }

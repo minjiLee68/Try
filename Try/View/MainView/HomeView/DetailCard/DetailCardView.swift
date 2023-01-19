@@ -9,9 +9,9 @@ import SwiftUI
 
 struct DetailCardView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject var mainViewModel: MainHomeViewModel
-    
-    @State var contents: Contents?
+    @StateObject var mainViewModel = MainHomeViewModel()
+
+    @State var selectGoalContent: Contents?
     @State var defaultProfile = "profile"
     @State var defaultNickName = "이름"
     
@@ -20,6 +20,7 @@ struct DetailCardView: View {
     @State var firstContent = ""
     @State var secondContent = ""
     @State var thirdContent = ""
+    @State var code = ""
     
     @State var contentId: String
     @Binding var isTab: Bool
@@ -30,7 +31,7 @@ struct DetailCardView: View {
         VStack(spacing: 20) {
             navigationBar
             
-            if contents != nil {
+            if selectGoalContent?.content != nil {
                 detailContents
             } else {
                 goalListSetting
@@ -43,9 +44,6 @@ struct DetailCardView: View {
         .onAppear {
             mainViewModel.userInfoFetchData()
         }
-        .onDisappear {
-            
-        }
         .ignoresSafeArea(.keyboard, edges: .bottom)
     }
     
@@ -54,22 +52,16 @@ struct DetailCardView: View {
             topTitle
             
             VStack(spacing: 15) {
-                HStack(alignment: .center, spacing: 0) {
-                    Text("안녕하세요")
-                        .foregroundColor(.white)
-                }
-                HStack(alignment: .center, spacing: 0) {
-                    Text("안녕하세요")
-                        .foregroundColor(.white)
-                }
-                HStack(alignment: .center, spacing: 0) {
-                    Text("안녕하세요")
-                        .foregroundColor(.white)
+                ForEach(0..<(selectGoalContent?.content?.count ?? 0), id: \.self) { index in
+                    HStack(alignment: .center, spacing: 0) {
+                        Text(selectGoalContent?.content?[index] ?? "")
+                            .foregroundColor(.white)
+                    }
                 }
             }
         }
-        .matchedGeometryEffect(id: contentId, in: animation)
-        .transition(.asymmetric(insertion: .identity, removal: .offset(y:0.5)))
+//        .matchedGeometryEffect(id: contentId, in: animation)
+//        .transition(.asymmetric(insertion: .identity, removal: .offset(y:0.5)))
     }
     
     var topTitle: some View {
@@ -86,17 +78,14 @@ struct DetailCardView: View {
             
             Spacer()
             
-            if contents?.nickName.count != 0 {
-                VStack(spacing: 8) {
-                    WebImageView(url: contents?.profile ?? "", width: device.widthScale(50), height: device.heightScale(50))
-                        .clipShape(Circle())
-                        .id(contents?.id ?? "")
-                }
-                Text(contents?.nickName ?? "")
+            VStack(spacing: 8) {
+                WebImageView(url: self.defaultProfile, width: device.widthScale(50), height: device.heightScale(50))
+                    .clipShape(Circle())
+                    .id(UUID())
+                
+                Text(self.defaultNickName)
                     .foregroundColor(.white)
                     .defaultFont(size: 13)
-            } else {
-                
             }
         }
         .padding(.horizontal, 20)
@@ -108,7 +97,12 @@ struct DetailCardView: View {
             NavigationCustomBar(naviType: .detail, isButton: $isTab)
             
             Button {
-                mainViewModel.addShareContent(nickName: self.defaultNickName, content: [firstContent, secondContent, thirdContent])
+                mainViewModel.addShareContent(
+                    nickName: self.defaultNickName,
+                    profile: self.defaultProfile,
+                    code: code,
+                    content: [firstContent,secondContent,thirdContent]
+                )
                 isTab.toggle()
             } label: {
                 Text("확인")
@@ -167,6 +161,8 @@ extension DetailCardView {
             }
             .padding(.top, 40)
         }
+//        .matchedGeometryEffect(id: contentId, in: animation)
+//        .transition(.asymmetric(insertion: .identity, removal: .offset(y:0.5)))
     }
 }
 
@@ -175,12 +171,13 @@ extension DetailCardView {
 extension DetailCardView {
     var contactListView: some View {
         Menu {
-            ForEach(0..<mainViewModel.connection.count, id: \.self) { index in
+            ForEach(0..<mainViewModel.connectionUser.count, id: \.self) { index in
                 Button {
-                    self.defaultProfile = mainViewModel.connection[index].profile
-                    self.defaultNickName = mainViewModel.connection[index].nickName
+                    self.defaultProfile = mainViewModel.connectionUser[index].profile
+                    self.defaultNickName = mainViewModel.connectionUser[index].nickName
+                    self.code = mainViewModel.connectionUser[index].code
                 } label: {
-                    Text(mainViewModel.connection[index].nickName)
+                    Text(mainViewModel.connectionUser[index].nickName)
                         .foregroundColor(.white)
                         .defaultFont(size: 13)
                 }

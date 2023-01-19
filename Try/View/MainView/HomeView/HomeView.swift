@@ -21,12 +21,18 @@ struct HomeView: View {
             .onAppear {
                 mainViewModel.userInfoFetchData()
             }
-            .modifier(AppBackgroundColor(currentIndex: $currentIndex))
+            .modifier(AppBackgroundColor(viewModel: mainViewModel, currentIndex: $currentIndex))
     }
     
     var mainView: some View {
         VStack(spacing: 15) {
             HeaderView()
+            
+            Button {
+                isTabCard = true
+            } label: {
+                Text("추가하기")
+            }
             
             customCard
         }
@@ -34,7 +40,12 @@ struct HomeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .overlay {
             if isTabCard {
-                DetailCardView(mainViewModel: mainViewModel, contentId: selectGoalContent?.id ?? "", isTab: $isTabCard, animation: smooth)
+                DetailCardView(
+                    selectGoalContent: selectGoalContent,
+                    contentId: selectGoalContent?.id ?? "",
+                    isTab: $isTabCard,
+                    animation: smooth
+                )
             }
         }
     }
@@ -42,11 +53,13 @@ struct HomeView: View {
     // MARK: Card View
     var customCard: some View {
         CustomCarousel_new(index: $currentIndex, items: mainViewModel.goalContents, cardPadding: 150) { contents, cardSize in
-            cardContentView(content: contents)
-                .frame(width: device.widthScale(cardSize.width), height: device.heightScale(cardSize.height - 50))
-                .background(Color.black)
-                .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.black)
                 .shadow(color: .white.opacity(0.2), radius: 6)
+                .frame(width: device.widthScale(cardSize.width), height: device.heightScale(cardSize.height - 50))
+                .overlay(content: {
+                    cardContentView(content: contents)
+                })
                 .onTapGesture {
                     withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
                         selectGoalContent = contents
@@ -66,24 +79,21 @@ struct HomeView: View {
     func cardContentView(content: Contents) -> some View {
         ZStack {
             VStack(spacing: 0) {
-    //            if content.profile != "" {
-    //                WebImageView(url: content.profile, width: device.widthScale(120), height: device.heightScale(120))
-    //                    .clipShape(Circle())
-    //                    .id(content.id)
-    //            } else {
-    //                Image(content.profile)
-    //                    .resizable()
-    //                    .aspectRatio(contentMode: .fill)
-    //                    .frame(width: device.widthScale(120), height: device.heightScale(120))
-    //                    .clipShape(Circle())
-    //            }
-                Image(content.profile)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: device.widthScale(120), height: device.heightScale(120))
-                    .clipShape(Circle())
-                    .frame(maxHeight: .infinity, alignment: .top)
-                    .padding(.top, 50)
+                if content.profile != "" {
+                    WebImageView(url: content.profile, width: device.widthScale(120), height: device.heightScale(120))
+                        .clipShape(Circle())
+                        .id(content.id)
+                        .frame(maxHeight: .infinity, alignment: .top)
+                        .padding(.top, 50)
+                } else {
+                    Image("profile")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: device.widthScale(120), height: device.heightScale(120))
+                        .clipShape(Circle())
+                        .frame(maxHeight: .infinity, alignment: .top)
+                        .padding(.top, 50)
+                }
             }
             
             Text(content.nickName)

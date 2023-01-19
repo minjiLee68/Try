@@ -14,28 +14,27 @@ import FirebaseStorage
 class ProfileSettingViewModel: ObservableObject {
     @Published var profileImage = ""
     @AppStorage("isProfile") var isProfile = false
-    @AppStorage("recommendCode") var recommendCode = ""
+    @AppStorage("myCode") var myCode = ""
+    @AppStorage("reCommendCode") var reCommendCode = ""
+    @AppStorage("isMember") var isMember = UserDefaults.standard.bool(forKey: "isMember")
     
     let db = Firestore.firestore()
     let storageRef = Storage.storage().reference().child("profile/\(ShareVar.userUid)")
     let collectionRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
     
     func setUserData(image: UIImage, nickName: String, introduce: String, code: String) {
-        self.myCode()
+        self.uniqueCode(code: code)
         do {
             try self.collectionRef.setData(from: UserInfo(
                 nickName: nickName,
                 userProfile: self.profileImage,
                 introduce: introduce,
                 reCommendCode: code,
-                myCode: self.recommendCode
+                myCode: self.myCode
             ))
+            self.isMember = true
         } catch {
             print("error")
-        }
-        
-        if code != "" {
-            self.recommendCodeOverlap(code: code)
         }
     }
     
@@ -55,26 +54,10 @@ class ProfileSettingViewModel: ObservableObject {
         }
     }
     
-    // MARK: 추천 코드 입력
-    func recommendCodeOverlap(code: String) {
-        let query = db.collection(CollectionName.UserInfo.rawValue).whereField("myCode", isEqualTo: code)
-        query.getDocuments { (snapshot, error) in
-            if error != nil { return }
-            for doc in snapshot!.documents {
-                do {
-                    let data = try doc.data(as: Contents.self)
-                    let ref = self.collectionRef.collection(CollectionName.ShareGoal.rawValue)
-                    let _ = try ref.addDocument(from: Contents(nickName: data.nickName, profile: data.profile, content: data.content))
-                } catch {
-                    print("error \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-    
     // MARK: 내 고유 코드
-    func myCode() {
+    func uniqueCode(code: String) {
         let rand = Int.random(in: 111111..<999999)
-        self.recommendCode = String(rand)
+        self.myCode = String(rand)
+        self.reCommendCode = code
     }
 }

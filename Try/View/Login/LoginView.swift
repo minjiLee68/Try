@@ -13,16 +13,17 @@ struct LoginView: View {
     
     var body: some View {
         ZStack {
-            loginView
-        }
-        .frame(width: device.screenWidth)
-        .overlay {
-            if viewModel.isMember {
-                MainView()
-            } else if viewModel.isLoggedIn && !viewModel.isMember {
+            if !viewModel.isLoggedIn {
+                loginView
+            } else if !viewModel.isMember && viewModel.isLoggedIn {
                 ProfileSettingView()
             }
+            
+            if viewModel.isMember {
+                MainView()
+            }
         }
+        .frame(width: device.screenWidth)
     }
     
     var loginView: some View {

@@ -111,11 +111,11 @@ struct MyPageView: View {
             case LoginType.kakao.rawValue:
                 myPageViewModel.kakaoLogout()
             case LoginType.naver.rawValue:
+                myPageViewModel.oauth20ConnectionDidFinishDeleteToken()
                 print("네이버")
             case LoginType.apple.rawValue:
                 print("애플")
             default:
-                myPageViewModel.kakaoLogout()
                 print("default")
             }
         } label: {

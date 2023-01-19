@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseFirestoreSwift
 import FirebaseFirestore
+import NaverThirdPartyLogin
 import Contacts
 import KakaoSDKAuth
 import KakaoSDKUser
@@ -34,7 +35,7 @@ class MyPageViewModel: ObservableObject {
                 self.userInfoData = try document.data(as: UserInfo.self)
                 print("success Data \(String(describing: self.userInfoData))")
             } catch {
-                print("error -> \(error.localizedDescription)")
+                print("userInfoFetchData error -> \(error.localizedDescription)")
             }
         }
     }
@@ -80,30 +81,6 @@ class MyPageViewModel: ObservableObject {
             }
         }
     }
-    
-    // 로그아웃
-    func handleKakaoLogout() async -> Bool {
-        await withCheckedContinuation({ continuation in
-            UserApi.shared.logout { error in
-                if let error = error {
-                    print(error)
-                    continuation.resume(returning: false)
-                } else {
-                    continuation.resume(returning: true)
-                }
-            }
-        })
-    }
-    
-    func kakaoLogout() {
-        Task {
-            if await handleKakaoLogout() {
-                DispatchQueue.main.async {
-                    self.isMember = false
-                }
-            }
-        }
-    }
 
     func getContacts() {
         let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey] as [CNKeyDescriptor]
@@ -139,3 +116,35 @@ class MyPageViewModel: ObservableObject {
         }
     }
  }
+
+extension MyPageViewModel {
+    // 로그아웃
+    func oauth20ConnectionDidFinishDeleteToken() {
+        NaverThirdPartyLoginConnection.getSharedInstance()?.requestDeleteToken()
+        print("log out")
+    }
+    
+    // 로그아웃
+    func handleKakaoLogout() async -> Bool {
+        await withCheckedContinuation({ continuation in
+            UserApi.shared.logout { error in
+                if let error = error {
+                    print(error)
+                    continuation.resume(returning: false)
+                } else {
+                    continuation.resume(returning: true)
+                }
+            }
+        })
+    }
+    
+    func kakaoLogout() {
+        Task {
+            if await handleKakaoLogout() {
+                DispatchQueue.main.async {
+                    self.isMember = false
+                }
+            }
+        }
+    }
+}

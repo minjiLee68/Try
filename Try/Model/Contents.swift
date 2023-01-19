@@ -12,8 +12,10 @@ struct Contents: Hashable, Codable {
     var id = UUID().uuidString
     var nickName: String
     var profile: String
-    var content: [String]
+    var code: String
+    var content: [String]?
 }
+
 // MARK: 추천인 코드를 통해 연결된 친구
 struct Connection: Codable {
     var nickName: String

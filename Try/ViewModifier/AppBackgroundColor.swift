@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AppBackgroundColor: ViewModifier {
-    @StateObject var viewModel = MainHomeViewModel()
+    @StateObject var viewModel: MainHomeViewModel
     @Binding var currentIndex: Int
     
     func body(content: Content) -> some View {
@@ -18,12 +18,20 @@ struct AppBackgroundColor: ViewModifier {
                     let size = proxy.size
                     
                     TabView(selection: $currentIndex) {
-                        ForEach(viewModel.goalContents.indices, id: \.self) { index in
-                            Image(viewModel.goalContents[currentIndex].profile)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: size.width, height: size.height)
-                                .clipped()
+                        ForEach(0..<viewModel.goalContents.count, id: \.self) { _ in
+                            if viewModel.goalContents[currentIndex].profile == "" {
+                                Image("profile")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: size.width, height: size.height)
+                                    .clipped()
+                            } else {
+                                Image("profile")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: size.width, height: size.height)
+                                    .clipped()
+                            }
                         }
                     }
                     .tabViewStyle(.page(indexDisplayMode: .never))
