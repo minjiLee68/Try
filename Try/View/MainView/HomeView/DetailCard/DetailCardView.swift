@@ -9,10 +9,10 @@ import SwiftUI
 
 struct DetailCardView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject var mainViewModel = MainHomeViewModel()
+    @StateObject var mainViewModel: MainHomeViewModel
 
     @State var selectGoalContent: Contents?
-    @State var defaultProfile = "profile"
+    @State var defaultProfile = ""
     @State var defaultNickName = "이름"
     
     @State var isShowContent = false

@@ -36,22 +36,6 @@ class MainHomeViewModel: ObservableObject {
         }
     }
     
-    // MARK: 공유된 목표정보 가져오기
-    func getShareGoal() {
-        let ref = docRef.document(ShareVar.userUid).collection(CollectionName.ShareGoal.rawValue)
-        ref.addSnapshotListener { docSnapshot, error in
-            guard let document = docSnapshot?.documents else { return }
-            do {
-                for doc in document {
-                    self.goalContents.insert(try doc.data(as: Contents.self), at: 0)
-                }
-                print("success goalContents Data \(String(describing: self.goalContents))")
-            } catch {
-                print("getShareGoal error -> \(error.localizedDescription)")
-            }
-        }
-    }
-    
     // MARK: 목표내용 저장하기
     func addShareContent(nickName: String, profile: String, code: String, content: [String]) {
         let ref = docRef.document(ShareVar.userUid).collection(CollectionName.ShareGoal.rawValue)
@@ -60,40 +44,58 @@ class MainHomeViewModel: ObservableObject {
                 nickName: nickName,
                 profile: profile,
                 code: code,
-                content: content
+                content: content)
             )
-            )
-            fieldReCommendCode(content: content)
+            getShareUser(content: content)
+            getShareGoal()
         } catch {
             print("addShareContentError")
         }
     }
     
-    // MARK: 동일한 코드 정보 찾기
-    func fieldReCommendCode(content: [String]) {
-        let query = docRef.whereField("reCommendCode", isEqualTo: self.myCode)
-        query.getDocuments { querySnapshot, error in
-            if let error {
-                print("get code error \(error.localizedDescription)")
-            }
-            
-            if let querySnapshot {
-                for doc in querySnapshot.documents {
-                    let ref = self.docRef.document(doc.documentID).collection(CollectionName.ShareGoal.rawValue)
-                    do {
-                        let _ = try ref.addDocument(from: Contents(
-                            nickName: self.userInfoData?.nickName ?? "",
-                            profile: self.userInfoData?.userProfile ?? "",
-                            code: self.myCode,
-                            content: content)
-                        )
-                    } catch {
-                        print("addShareContentError")
-                    }
-                }
-            }
+    // MARK: 공유된 목표정보 가져오기
+    func getShareGoal() {
+        Task {
+            self.goalContents = try await ShareInfoService.getShareInfo()
         }
     }
+    
+    // MARK: 나와 연결된 사람 찾기
+    func getShareUser(content: [String]) {
+        Task {
+            try await ShareInfoService.fieldReCommendCode(
+                nickName: self.userInfoData?.nickName ?? "",
+                profile: self.userInfoData?.userProfile ?? "",
+                code: self.myCode,
+                content: content)
+        }
+    }
+    
+    // MARK: 동일한 코드 정보 찾기
+//    func fieldReCommendCode(content: [String]) {
+//        let query = docRef.whereField("reCommendCode", isEqualTo: self.myCode)
+//        query.getDocuments { querySnapshot, error in
+//            if let error {
+//                print("get code error \(error.localizedDescription)")
+//            }
+//
+//            if let querySnapshot {
+//                for doc in querySnapshot.documents {
+//                    let ref = self.docRef.document(doc.documentID).collection(CollectionName.ShareGoal.rawValue)
+//                    do {
+//                        let _ = try ref.addDocument(from: Contents(
+//                            nickName: self.userInfoData?.nickName ?? "",
+//                            profile: self.userInfoData?.userProfile ?? "",
+//                            code: self.myCode,
+//                            content: content)
+//                        )
+//                    } catch {
+//                        print("addShareContentError")
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     func addContent(contents: Contents) {
         let addRef = self.docRef.document(ShareVar.userUid).collection(CollectionName.ShareGoal.rawValue)

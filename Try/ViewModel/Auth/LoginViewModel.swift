@@ -39,6 +39,7 @@ class LoginViewModel: NSObject, ObservableObject {
             }
             self.userUid = Auth.auth().currentUser?.uid ?? ""
             ShareVar.userUid = self.userUid
+            print("userUId -> \(ShareVar.userUid)")
             self.ifUserDocuments(userUid: Auth.auth().currentUser?.uid ?? "")
             self.isLoggedIn = true
         }

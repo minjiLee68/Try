@@ -20,6 +20,7 @@ struct HomeView: View {
         mainView
             .onAppear {
                 mainViewModel.userInfoFetchData()
+                mainViewModel.getShareGoal()
             }
             .modifier(AppBackgroundColor(viewModel: mainViewModel, currentIndex: $currentIndex))
     }
@@ -41,6 +42,7 @@ struct HomeView: View {
         .overlay {
             if isTabCard {
                 DetailCardView(
+                    mainViewModel: mainViewModel,
                     selectGoalContent: selectGoalContent,
                     contentId: selectGoalContent?.id ?? "",
                     isTab: $isTabCard,
