@@ -19,6 +19,8 @@ struct ProfileEditorView: View {
     @State var introduce: String
     @State var reCommend: String
     
+    @State var settingType: Setting
+    
     @State private var userImage: UIImage = UIImage()
     
     let nickNameMaxCount = Int(8)
@@ -42,7 +44,10 @@ struct ProfileEditorView: View {
                     Text("완료")
                         .foregroundColor(nickName.count >= 4 ? .white : .gray)
                 }
-                .disabled(nickName.count >= 3 ? false : true)
+                .disabled(
+                    (settingType == .EditProfile && nickName.count >= 3) ||
+                    (settingType == .EditCode && reCommend != "") ? false : true
+                )
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(.trailing, 20)
             }
@@ -85,6 +90,7 @@ struct ProfileEditorView: View {
             }
         }
         .padding(.top, 50)
+        .disabled(settingType == .EditCode ? true : false)
     }
     
     // MARK: 닉네임 세팅
@@ -98,15 +104,16 @@ struct ProfileEditorView: View {
                 .padding(12)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(6)
-                .foregroundColor(Color.white)
+                .foregroundColor(settingType == .EditCode ? .gray : .white)
                 .onChange(of: nickName) { newValue in
                     if nickName.count > nickNameMaxCount {
                         nickName = String(nickName.prefix(nickNameMaxCount))
                     }
                 }
+                .disabled(settingType == .EditCode ? true : false)
         }
         .padding(.horizontal, 20)
-        .padding(.top, 30)
+        .padding(.top, 40)
     }
     
     // MARK: 한줄 소개
@@ -121,15 +128,16 @@ struct ProfileEditorView: View {
                 .padding(12)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(6)
-                .foregroundColor(Color.white)
+                .foregroundColor(settingType == .EditCode ? .gray : .white)
                 .onChange(of: introduce) { newValue in
                     if introduce.count > introduceMaxCount {
                         introduce = String(introduce.prefix(introduceMaxCount))
                     }
                 }
+                .disabled(settingType == .EditCode ? true : false)
         }
         .padding(.horizontal, 20)
-        .padding(.top, 30)
+        .padding(.top, 40)
     }
     
     // MARK: 추천인 코드
@@ -152,7 +160,7 @@ struct ProfileEditorView: View {
                 }
         }
         .padding(.horizontal, 20)
-        .padding(.top, 30)
+        .padding(.top, 40)
     }
 }
 

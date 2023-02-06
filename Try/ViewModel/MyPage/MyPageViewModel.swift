@@ -25,6 +25,7 @@ class MyPageViewModel: ObservableObject {
     let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
     
     @AppStorage("recommendCode") var recommendCode = ""
+    @AppStorage("myCode") var myCode = ""
     @AppStorage("isMember") var isMember = UserDefaults.standard.bool(forKey: "isMember")
     
     // MARK: 내 정보 가져오기
@@ -37,6 +38,13 @@ class MyPageViewModel: ObservableObject {
             } catch {
                 print("userInfoFetchData error -> \(error.localizedDescription)")
             }
+        }
+    }
+    
+    // MARK: 나와 연결된 사람 찾기
+    func getShareUser(code: String) {
+        Task {
+            try await ShareInfoService.otherUserConnect(code: code)
         }
     }
     

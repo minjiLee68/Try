@@ -30,9 +30,15 @@ enum searchMode {
 }
 
 // MARK: popup
-enum PopupMode {
-    case isBox
-    case isnonBox
+enum Setting {
+    case EditCode
+    case EditProfile
+}
+
+// MARK: detail page Type
+enum DetailType {
+    case Editable
+    case Additional
 }
 
 // MARK: Login Type

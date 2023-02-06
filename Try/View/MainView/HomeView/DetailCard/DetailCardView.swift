@@ -12,11 +12,14 @@ struct DetailCardView: View {
     @StateObject var mainViewModel: MainHomeViewModel
 
     @State var selectGoalContent: Contents?
+    @State var cardType: DetailType
     @State var defaultProfile = ""
     @State var defaultNickName = "이름"
     
     @State var isShowContent = false
     @State var isContactList = false
+    @State var isUserTab = false
+    
     @State var firstContent = ""
     @State var secondContent = ""
     @State var thirdContent = ""
@@ -31,7 +34,7 @@ struct DetailCardView: View {
         VStack(spacing: 20) {
             navigationBar
             
-            if selectGoalContent?.content != nil {
+            if cardType == .Editable {
                 detailContents
             } else {
                 goalListSetting
@@ -41,10 +44,10 @@ struct DetailCardView: View {
         }
         .background(.black)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .onAppear {
-            mainViewModel.userInfoFetchData()
-        }
         .ignoresSafeArea(.keyboard, edges: .bottom)
+        .onAppear {
+            mainViewModel.getShareUser()
+        }
     }
     
     var detailContents: some View {
@@ -60,8 +63,6 @@ struct DetailCardView: View {
                 }
             }
         }
-//        .matchedGeometryEffect(id: contentId, in: animation)
-//        .transition(.asymmetric(insertion: .identity, removal: .offset(y:0.5)))
     }
     
     var topTitle: some View {
@@ -79,11 +80,12 @@ struct DetailCardView: View {
             Spacer()
             
             VStack(spacing: 8) {
-                WebImageView(url: self.defaultProfile, width: device.widthScale(50), height: device.heightScale(50))
+                WebImageView(url: cardType == .Additional ? self.defaultProfile : selectGoalContent?.profile ?? "",
+                             width: device.widthScale(50), height: device.heightScale(50))
                     .clipShape(Circle())
                     .id(UUID())
                 
-                Text(self.defaultNickName)
+                Text(cardType == .Additional ? self.defaultNickName : selectGoalContent?.nickName ?? "")
                     .foregroundColor(.white)
                     .defaultFont(size: 13)
             }
@@ -106,9 +108,11 @@ struct DetailCardView: View {
                 isTab.toggle()
             } label: {
                 Text("확인")
+                    .foregroundColor(isUserTab ? .white : .gray)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.trailing, 20)
+            .disabled(isUserTab ? false : true)
         }
         .onChange(of: isTab) { newValue in
             hideKeyboard()
@@ -171,22 +175,25 @@ extension DetailCardView {
 extension DetailCardView {
     var contactListView: some View {
         Menu {
-            ForEach(0..<mainViewModel.connectionUser.count, id: \.self) { index in
+            ForEach(0..<mainViewModel.connectionUsers.count, id: \.self) { index in
                 Button {
-                    self.defaultProfile = mainViewModel.connectionUser[index].profile
-                    self.defaultNickName = mainViewModel.connectionUser[index].nickName
-                    self.code = mainViewModel.connectionUser[index].code
+                    self.defaultProfile = mainViewModel.connectionUsers[index].profile
+                    self.defaultNickName = mainViewModel.connectionUsers[index].nickName
+                    self.code = mainViewModel.connectionUsers[index].code
+                    isUserTab = true
                 } label: {
-                    Text(mainViewModel.connectionUser[index].nickName)
+                    Text(mainViewModel.connectionUsers[index].nickName)
                         .foregroundColor(.white)
                         .defaultFont(size: 13)
                 }
             }
         } label: {
             VStack(spacing: 8) {
-                Image(self.defaultProfile)
-                    .mask(Circle().frame(width: device.widthScale(60), height: device.heightScale(60)))
-                    .frame(width: device.widthScale(60), height: device.heightScale(60))
+                if self.defaultProfile.count == 0 {
+                    Image("profile")
+                        .mask(Circle().frame(width: device.widthScale(60), height: device.heightScale(60)))
+                        .frame(width: device.widthScale(60), height: device.heightScale(60))
+                }
                 
                 Text(self.defaultNickName)
                     .foregroundColor(.white.opacity(0.8))

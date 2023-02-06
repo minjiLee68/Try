@@ -114,7 +114,7 @@ struct ProfileSettingView: View {
                 }
         }
         .padding(.horizontal, 20)
-        .padding(.top, 30)
+        .padding(.top, 40)
     }
     
     // MARK: 한줄 소개
@@ -137,7 +137,7 @@ struct ProfileSettingView: View {
                 }
         }
         .padding(.horizontal, 20)
-        .padding(.top, 30)
+        .padding(.top, 40)
     }
     
     // MARK: 추천인 코드
@@ -160,6 +160,6 @@ struct ProfileSettingView: View {
                 }
         }
         .padding(.horizontal, 20)
-        .padding(.top, 30)
+        .padding(.top, 40)
     }
 }

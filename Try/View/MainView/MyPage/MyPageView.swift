@@ -13,6 +13,7 @@ struct MyPageView: View {
     @StateObject var myPageViewModel = MyPageViewModel()
     @State var tabId = ""
     @State var searchText = ""
+    @State var recommend = ""
     
     @State var isRecomment = false
     @State var isSideBtn = false
@@ -37,7 +38,8 @@ struct MyPageView: View {
                 NavigationLink(destination: ProfileEditorView(
                     nickName: myPageViewModel.userInfoData?.nickName ?? "",
                     introduce: myPageViewModel.userInfoData?.introduce ?? "",
-                    reCommend: myPageViewModel.userInfoData?.reCommendCode ?? "")
+                    reCommend: myPageViewModel.userInfoData?.reCommendCode ?? "",
+                    settingType: .EditProfile)
                 ) {
                     Text("프로필 편집")
                         .defaultFont(size: 14)
@@ -53,6 +55,29 @@ struct MyPageView: View {
         .onAppear {
             myPageViewModel.userInfoFetchData()
         }
+        .overlay(content: {
+//            ZStack {
+//                RoundedRectangle(cornerRadius: 6)
+//                    .fill(Color.black)
+//                    .shadow(color: Color.gray.opacity(0.6), radius: 6)
+//                    .frame(width: device.widthScale(260), height: device.heightScale(260))
+//                    .frame(maxHeight: .infinity, alignment: .center)
+//                    .overlay {
+//                        VStack {
+//                            ZStack {
+//                                TextField("코드 입력", text: $recommend)
+//                            }
+//                            .padding(.horizontal, 15)
+//                            
+//                            Button {
+//                                myPageViewModel.getShareUser(code: recommend)
+//                            } label: {
+//                                Text("확인")
+//                            }
+//                        }
+//                    }
+//            }
+        })
         .frame(width: device.screenWidth, height: device.screenHeight)
     }
     
@@ -72,9 +97,12 @@ struct MyPageView: View {
                     }
             }
             
-            Button {
-                isRecomment.toggle()
-            } label: {
+            NavigationLink(destination: ProfileEditorView(
+                nickName: myPageViewModel.userInfoData?.nickName ?? "",
+                introduce: myPageViewModel.userInfoData?.introduce ?? "",
+                reCommend: myPageViewModel.userInfoData?.reCommendCode ?? "",
+                settingType: .EditCode)
+            ) {
                 RoundedRectangle(cornerRadius: 6)
                     .stroke(Color.gray.opacity(0.5))
                     .frame(height: device.heightScale(40))

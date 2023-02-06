@@ -10,9 +10,9 @@ import SwiftUI
 struct HomeView: View {
     @StateObject var mainViewModel = MainHomeViewModel()
     @State var selectGoalContent: Contents?
+    @State var cardType: DetailType = .Editable
     @State var currentIndex = 0
     @State var isTabCard = false
-    //    @State var isDetailView = false
     
     @Namespace var smooth
     
@@ -20,7 +20,6 @@ struct HomeView: View {
         mainView
             .onAppear {
                 mainViewModel.userInfoFetchData()
-                mainViewModel.getShareGoal()
             }
             .modifier(AppBackgroundColor(viewModel: mainViewModel, currentIndex: $currentIndex))
     }
@@ -31,6 +30,7 @@ struct HomeView: View {
             
             Button {
                 isTabCard = true
+                cardType = .Additional
             } label: {
                 Text("추가하기")
             }
@@ -44,6 +44,7 @@ struct HomeView: View {
                 DetailCardView(
                     mainViewModel: mainViewModel,
                     selectGoalContent: selectGoalContent,
+                    cardType: cardType,
                     contentId: selectGoalContent?.id ?? "",
                     isTab: $isTabCard,
                     animation: smooth
@@ -66,6 +67,7 @@ struct HomeView: View {
                     withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
                         selectGoalContent = contents
                         isTabCard = true
+                        cardType = .Editable
                     }
                 }
                 .matchedGeometryEffect(id: contents.id, in: smooth)

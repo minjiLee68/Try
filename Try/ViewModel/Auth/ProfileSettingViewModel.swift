@@ -24,17 +24,25 @@ class ProfileSettingViewModel: ObservableObject {
     
     func setUserData(image: UIImage, nickName: String, introduce: String, code: String) {
         self.uniqueCode(code: code)
+        self.getShareUser(code: code)
         do {
             try self.collectionRef.setData(from: UserInfo(
                 nickName: nickName,
                 userProfile: self.profileImage,
                 introduce: introduce,
                 reCommendCode: code,
-                myCode: self.myCode
-            ))
-            self.isMember = true
+                myCode: self.myCode)
+            )
         } catch {
             print("error")
+        }
+        self.isMember = true
+    }
+    
+    // MARK: 나와 연결된 사람 찾기
+    func getShareUser(code: String) {
+        Task {
+            try await ShareInfoService.otherUserConnect(code: code)
         }
     }
     
@@ -47,8 +55,15 @@ class ProfileSettingViewModel: ObservableObject {
         }
     }
     
-    func imageUrl()  {
+    func imageUrl() {
         let storageUrl = Storage.storage().reference(withPath: "profile/\(ShareVar.userUid)")
+        storageUrl.downloadURL { url, error in
+            self.profileImage = url?.absoluteString ?? ""
+        }
+    }
+    
+    func defaultImageUrl() {
+        let storageUrl = Storage.storage().reference(withPath: "profile/defaultProfile.png")
         storageUrl.downloadURL { url, error in
             self.profileImage = url?.absoluteString ?? ""
         }
