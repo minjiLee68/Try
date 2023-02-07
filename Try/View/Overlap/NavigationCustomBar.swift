@@ -17,7 +17,9 @@ struct NavigationCustomBar: View {
             switch naviType {
             case .profileSetting:
                 naviContents(title: "프로필 설정")
-            case .detail:
+            case .cardDetail:
+                naviContents(leadingBtn: "취소")
+            case .drawerDetail:
                 naviContents(leadingBtn: "취소")
             case .mypage:
                 naviContents(leadingBtn: "취소")
@@ -35,7 +37,7 @@ struct NavigationCustomBar: View {
     func naviContents(leadingBtn: String = "", title: String = "", trailingBtn: String = "") -> some View {
         HStack(spacing: 0) {
             Button {
-                if naviType == .detail {
+                if naviType == .cardDetail {
                     withAnimation(.easeOut(duration: 0.35)) {
                         isButton = false
                     }

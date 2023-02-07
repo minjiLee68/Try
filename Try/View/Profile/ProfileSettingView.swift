@@ -43,7 +43,7 @@ struct ProfileSettingView: View {
                 NavigationCustomBar(naviType: .profileSetting, isButton: .constant(false))
                 
                 Button {
-                    profileViewModel.setUserData(image: userImage, nickName: nickName, introduce: introduce, code: reCommend)
+                    profileViewModel.setUserData(image: userImage, nickName: nickName, introduce: introduce)
                     profileViewModel.isProfile = true
                     hideKeyboard()
                 } label: {
@@ -68,7 +68,7 @@ struct ProfileSettingView: View {
             
             oneLineIntroduce
             
-            reCommendedCode
+//            reCommendedCode
             
             Spacer()
         }
@@ -141,25 +141,25 @@ struct ProfileSettingView: View {
     }
     
     // MARK: 추천인 코드
-    var reCommendedCode: some View {
-        VStack {
-            Text("추천코드")
-                .foregroundColor(.white)
-                .fontWeight(.medium)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            TextField(reCommendField, text: $reCommend)
-                .padding(12)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(6)
-                .foregroundColor(Color.white)
-                .onChange(of: reCommend) { newValue in
-                    if reCommend.count > reCommendedCount {
-                        reCommend = String(reCommend.prefix(reCommendedCount))
-                    }
-                }
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 40)
-    }
+//    var reCommendedCode: some View {
+//        VStack {
+//            Text("추천코드")
+//                .foregroundColor(.white)
+//                .fontWeight(.medium)
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//
+//            TextField(reCommendField, text: $reCommend)
+//                .padding(12)
+//                .background(Color.gray.opacity(0.1))
+//                .cornerRadius(6)
+//                .foregroundColor(Color.white)
+//                .onChange(of: reCommend) { newValue in
+//                    if reCommend.count > reCommendedCount {
+//                        reCommend = String(reCommend.prefix(reCommendedCount))
+//                    }
+//                }
+//        }
+//        .padding(.horizontal, 20)
+//        .padding(.top, 40)
+//    }
 }

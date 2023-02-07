@@ -19,5 +19,9 @@ struct Contents: Hashable, Codable {
 struct Connection: Codable {
     var nickName: String
     var profile: String
-    var code: String
+}
+
+struct Drawers {
+    var drawerList = ""
+    var type: DrawerType
 }

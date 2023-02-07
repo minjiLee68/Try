@@ -96,13 +96,12 @@ struct DetailCardView: View {
     
     var navigationBar: some View {
         ZStack {
-            NavigationCustomBar(naviType: .detail, isButton: $isTab)
+            NavigationCustomBar(naviType: .cardDetail, isButton: $isTab)
             
             Button {
                 mainViewModel.addShareContent(
                     nickName: self.defaultNickName,
                     profile: self.defaultProfile,
-                    code: code,
                     content: [firstContent,secondContent,thirdContent]
                 )
                 isTab.toggle()
@@ -179,7 +178,6 @@ extension DetailCardView {
                 Button {
                     self.defaultProfile = mainViewModel.connectionUsers[index].profile
                     self.defaultNickName = mainViewModel.connectionUsers[index].nickName
-                    self.code = mainViewModel.connectionUsers[index].code
                     isUserTab = true
                 } label: {
                     Text(mainViewModel.connectionUsers[index].nickName)

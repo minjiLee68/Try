@@ -9,5 +9,6 @@ import SwiftUI
 
 class EnvironmentViewModel: ObservableObject {
     @Published var isSideBtn = false
-    @AppStorage("loginType") var loginType = (UserDefaults.standard.string(forKey: "loginType") ?? "")
+    @Published var drawerSelected = false
+    let sideBarWidth = device.screenWidth - 60
 }

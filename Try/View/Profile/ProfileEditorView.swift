@@ -15,12 +15,6 @@ struct ProfileEditorView: View {
     @State var isImageChanged = false
     @State var isSave = false
     
-    @State var nickName: String
-    @State var introduce: String
-    @State var reCommend: String
-    
-    @State var settingType: Setting
-    
     @State private var userImage: UIImage = UIImage()
     
     let nickNameMaxCount = Int(8)
@@ -38,16 +32,11 @@ struct ProfileEditorView: View {
                 NavigationCustomBar(naviType: .profileEditor, isButton: .constant(false))
                 
                 Button {
-                    profileViewModel.setUserData(image: userImage, nickName: nickName, introduce: introduce, code: reCommend)
+                    profileViewModel.setUserData(image: userImage, nickName: profileViewModel.nickName, introduce: profileViewModel.introduce)
                     dismiss()
                 } label: {
                     Text("완료")
-                        .foregroundColor(nickName.count >= 4 ? .white : .gray)
                 }
-                .disabled(
-                    (settingType == .EditProfile && nickName.count >= 3) ||
-                    (settingType == .EditCode && reCommend != "") ? false : true
-                )
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(.trailing, 20)
             }
@@ -65,9 +54,12 @@ struct ProfileEditorView: View {
             
             oneLineIntroduce
             
-            reCommendedCode
+//            reCommendedCode
             
             Spacer()
+        }
+        .onAppear {
+            profileViewModel.userInfoFetchData()
         }
     }
     
@@ -77,20 +69,12 @@ struct ProfileEditorView: View {
             isPickers.toggle()
         } label: {
             ZStack {
-                Image("profile")
-                    .mask(Circle().frame(width: 80, height: 80))
-                    .frame(width: 80, height: 80)
-                    .opacity(isImageChanged ? 0: 1)
-                
-                Image(uiImage: userImage)
-                    .resizable()
-                    .frame(width: 80, height: 80)
+                WebImageView(url: profileViewModel.profileImage, width: device.widthScale(80), height: device.heightScale(80))
                     .clipShape(Circle())
-                    .opacity(isImageChanged ? 1 : 0)
+                    .id(UUID())
             }
         }
         .padding(.top, 50)
-        .disabled(settingType == .EditCode ? true : false)
     }
     
     // MARK: 닉네임 세팅
@@ -100,17 +84,16 @@ struct ProfileEditorView: View {
                 .foregroundColor(.white)
                 .fontWeight(.medium)
             
-            TextField("", text: $nickName)
+            TextField("", text: $profileViewModel.nickName)
                 .padding(12)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(6)
-                .foregroundColor(settingType == .EditCode ? .gray : .white)
-                .onChange(of: nickName) { newValue in
-                    if nickName.count > nickNameMaxCount {
-                        nickName = String(nickName.prefix(nickNameMaxCount))
+                .foregroundColor(.white)
+                .onChange(of: profileViewModel.nickName) { newValue in
+                    if profileViewModel.nickName.count > nickNameMaxCount {
+                        profileViewModel.nickName = String(profileViewModel.nickName.prefix(nickNameMaxCount))
                     }
                 }
-                .disabled(settingType == .EditCode ? true : false)
         }
         .padding(.horizontal, 20)
         .padding(.top, 40)
@@ -124,43 +107,42 @@ struct ProfileEditorView: View {
                 .fontWeight(.medium)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            TextField("", text: $introduce)
+            TextField("", text: $profileViewModel.introduce)
                 .padding(12)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(6)
-                .foregroundColor(settingType == .EditCode ? .gray : .white)
-                .onChange(of: introduce) { newValue in
-                    if introduce.count > introduceMaxCount {
-                        introduce = String(introduce.prefix(introduceMaxCount))
+                .foregroundColor(.white)
+                .onChange(of: profileViewModel.introduce) { newValue in
+                    if profileViewModel.introduce.count > introduceMaxCount {
+                        profileViewModel.introduce = String(profileViewModel.introduce.prefix(introduceMaxCount))
                     }
                 }
-                .disabled(settingType == .EditCode ? true : false)
         }
         .padding(.horizontal, 20)
         .padding(.top, 40)
     }
     
-    // MARK: 추천인 코드
-    var reCommendedCode: some View {
-        VStack {
-            Text("추천코드")
-                .foregroundColor(.white)
-                .fontWeight(.medium)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            TextField("", text: $reCommend)
-                .padding(12)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(6)
-                .foregroundColor(Color.white)
-                .onChange(of: reCommend) { newValue in
-                    if reCommend.count > reCommendedCount {
-                        reCommend = String(reCommend.prefix(reCommendedCount))
-                    }
-                }
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 40)
-    }
+//    // MARK: 추천인 코드
+//    var reCommendedCode: some View {
+//        VStack {
+//            Text("추천코드")
+//                .foregroundColor(.white)
+//                .fontWeight(.medium)
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//
+//            TextField("", text: $reCommend)
+//                .padding(12)
+//                .background(Color.gray.opacity(0.1))
+//                .cornerRadius(6)
+//                .foregroundColor(Color.white)
+//                .onChange(of: reCommend) { newValue in
+//                    if reCommend.count > reCommendedCount {
+//                        reCommend = String(reCommend.prefix(reCommendedCount))
+//                    }
+//                }
+//        }
+//        .padding(.horizontal, 20)
+//        .padding(.top, 40)
+//    }
 }
 

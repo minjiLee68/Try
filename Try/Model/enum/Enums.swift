@@ -18,21 +18,24 @@ enum Tab: String, CaseIterable {
 // MARK: Navi Enum
 enum NaviType {
     case profileSetting
-    case detail
+    case cardDetail
+    case drawerDetail
     case mypage
     case profileEditor
+}
+
+// MARK: Drawer Enum
+enum DrawerType {
+    case FindingFriends
+    case Observation
+    case Empty
+    case Logout
 }
 
 // MARK: Search Mode
 enum searchMode {
     case filtering
     case allList
-}
-
-// MARK: popup
-enum Setting {
-    case EditCode
-    case EditProfile
 }
 
 // MARK: detail page Type

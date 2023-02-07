@@ -10,5 +10,6 @@ import SwiftUI
 enum CollectionName: String {
     case UserInfo = "UserInfo"
     case Contact = "Contact"
-    case ShareGoal = "ShareGoal"
+    case HabitShare = "HabitShare"
+    case FriendRequest = "FriendRequest"
 }

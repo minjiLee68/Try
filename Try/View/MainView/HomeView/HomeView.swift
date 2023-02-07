@@ -14,6 +14,8 @@ struct HomeView: View {
     @State var currentIndex = 0
     @State var isTabCard = false
     
+    @Binding var drawerSelected: Bool
+    
     @Namespace var smooth
     
     var body: some View {
@@ -115,6 +117,14 @@ extension HomeView {
     @ViewBuilder
     func HeaderView() -> some View {
         VStack(spacing: 15) {
+            Button {
+                drawerSelected.toggle()
+            } label: {
+                Image("ic_placeholder")
+                    .colorMultiply(.white)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            
             HStack {
                 (Text("Hello ")
                     .fontWeight(.semibold) +
@@ -144,6 +154,6 @@ extension HomeView {
                 .padding(.vertical, 15)
         }
         .opacity(isTabCard ? 0 : 1)
-        .padding(.top, 20)
+        .padding(.top, 5)
     }
 }

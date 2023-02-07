@@ -32,7 +32,6 @@ struct LoginView: View {
             
             Button {
                 viewModel.handleKakaoLogin()
-                environmentViewModel.loginType = LoginType.kakao.rawValue
             } label: {
                 Image("kakaoLogin")
                     .resizable()
@@ -43,7 +42,6 @@ struct LoginView: View {
             Button {
                 viewModel.naverLoginDelegate()
                 viewModel.naverLoginInstance?.requestThirdPartyLogin()
-                environmentViewModel.loginType = LoginType.naver.rawValue
             } label: {
                 Image("NaverLogin")
                     .resizable()
@@ -52,7 +50,7 @@ struct LoginView: View {
             .padding(.top, 30)
             
             Button {
-                environmentViewModel.loginType = LoginType.apple.rawValue
+                
             } label: {
                 Image("AppleLogin")
                     .resizable()

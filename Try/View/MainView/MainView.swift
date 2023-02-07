@@ -12,12 +12,15 @@ struct MainView: View {
     @State var currentTab: Tab = .home
     @State var currentIndex: Int = 0
     
+    @State var drawerSelected = false
+    let sideBarWidth = device.screenWidth - 60
+    
     @Namespace var animation
     
     var body: some View {
         NavigationView {
             ZStack {
-                HomeView()
+                HomeView(drawerSelected: $drawerSelected)
 //                TabView(selection: $currentTab) {
 //                    HomeView()
 //                        .tag(Tab.home)
@@ -33,6 +36,17 @@ struct MainView: View {
 //
 //                    tabBar()
 //                }
+                if drawerSelected {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            drawerSelected = false
+                        }
+                }
+                
+                DrawerView()
+                    .offset(x: drawerSelected ? 0 : -(sideBarWidth))
+                    .animation(.easeInOut, value: drawerSelected)
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
         }

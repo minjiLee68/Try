@@ -17,6 +17,7 @@ class MyPageViewModel: ObservableObject {
     @Published var userInfoData: UserInfo?
     @Published var contact: Contact?
     @Published var contacts = [Contact]()
+    @Published var drawers = [Drawers]()
     @Published var listMode: searchMode = .allList
     
     let store = CNContactStore()
@@ -44,7 +45,7 @@ class MyPageViewModel: ObservableObject {
     // MARK: 나와 연결된 사람 찾기
     func getShareUser(code: String) {
         Task {
-            try await ShareInfoService.otherUserConnect(code: code)
+//            try await ShareInfoService.otherUserConnect(code: code)
         }
     }
     
@@ -58,10 +59,19 @@ class MyPageViewModel: ObservableObject {
         }
     }
     
+    //MARK: Drawer list init
+    func drawerList() {
+        drawers = [
+            Drawers(drawerList: "친구찾기", type: .FindingFriends),
+            Drawers(drawerList: "나의 관찰 기록", type: .Observation),
+            Drawers(drawerList: "아직 비우기", type: .Empty),
+            Drawers(drawerList: "로그아웃", type: .Logout)
+        ]
+    }
+    
     func contactUpdate(phoneNumber: String, send: Int) {
         docRef.collection(CollectionName.Contact.rawValue).getDocuments { (querySnapshot, error) in
             if let error {
-                print("contact error -> \(error.localizedDescription)")
                 return
             }
             if let querySnapshot {
@@ -70,7 +80,6 @@ class MyPageViewModel: ObservableObject {
                         let data = try doc.data(as: Contact.self)
                         if data.phoneNumber == phoneNumber {
                             let id = doc.documentID
-                            print("documentID \(id)")
                             let ref = self.docRef.collection(CollectionName.Contact.rawValue).document(id)
                             ref.updateData(["myFriends" : send])
                         }
