@@ -141,21 +141,21 @@ extension DetailCardView {
             .padding(.horizontal, 20)
             
             VStack(spacing: 20) {
-                TextField("첫번째 목표", text: $firstContent)
+                TextField("첫번째 습관 만들기", text: $firstContent)
                     .padding()
                     .padding(.leading, 6)
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(6)
                     .foregroundColor(Color.white)
                 
-                TextField("두번째 목표", text: $secondContent)
+                TextField("두번째 습관 만들기", text: $secondContent)
                     .padding()
                     .padding(.leading, 6)
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(6)
                     .foregroundColor(Color.white)
                 
-                TextField("세번째 목표", text: $thirdContent)
+                TextField("세번째 습관 만들기", text: $thirdContent)
                     .padding()
                     .padding(.leading, 6)
                     .background(Color.gray.opacity(0.1))

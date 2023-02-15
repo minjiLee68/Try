@@ -85,7 +85,7 @@ struct HomeView: View {
     func cardContentView(content: Contents) -> some View {
         ZStack {
             VStack(spacing: 0) {
-                if content.profile != "" {
+                if content.otherProfile != "" {
                     WebImageView(url: content.profile, width: device.widthScale(120), height: device.heightScale(120))
                         .clipShape(Circle())
                         .id(content.id)
@@ -102,7 +102,7 @@ struct HomeView: View {
                 }
             }
             
-            Text(content.nickName)
+            Text(content.otherName)
                 .foregroundColor(.white)
                 .defaultFont(size: 18)
                 .frame(maxHeight: .infinity, alignment: .center)

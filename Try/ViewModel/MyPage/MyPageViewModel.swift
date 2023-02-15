@@ -71,9 +71,6 @@ class MyPageViewModel: ObservableObject {
     
     func contactUpdate(phoneNumber: String, send: Int) {
         docRef.collection(CollectionName.Contact.rawValue).getDocuments { (querySnapshot, error) in
-            if let error {
-                return
-            }
             if let querySnapshot {
                 for doc in querySnapshot.documents {
                     do {

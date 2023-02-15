@@ -38,6 +38,13 @@ enum searchMode {
     case allList
 }
 
+// MARK: 친구요청 상태
+enum RequestStatus: Int {
+    case wait = 0
+    case accept = 1
+    case refusal = 2
+}
+
 // MARK: detail page Type
 enum DetailType {
     case Editable

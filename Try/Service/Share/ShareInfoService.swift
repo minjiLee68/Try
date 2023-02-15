@@ -12,47 +12,90 @@ import FirebaseFirestoreSwift
 
 enum ShareInfoService {
     //MARK: 내 정보 가져오기
-    static func getMyUserInfo() async throws -> UserInfo {
-        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
-        let ref = try await docRef.getDocument()
-        return try ref.data(as: UserInfo.self)
+    static func getMyUserInfo(completion: @escaping (UserInfo) -> ()) {
+        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue)
+        docRef.document(ShareVar.userUid).addSnapshotListener { (docSnapshot, error) in
+            guard let document = docSnapshot else { return }
+            do {
+                completion(try document.data(as: UserInfo.self))
+            } catch {
+                print("userInfoFetchData error -> \(error.localizedDescription)")
+            }
+        }
     }
     
     // MARK: 목표내용 저장하기
     static func addShareContent(nickName: String, profile: String, content: [String]) async throws {
         let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue)
-        let ref = docRef.document(ShareVar.userUid).collection(CollectionName.HabitShare.rawValue).document()
-        try ref.setData(from: Contents(nickName: nickName, profile: profile, content: content))
-        
         let userRef = try await docRef.document(ShareVar.userUid).getDocument()
         let userData = try userRef.data(as: UserInfo.self)
-        let otherRef = docRef.document(userRef.documentID).collection(CollectionName.HabitShare.rawValue).document()
-        try otherRef.setData(from: Contents(
+        
+        let ref = docRef.document(ShareVar.userUid).collection(CollectionName.HabitShare.rawValue).document()
+        try ref.setData(from: Contents(
             nickName: userData.nickName,
             profile: userData.userProfile,
+            otherName: nickName,
+            otherProfile: profile,
             content: content)
         )
+        
+        let query = try await docRef.whereField("nickName", isEqualTo: nickName).getDocuments()
+        do {
+            for doc in query.documents {
+                let otherRef = docRef.document(doc.documentID).collection(CollectionName.HabitShare.rawValue).document()
+                try otherRef.setData(from: Contents(
+                    nickName: nickName,
+                    profile: profile,
+                    otherName: userData.nickName,
+                    otherProfile: userData.userProfile,
+                    content: content)
+                )
+            }
+        } catch {
+            print("addContent error \(error.localizedDescription)")
+        }
     }
     
     // MARK: 공유된 목표정보 가져오기
-    static func getShareInfo() async throws -> [Contents] {
+    static func getShareInfo(_ completion: @escaping (Contents) -> ()) {
         let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
-        let ref = try await docRef.collection(CollectionName.HabitShare.rawValue).getDocuments()
-        return ref.documents.compactMap { document in
-            try? document.data(as: Contents.self)
+        docRef.collection(CollectionName.HabitShare.rawValue).addSnapshotListener { (queryDoc, error) in
+            guard let document = queryDoc else { return }
+            do {
+                for doc in document.documents {
+                    completion(try doc.data(as: Contents.self))
+                }
+            } catch {
+                print("getShareInfo Error \(error.localizedDescription)")
+            }
         }
     }
     
     // MARK: 나와 연결된 사람
-//    static func fieldReCommendCode() async throws -> [UserInfo] {
-//        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue)
-//        let userRef = try await docRef.document(ShareVar.userUid).getDocument()
-//        let userData = try userRef.data(as: UserInfo.self)
-//        let query = try await docRef.whereField("reCommendCode", isEqualTo: userData.myCode).getDocuments()
-//        return query.documents.compactMap { item in
-//            try? item.data(as: UserInfo.self)
+//    static func friendRequests(_ completion: @escaping([UserInfo]) -> ()) {
+//        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
+//        let query = docRef.collection(CollectionName.FriendRequest.rawValue).whereField("state", isEqualTo: 1)
+//        query.addSnapshotListener { (querySnapshot, error) in
+//            do {
+//                if let querySnapshot {
+//                    for doc in querySnapshot.documents {
+//                        completion([try doc.data(as: UserInfo.self)])
+//                    }
+//                }
+//            } catch {
+//                print("friendRequest error \(error.localizedDescription)")
+//            }
 //        }
 //    }
+    
+    static func friendRequests() async throws -> [UserInfo] {
+        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
+        let query = docRef.collection(CollectionName.FriendRequest.rawValue).whereField("state", isEqualTo: 1)
+        let document = try await query.getDocuments()
+        return document.documents.compactMap({ doc in
+            try? doc.data(as: UserInfo.self)
+        })
+    }
     
     // MARK: 내가 연결하고 싶은 사람
 //    static func otherUserConnect(code: String) async throws {

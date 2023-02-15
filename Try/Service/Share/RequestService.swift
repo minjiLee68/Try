@@ -11,18 +11,44 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 enum RequestService {
-    static func friendsRequest(nickName: String) async throws {
+    // MARK: 친구요청
+    static func friendsRequest(nickName: String, state: Int) {
         let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue)
-        let userData = try await ShareInfoService.getMyUserInfo()
-        let query = try await docRef.whereField("nickName", isEqualTo: nickName).getDocuments()
-        for doc in query.documents {
-            let id = doc.documentID
-            let ref = docRef.document(id).collection(CollectionName.FriendRequest.rawValue).document()
-            try ref.setData(from: UserInfo(
-                nickName: userData.nickName,
-                userProfile: userData.userProfile,
-                introduce: userData.introduce)
-            )
+        ShareInfoService.getMyUserInfo { info in
+            Task {
+                if info.nickName == nickName {
+                    return
+                }
+                let query = try await docRef.whereField("nickName", isEqualTo: nickName).getDocuments()
+                for doc in query.documents {
+                    let id = doc.documentID
+                    let data = try doc.data(as: UserInfo.self)
+                    let ref = docRef.document(ShareVar.userUid).collection(CollectionName.FriendRequest.rawValue).document()
+                    try ref.setData(from: Friends(
+                        uid: id,
+                        nickName: nickName,
+                        profile: data.userProfile,
+                        state: state)
+                    )
+                    
+                    let otherRef = docRef.document(id).collection(CollectionName.FriendRequest.rawValue).document()
+                    try otherRef.setData(from: Friends(
+                        uid: ShareVar.userUid,
+                        nickName: info.nickName,
+                        profile: info.userProfile,
+                        state: state)
+                    )
+                }
+            }
+        }
+    }
+    
+    // MARK: 친구목록
+    static func friendsList() async throws -> [Friends] {
+        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
+        let ref = try await docRef.collection(CollectionName.FriendRequest.rawValue).getDocuments()
+        return ref.documents.compactMap { document in
+            try? document.data(as: Friends.self)
         }
     }
 }

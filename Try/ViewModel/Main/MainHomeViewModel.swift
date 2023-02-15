@@ -23,8 +23,10 @@ class MainHomeViewModel: ObservableObject {
     // MARK: 내 정보 가져오기
     func userInfoFetchData() {
         Task {
-            self.userInfoData = try await ShareInfoService.getMyUserInfo()
-            getShareGoal()
+            ShareInfoService.getMyUserInfo { info in
+                self.userInfoData = info
+            }
+            self.getShareGoal()
         }
 //        self.docRef.document(ShareVar.userUid).addSnapshotListener { (docSnapshot, error) in
 //            self.getShareGoal()
@@ -46,21 +48,22 @@ class MainHomeViewModel: ObservableObject {
                 content: content
             )
         }
-        getShareGoal()
     }
     
     // MARK: 공유된 목표정보 가져오기
     func getShareGoal() {
         Task {
-            self.goalContents = try await ShareInfoService.getShareInfo()
+            ShareInfoService.getShareInfo { info in
+                self.goalContents.append(info)
+            }
         }
     }
     
     // MARK: 나와 연결된 사람 찾기
     func getShareUser() {
-//        Task {
-//            self.connectionUsers = self.connectionToItem(try await ShareInfoService.fieldReCommendCode())
-//        }
+        Task {
+            self.connectionUsers = self.connectionToItem(try await ShareInfoService.friendRequests())
+        }
     }
     
     func addContent(contents: Contents) {

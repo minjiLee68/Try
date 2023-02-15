@@ -11,6 +11,7 @@ struct FindingFriendsView: View {
     @StateObject var drawerViewModel = DrawerViewModel()
     
     @State var searchText = ""
+    @State var isRequest = false
     
     var body: some View {
         VStack {
@@ -51,15 +52,26 @@ struct FindingFriendsView: View {
                     Spacer()
                     
                     Button {
-                        drawerViewModel.friendsRequest(nickName: drawerViewModel.userList[index].nickName)
+                        drawerViewModel.friendsRequest(nickName: drawerViewModel.userList[index].nickName, state: 0)
                     } label: {
-                        RoundedRectangle(cornerRadius: 5)
-                            .stroke(Color.blue, lineWidth: 1)
-                            .frame(width: device.widthScale(60), height: device.heightScale(30))
-                            .overlay {
-                                Text("친구요청")
-                                    .defaultFont(size: 12)
-                            }
+                        if isRequest {
+                            RoundedRectangle(cornerRadius: 5)
+                                .foregroundColor(.blue)
+                                .frame(width: device.widthScale(60), height: device.heightScale(30))
+                                .overlay {
+                                    Text("요청취소")
+                                        .defaultFont(size: 12)
+                                }
+                        } else {
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(Color.blue, lineWidth: 1)
+                                .frame(width: device.widthScale(60), height: device.heightScale(30))
+                                .overlay {
+                                    Text("친구요청")
+                                        .defaultFont(size: 12)
+                                }
+                        }
+                        
                     }
 
                 }

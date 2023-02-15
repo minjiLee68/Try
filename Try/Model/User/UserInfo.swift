@@ -8,9 +8,18 @@
 import SwiftUI
 import FirebaseFirestoreSwift
 
+// MARK: 사용자 정보
 struct UserInfo: Codable {
     @DocumentID var uid: String?
     var nickName: String
     var userProfile: String
     var introduce: String
+}
+
+// MARK: 친구요청
+struct Friends: Codable {
+    var uid: String
+    var nickName: String
+    var profile: String
+    var state: Int
 }

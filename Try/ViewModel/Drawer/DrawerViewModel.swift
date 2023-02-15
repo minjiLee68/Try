@@ -16,7 +16,9 @@ class DrawerViewModel: ObservableObject {
     @Published var userInfoData: UserInfo?
     @Published var userList = [UserInfo]()
     @Published var drawers = [Drawers]()
+    @Published var friends = [Friends]()
     @Published var listMode: searchMode = .allList
+    @Published var requestStatus: RequestStatus = .wait
     
     let db = Firestore.firestore()
     let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
@@ -25,7 +27,9 @@ class DrawerViewModel: ObservableObject {
     // MARK: 내 정보 가져오기
     func userInfoFetchData() {
         Task {
-            self.userInfoData = try await ShareInfoService.getMyUserInfo()
+            ShareInfoService.getMyUserInfo { info in
+                self.userInfoData = info
+            }
         }
 //        self.docRef.addSnapshotListener { (docSnapshot, error) in
 //            guard let document = docSnapshot else { return }
@@ -46,13 +50,20 @@ class DrawerViewModel: ObservableObject {
     }
     
     // MARK: 친구요청
-    func friendsRequest(nickName: String) {
+    func friendsRequest(nickName: String, state: Int) {
         Task {
-            try await RequestService.friendsRequest(nickName: nickName)
+            RequestService.friendsRequest(nickName: nickName, state: state)
         }
     }
     
-    //MARK: 친구 리스트 가져오기
+    // MARK: 친구목록
+    func friendList() {
+        Task {
+            self.friends.append(contentsOf: try await RequestService.friendsList())
+        }
+    }
+    
+    //MARK: 사용자 리스트 가져오기
     func getUserList() {
         self.db.collection(CollectionName.UserInfo.rawValue).addSnapshotListener { (docSnapshot, error) in
             guard let document = docSnapshot else { return }
