@@ -51,29 +51,18 @@ struct FindingFriendsView: View {
                     
                     Spacer()
                     
-                    Button {
-                        drawerViewModel.friendsRequest(nickName: drawerViewModel.userList[index].nickName, state: 0)
-                    } label: {
-                        if isRequest {
-                            RoundedRectangle(cornerRadius: 5)
-                                .foregroundColor(.blue)
-                                .frame(width: device.widthScale(60), height: device.heightScale(30))
-                                .overlay {
-                                    Text("요청취소")
-                                        .defaultFont(size: 12)
-                                }
-                        } else {
-                            RoundedRectangle(cornerRadius: 5)
-                                .stroke(Color.blue, lineWidth: 1)
-                                .frame(width: device.widthScale(60), height: device.heightScale(30))
-                                .overlay {
-                                    Text("친구요청")
-                                        .defaultFont(size: 12)
-                                }
+                    if drawerViewModel.userList[index].nickName != drawerViewModel.userInfoData?.nickName ?? "" {
+                        Button {
+                            drawerViewModel.friendsRequest(nickName: drawerViewModel.userList[index].nickName, state: RequestStatus.wait.rawValue)
+                        } label: {
+                            if drawerViewModel.userList[index].status == RequestStatus.wait.rawValue {
+                                requestButton(text: "요청취소")
+                            } else if drawerViewModel.userList[index].status == RequestStatus.defaults.rawValue{
+                                requestButton(text: "친구요청")
+                            }
+                            
                         }
-                        
                     }
-
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 6)

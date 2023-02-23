@@ -14,6 +14,7 @@ struct UserInfo: Codable {
     var nickName: String
     var userProfile: String
     var introduce: String
+    var status: Int
 }
 
 // MARK: 친구요청

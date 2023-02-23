@@ -32,7 +32,8 @@ class ProfileSettingViewModel: ObservableObject {
             try self.collectionRef.setData(from: UserInfo(
                 nickName: nickName,
                 userProfile: self.profileImage,
-                introduce: introduce)
+                introduce: introduce,
+                status: RequestStatus.defaults.rawValue)
             )
         } catch {
             print("error")

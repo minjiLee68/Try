@@ -40,9 +40,10 @@ enum searchMode {
 
 // MARK: 친구요청 상태
 enum RequestStatus: Int {
-    case wait = 0
-    case accept = 1
-    case refusal = 2
+    case defaults = 0 // 기본 값
+    case accept = 1 // 친구매칭 성공
+    case refusal = 2 // 친구매칭 실패
+    case wait = 3 // 친구요청
 }
 
 // MARK: detail page Type

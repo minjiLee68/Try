@@ -56,6 +56,13 @@ class DrawerViewModel: ObservableObject {
         }
     }
     
+    // MARK: 친구요청 상태
+    func friendStatus(nickName: String) {
+        Task {
+            try await RequestService.friendsStatus(nickName: nickName)
+        }
+    }
+    
     // MARK: 친구목록
     func friendList() {
         Task {
@@ -73,6 +80,7 @@ class DrawerViewModel: ObservableObject {
                     if data.nickName == self.userInfoData?.nickName {
                         print("getUserList \(data)")
                     }
+                    self.friendStatus(nickName: data.nickName)
                     self.userList.append(data)
                 }
             } catch {

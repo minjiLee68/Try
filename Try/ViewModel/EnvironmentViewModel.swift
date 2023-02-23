@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
+import FirebaseFirestoreSwift
+import FirebaseStorage
 
 class EnvironmentViewModel: ObservableObject {
     @Published var isSideBtn = false

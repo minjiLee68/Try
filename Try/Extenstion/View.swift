@@ -16,4 +16,14 @@ extension View {
         let resign = #selector(UIResponder.resignFirstResponder)
         UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
     }
+    
+    func requestButton(text: String) -> some View {
+        RoundedRectangle(cornerRadius: 5)
+            .foregroundColor(.blue)
+            .frame(width: device.widthScale(60), height: device.heightScale(30))
+            .overlay {
+                Text(text)
+                    .defaultFont(size: 12)
+            }
+    }
 }

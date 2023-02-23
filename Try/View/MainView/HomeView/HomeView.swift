@@ -12,7 +12,9 @@ struct HomeView: View {
     @State var selectGoalContent: Contents?
     @State var cardType: DetailType = .Editable
     @State var currentIndex = 0
+    
     @State var isTabCard = false
+    @State var isResponse = false
     
     @Binding var drawerSelected: Bool
     
@@ -42,6 +44,11 @@ struct HomeView: View {
         .padding([.horizontal, .top], 15)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .overlay {
+            if !mainViewModel.friendRequest.isEmpty {
+                newFriendRequestView
+                    .opacity(isResponse ? 0 : 1)
+            }
+            
             if isTabCard {
                 DetailCardView(
                     mainViewModel: mainViewModel,
@@ -107,6 +114,56 @@ struct HomeView: View {
                 .defaultFont(size: 18)
                 .frame(maxHeight: .infinity, alignment: .center)
         }
+    }
+    
+    // MARK: 새로운 친구요청
+    var newFriendRequestView: some View {
+        RoundedRectangle(cornerRadius: 10)
+            .fill(Color.black)
+            .shadow(color: .white.opacity(0.2), radius: 5)
+            .overlay(content: {
+                VStack(alignment: .center ,spacing: 0) {
+                    Text("새로운 친구요청이 있습니다!")
+                        .font(.title3)
+                        .defaultFont(size: 16)
+                        .foregroundColor(.white)
+                    
+                    ForEach(mainViewModel.friendRequest.indices, id: \.self) { i in
+                        HStack(spacing: 15) {
+                            WebImageView(url: mainViewModel.friendRequest[i].profile, width: device.widthScale(40), height: device.heightScale(40))
+                                .clipShape(Circle())
+                                .id(mainViewModel.friendRequest[i].uid)
+                            
+                            Text(mainViewModel.friendRequest[i].nickName)
+                                .foregroundColor(.white)
+                            
+                            Spacer()
+                            
+                            HStack(spacing: 6) {
+                                Button {
+                                    mainViewModel.friendsResponse(
+                                        nickName: mainViewModel.friendRequest[i].nickName, state: RequestStatus.refusal.rawValue)
+                                    isResponse.toggle()
+                                } label: {
+                                    requestButton(text: "거절")
+                                }
+                                
+                                Button {
+                                    mainViewModel.friendsResponse(
+                                        nickName: mainViewModel.friendRequest[i].nickName, state: RequestStatus.accept.rawValue)
+                                    isResponse.toggle()
+                                } label: {
+                                    requestButton(text: "수락")
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 6)
+                        .padding(.horizontal, 20)
+                    }
+                }
+            })
+            .frame(width: device.screenWidth - 30, height: .infinity)
     }
 }
 
