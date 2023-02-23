@@ -24,18 +24,17 @@ class MainHomeViewModel: ObservableObject {
     // MARK: 내 정보 가져오기
     func userInfoFetchData() {
         Task {
-            ShareInfoService.getMyUserInfo { info in
-                self.userInfoData = info
-            }
-            self.getShareGoal()
-            self.newFriendRequest()
+            newFriendRequest()
         }
+        ShareInfoService.getMyUserInfo { info in
+            self.userInfoData = info
+        }
+        self.getShareGoal()
     }
     
     // MARK: 나에게 온 친구요청 확인
     func newFriendRequest() {
-        let ref = db.document(ShareVar.userUid).collection(CollectionName.FriendRequest.rawValue)
-        ref.addSnapshotListener { (snapshot, error) in
+        docRef.document(ShareVar.userUid).collection(CollectionName.FriendRequest.rawValue).getDocuments { snapshot, error in
             if let error {
                 print("newFriendRequest Fail \(error)")
             }

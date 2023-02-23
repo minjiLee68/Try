@@ -44,7 +44,6 @@ struct ProfileSettingView: View {
                 
                 Button {
                     profileViewModel.setUserData(image: userImage, nickName: nickName, introduce: introduce)
-                    profileViewModel.isProfile = true
                     hideKeyboard()
                 } label: {
                     Text("완료")

@@ -31,15 +31,6 @@ class DrawerViewModel: ObservableObject {
                 self.userInfoData = info
             }
         }
-//        self.docRef.addSnapshotListener { (docSnapshot, error) in
-//            guard let document = docSnapshot else { return }
-//            do {
-//                self.userInfoData = try document.data(as: UserInfo.self)
-//                print("success Data \(String(describing: self.userInfoData))")
-//            } catch {
-//                print("userInfoFetchData error -> \(error.localizedDescription)")
-//            }
-//        }
     }
     
     // MARK: 나와 연결된 사람 찾기

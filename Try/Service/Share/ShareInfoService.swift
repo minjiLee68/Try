@@ -13,8 +13,8 @@ import FirebaseFirestoreSwift
 enum ShareInfoService {
     //MARK: 내 정보 가져오기
     static func getMyUserInfo(completion: @escaping (UserInfo) -> ()) {
-        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue)
-        docRef.document(ShareVar.userUid).addSnapshotListener { (docSnapshot, error) in
+        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
+        docRef.addSnapshotListener { (docSnapshot, error) in
             guard let document = docSnapshot else { return }
             do {
                 completion(try document.data(as: UserInfo.self))

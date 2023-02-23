@@ -19,7 +19,7 @@ struct LoginView: View {
                 ProfileSettingView()
             }
             
-            if viewModel.isMember {
+            if viewModel.isMember && viewModel.isLoggedIn {
                 MainView()
             }
         }

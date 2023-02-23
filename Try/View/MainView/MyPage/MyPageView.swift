@@ -98,7 +98,7 @@ struct MyPageView: View {
                 EmptyView()
             } label: {
                 HStack(spacing: 5) {
-                    Text("친구 리스트 0")
+                    Text("친구 리스트 \(myPageViewModel.friendList.count)")
                         .foregroundColor(.white)
                         .fontWeight(.bold)
                         .defaultFont(size: 16)

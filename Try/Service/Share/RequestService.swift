@@ -65,7 +65,7 @@ enum RequestService {
         
         // 3. Set에 포함된 닉네임을 가진 UserInfo 문서들을 일괄 업데이트 한다.
         let userInfoQuery = db.collection(CollectionName.UserInfo.rawValue)
-            .whereField("nickName", in: friendNames)
+            .whereField("nickName", isEqualTo: friendNames)
         
         // pagination 처리를 위해 마지막 문서를 기억
         var cursor: QueryDocumentSnapshot? = nil

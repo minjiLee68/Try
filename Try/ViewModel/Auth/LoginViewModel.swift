@@ -22,7 +22,6 @@ class LoginViewModel: NSObject, ObservableObject {
     @Published var naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
     @Published var isLoggedIn = false
     @AppStorage("userUid") var userUid = (UserDefaults.standard.string(forKey: "userUid") ?? "")
-    @AppStorage("recommendCode") var recommendCode = ""
     @AppStorage("isMember") var isMember = UserDefaults.standard.bool(forKey: "isMember")
     
     let db = Firestore.firestore()
@@ -37,9 +36,9 @@ class LoginViewModel: NSObject, ObservableObject {
             } else {
                 print("파이어베이스 사용자 생성")
             }
+            self.ifUserDocuments(userUid: Auth.auth().currentUser?.uid ?? "")
             self.userUid = Auth.auth().currentUser?.uid ?? ""
             ShareVar.userUid = self.userUid
-            self.ifUserDocuments(userUid: Auth.auth().currentUser?.uid ?? "")
             self.isLoggedIn = true
         }
     }
@@ -50,12 +49,16 @@ class LoginViewModel: NSObject, ObservableObject {
             if let error {
                 print("get document error : \(error.localizedDescription)")
             } else {
-                if let querySnapshot {
-                    for doc in querySnapshot.documents {
-                        if userUid == doc.documentID {
-                            print("docId \(doc.documentID)")
-                            self.isMember = true
-                        }
+                guard let snapshot = querySnapshot else {
+                    self.isMember = false
+//                    self.isMember = false
+                    return
+                }
+                for doc in snapshot.documents {
+                    if userUid == doc.documentID {
+                        print("docId \(doc.documentID)")
+                        self.isMember = true
+//                        self.isMember = true
                     }
                 }
             }

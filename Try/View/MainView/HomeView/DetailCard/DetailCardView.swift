@@ -45,9 +45,6 @@ struct DetailCardView: View {
         .background(.black)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .ignoresSafeArea(.keyboard, edges: .bottom)
-        .onAppear {
-            mainViewModel.getShareUser()
-        }
     }
     
     var detailContents: some View {

@@ -16,7 +16,7 @@ import KakaoSDKUser
 class MyPageViewModel: ObservableObject {
     @Published var userInfoData: UserInfo?
     @Published var contact: Contact?
-    @Published var contacts = [Contact]()
+    @Published var friendList = [Friends]()
     @Published var drawers = [Drawers]()
     @Published var listMode: searchMode = .allList
     
@@ -31,15 +31,19 @@ class MyPageViewModel: ObservableObject {
     
     // MARK: 내 정보 가져오기
     func userInfoFetchData() {
-        self.docRef.addSnapshotListener { (docSnapshot, error) in
-            guard let document = docSnapshot else { return }
-            do {
-                self.userInfoData = try document.data(as: UserInfo.self)
-                print("success Data \(String(describing: self.userInfoData))")
-            } catch {
-                print("userInfoFetchData error -> \(error.localizedDescription)")
-            }
+        ShareInfoService.getMyUserInfo { userInfo in
+            self.userInfoData = userInfo
         }
+//        self.docRef.addSnapshotListener { (docSnapshot, error) in
+//            guard let document = docSnapshot else { return }
+//            do {
+//                self.userInfoData = try document.data(as: UserInfo.self)
+//                print("success Data \(String(describing: self.userInfoData))")
+//            } catch {
+//                print("userInfoFetchData error -> \(error.localizedDescription)")
+//            }
+//        }
+        getFriendList()
     }
     
     // MARK: 나와 연결된 사람 찾기
@@ -50,14 +54,20 @@ class MyPageViewModel: ObservableObject {
     }
     
     //MARK: 친구 리스트 가져오기
-    func setContactData(contact: Contact) {
-        let ref = db.collection(CollectionName.Contact.rawValue)
-        do {
-            let _ = try ref.addDocument(from: Contact(id: ShareVar.userUid, name: contact.name, phoneNumber: contact.phoneNumber, code: contact.code))
-        } catch {
-            print("error")
+    // MARK: 친구목록
+    func getFriendList() {
+        Task {
+            self.friendList.append(contentsOf: try await RequestService.friendsList())
         }
     }
+//    func setContactData(contact: Contact) {
+//        let ref = db.collection(CollectionName.Contact.rawValue)
+//        do {
+//            let _ = try ref.addDocument(from: Contact(id: ShareVar.userUid, name: contact.name, phoneNumber: contact.phoneNumber, code: contact.code))
+//        } catch {
+//            print("error")
+//        }
+//    }
     
     //MARK: Drawer list init
     func drawerList() {
@@ -88,47 +98,47 @@ class MyPageViewModel: ObservableObject {
         }
     }
     
-    func messageFilter(id: String, completion: @escaping(Int) -> ()) {
-        for i in 0..<self.contacts.count {
-            if self.contacts[i].id == id {
-                completion(i)
-            }
-        }
-    }
+//    func messageFilter(id: String, completion: @escaping(Int) -> ()) {
+//        for i in 0..<self.contacts.count {
+//            if self.contacts[i].id == id {
+//                completion(i)
+//            }
+//        }
+//    }
 
-    func getContacts() {
-        let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey] as [CNKeyDescriptor]
-        let request = CNContactFetchRequest(keysToFetch: keys)
-        request.sortOrder = CNContactSortOrder.userDefault
-        // 권한 체크
-        store.requestAccess(for: .contacts) { (granted, error) in
-            guard granted else { return }
-            do {
-                // 연락처 데이터 획득
-                let containerId = self.store.defaultContainerIdentifier()
-                let predicate = CNContact.predicateForContactsInContainer(withIdentifier: containerId)
-                let contact = try self.store.unifiedContacts(matching: predicate, keysToFetch: keys)
-                self.contacts = self.contactMapping(cnContact: contact)
-                contact.forEach { data in
-                    print("Fetched contacts: \(String(describing: data.phoneNumbers.first?.value.stringValue))")
-                }
-//                })
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
-    func contactMapping(cnContact: [CNContact]) -> [Contact] {
-        return cnContact.map { item in
-            return Contact(
-                id: item.identifier,
-                name: (item.familyName) + (item.givenName),
-                phoneNumber: item.phoneNumbers.first?.value.stringValue ?? "",
-                code: ""
-            )
-        }
-    }
+//    func getContacts() {
+//        let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey] as [CNKeyDescriptor]
+//        let request = CNContactFetchRequest(keysToFetch: keys)
+//        request.sortOrder = CNContactSortOrder.userDefault
+//        // 권한 체크
+//        store.requestAccess(for: .contacts) { (granted, error) in
+//            guard granted else { return }
+//            do {
+//                // 연락처 데이터 획득
+//                let containerId = self.store.defaultContainerIdentifier()
+//                let predicate = CNContact.predicateForContactsInContainer(withIdentifier: containerId)
+//                let contact = try self.store.unifiedContacts(matching: predicate, keysToFetch: keys)
+//                self.contacts = self.contactMapping(cnContact: contact)
+//                contact.forEach { data in
+//                    print("Fetched contacts: \(String(describing: data.phoneNumbers.first?.value.stringValue))")
+//                }
+////                })
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+//        }
+//    }
+//
+//    func contactMapping(cnContact: [CNContact]) -> [Contact] {
+//        return cnContact.map { item in
+//            return Contact(
+//                id: item.identifier,
+//                name: (item.familyName) + (item.givenName),
+//                phoneNumber: item.phoneNumbers.first?.value.stringValue ?? "",
+//                code: ""
+//            )
+//        }
+//    }
  }
 
 extension MyPageViewModel {

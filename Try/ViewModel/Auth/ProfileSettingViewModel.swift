@@ -15,8 +15,7 @@ class ProfileSettingViewModel: ObservableObject {
     @Published var profileImage = ""
     @Published var nickName = ""
     @Published var introduce = ""
-    @AppStorage("isProfile") var isProfile = false
-    @AppStorage("isMember") var isMember = UserDefaults.standard.bool(forKey: "isMember")
+    @Published var isProfile = false
     
     let db = Firestore.firestore()
     let storageRef = Storage.storage().reference().child("profile/\(ShareVar.userUid)")
@@ -35,10 +34,11 @@ class ProfileSettingViewModel: ObservableObject {
                 introduce: introduce,
                 status: RequestStatus.defaults.rawValue)
             )
+            self.isProfile = true
+            ShareVar.isMember = true
         } catch {
             print("error")
         }
-        self.isMember = true
     }
     
     // MARK: 내 정보 가져오기 (프로필 편집)
