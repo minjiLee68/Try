@@ -60,7 +60,6 @@ struct FindingFriendsView: View {
                             } else if drawerViewModel.userList[index].status == RequestStatus.defaults.rawValue{
                                 requestButton(text: "친구요청")
                             }
-                            
                         }
                     }
                 }

@@ -22,8 +22,8 @@ enum RequestService {
                 let query = try await docRef.whereField("nickName", isEqualTo: nickName).getDocuments()
                 for doc in query.documents {
                     let id = doc.documentID
-                    let data = try doc.data(as: UserInfo.self)
-                    let ref = docRef.document(ShareVar.userUid).collection(CollectionName.FriendRequest.rawValue).document()
+                    guard let data = try? doc.data(as: UserInfo.self) else { continue }
+                    let ref = docRef.document(ShareVar.userUid).collection(CollectionName.FriendRequest.rawValue).document(data.uid!)
                     try ref.setData(from: Friends(
                         uid: id,
                         nickName: nickName,
@@ -31,7 +31,7 @@ enum RequestService {
                         state: state)
                     )
                     
-                    let otherRef = docRef.document(id).collection(CollectionName.FriendRequest.rawValue).document()
+                    let otherRef = docRef.document(id).collection(CollectionName.FriendRequest.rawValue).document(ShareVar.userUid)
                     try otherRef.setData(from: Friends(
                         uid: ShareVar.userUid,
                         nickName: info.nickName,
@@ -63,33 +63,38 @@ enum RequestService {
             return doc.get("nickName") as? String
         }
         
-        // 3. Set에 포함된 닉네임을 가진 UserInfo 문서들을 일괄 업데이트 한다.
-        let userInfoQuery = db.collection(CollectionName.UserInfo.rawValue)
-            .whereField("nickName", isEqualTo: friendNames)
-        
-        // pagination 처리를 위해 마지막 문서를 기억
-        var cursor: QueryDocumentSnapshot? = nil
-        repeat {
-//            let querySnapshot = try await userInfoQuery.limit(to: 100).getDocuments()
-            let querySnapshot = try await userInfoQuery.getDocuments()
-            let batch = db.batch()
-            for doc in querySnapshot.documents {
-                print("friend doc id \(doc.documentID), \(querySnapshot.count)")
-                
-                let docRef = db.collection(CollectionName.UserInfo.rawValue).document(doc.documentID)
-                batch.updateData(["status" : RequestStatus.accept.rawValue], forDocument: docRef)
-            }
-//            querySnapshot.documents.forEach { doc in
-//                print("friend doc id\(doc.documentID)")
-//                let docRef = db.collection(CollectionName.UserInfo.rawValue).document(doc.documentID)
-//                batch.updateData(["status" : RequestStatus.accept.rawValue], forDocument: docRef)
-//            }
-            try await batch.commit()
-            cursor = querySnapshot.documents.last
-            if querySnapshot.documents.isEmpty {
-                cursor = nil
-            }
-        } while cursor != nil
+        if !friendNames.isEmpty {
+            // 3. Set에 포함된 닉네임을 가진 UserInfo 문서들을 일괄 업데이트 한다.
+            let userInfoQuery = db.collection(CollectionName.UserInfo.rawValue)
+                .whereField("nickName", in: friendNames)
+            
+            // pagination 처리를 위해 마지막 문서를 기억
+            var cursor: QueryDocumentSnapshot? = nil
+            repeat {
+    //            let querySnapshot = try await userInfoQuery.limit(to: 100).getDocuments()
+                let querySnapshot = try await userInfoQuery.getDocuments()
+                let batch = db.batch()
+                for doc in querySnapshot.documents {
+                    print("friend doc id \(doc.documentID), \(querySnapshot.count)")
+                    
+                    let docRef = db.collection(CollectionName.UserInfo.rawValue).document(doc.documentID)
+                    batch.updateData(["status" : RequestStatus.accept.rawValue], forDocument: docRef)
+                }
+    //            querySnapshot.documents.forEach { doc in
+    //                print("friend doc id\(doc.documentID)")
+    //                let docRef = db.collection(CollectionName.UserInfo.rawValue).document(doc.documentID)
+    //                batch.updateData(["status" : RequestStatus.accept.rawValue], forDocument: docRef)
+    //            }
+                try await batch.commit()
+                cursor = querySnapshot.documents.last
+                if querySnapshot.documents.isEmpty {
+                    cursor = nil
+                }
+            } while cursor != nil
+            
+        } else {
+            print("해당 값이 없습니다람쥐")
+        }
         
 //        let query = db.collectionGroup(CollectionName.FriendRequest.rawValue).whereField("state", isEqualTo: 1).whereField("nickName", isEqualTo: nickName)
 //        let querySnapshot = try await query.getDocuments()

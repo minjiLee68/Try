@@ -163,7 +163,8 @@ struct HomeView: View {
                     }
                 }
             })
-            .frame(width: device.screenWidth - 30, height: .infinity)
+            .frame(width: device.screenWidth - 30)
+            .frame(maxHeight: .infinity)
     }
 }
 

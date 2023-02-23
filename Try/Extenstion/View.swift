@@ -19,7 +19,7 @@ extension View {
     
     func requestButton(text: String) -> some View {
         RoundedRectangle(cornerRadius: 5)
-            .foregroundColor(.blue)
+            .stroke(Color.blue)
             .frame(width: device.widthScale(60), height: device.heightScale(30))
             .overlay {
                 Text(text)
