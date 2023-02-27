@@ -18,7 +18,7 @@ struct UserInfo: Codable {
 }
 
 // MARK: 친구요청
-struct Friends: Codable {
+struct Friends: Codable, Hashable {
     var uid: String
     var nickName: String
     var profile: String

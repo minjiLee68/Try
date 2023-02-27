@@ -75,8 +75,6 @@ enum RequestService {
                 let querySnapshot = try await userInfoQuery.getDocuments()
                 let batch = db.batch()
                 for doc in querySnapshot.documents {
-                    print("friend doc id \(doc.documentID), \(querySnapshot.count)")
-                    
                     let docRef = db.collection(CollectionName.UserInfo.rawValue).document(doc.documentID)
                     batch.updateData(["status" : RequestStatus.accept.rawValue], forDocument: docRef)
                 }

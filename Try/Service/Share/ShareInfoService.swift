@@ -32,10 +32,8 @@ enum ShareInfoService {
         
         let ref = docRef.document(ShareVar.userUid).collection(CollectionName.HabitShare.rawValue).document()
         try ref.setData(from: Contents(
-            nickName: userData.nickName,
-            profile: userData.userProfile,
-            otherName: nickName,
-            otherProfile: profile,
+            nickName: nickName,
+            profile: profile,
             content: content)
         )
         
@@ -44,10 +42,8 @@ enum ShareInfoService {
             for doc in query.documents {
                 let otherRef = docRef.document(doc.documentID).collection(CollectionName.HabitShare.rawValue).document()
                 try otherRef.setData(from: Contents(
-                    nickName: nickName,
-                    profile: profile,
-                    otherName: userData.nickName,
-                    otherProfile: userData.userProfile,
+                    nickName: userData.nickName,
+                    profile: userData.userProfile,
                     content: content)
                 )
             }
@@ -88,14 +84,14 @@ enum ShareInfoService {
 //        }
 //    }
     
-    static func friendRequests() async throws -> [UserInfo] {
-        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
-        let query = docRef.collection(CollectionName.FriendRequest.rawValue).whereField("state", isEqualTo: 1)
-        let document = try await query.getDocuments()
-        return document.documents.compactMap({ doc in
-            try? doc.data(as: UserInfo.self)
-        })
-    }
+//    static func friendRequests() async throws -> [UserInfo] {
+//        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
+//        let query = docRef.collection(CollectionName.FriendRequest.rawValue).whereField("state", isEqualTo: 1)
+//        let document = try await query.getDocuments()
+//        return document.documents.compactMap({ doc in
+//            try? doc.data(as: UserInfo.self)
+//        })
+//    }
     
     // MARK: 내가 연결하고 싶은 사람
 //    static func otherUserConnect(code: String) async throws {

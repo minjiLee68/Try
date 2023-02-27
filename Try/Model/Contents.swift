@@ -12,8 +12,6 @@ struct Contents: Hashable, Codable {
     var id = UUID().uuidString
     var nickName: String
     var profile: String
-    var otherName: String
-    var otherProfile: String
     var content: [String]?
 }
 

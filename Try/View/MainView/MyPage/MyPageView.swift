@@ -40,9 +40,6 @@ struct MyPageView: View {
                         .defaultFont(size: 14)
                 }
             }
-            
-//            followerView
-            
             myFriendList
             
             logoutView
@@ -97,33 +94,52 @@ struct MyPageView: View {
             NavigationLink {
                 EmptyView()
             } label: {
-                HStack(spacing: 5) {
-                    Text("친구 리스트 \(myPageViewModel.friendList.count)")
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                        .defaultFont(size: 16)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 50)
+                VStack {
+                    HStack(spacing: 5) {
+                        Text("친구 리스트 \(myPageViewModel.friendList.count)")
+                            .foregroundColor(.white)
+                            .fontWeight(.bold)
+                            .defaultFont(size: 16)
+                            .padding(.horizontal, 20)
+                            .padding(.top, 50)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    
+                    ForEach(myPageViewModel.friendList.indices, id: \.self) { i in
+                        Divider()
+                        
+                        HStack(spacing: 15) {
+                            WebImageView(url: myPageViewModel.friendList[i].profile, width: device.widthScale(40), height: device.heightScale(40))
+                                .clipShape(Circle())
+                                .id(myPageViewModel.friendList[i].uid)
+                            
+                            Text(myPageViewModel.friendList[i].nickName)
+                                .foregroundColor(.white)
+                        }
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 6)
+                        .padding(.horizontal, 20)
+                    }
                 }
             }
         }
+        .frame(maxHeight: .infinity, alignment: .bottom)
     }
     
     // MARK: 로그아웃
     var logoutView: some View {
         Button {
-//            switch environmentViewModel.loginType {
-//            case LoginType.kakao.rawValue:
-//                myPageViewModel.kakaoLogout()
-//            case LoginType.naver.rawValue:
-//                myPageViewModel.oauth20ConnectionDidFinishDeleteToken()
-//                print("네이버")
-//            case LoginType.apple.rawValue:
-//                print("애플")
-//            default:
-//                print("default")
-//            }
+            switch ShareVar.loginType {
+            case LoginType.kakao.rawValue:
+                myPageViewModel.kakaoLogout()
+            case LoginType.naver.rawValue:
+                myPageViewModel.oauth20ConnectionDidFinishDeleteToken()
+                print("네이버")
+            case LoginType.apple.rawValue:
+                print("애플")
+            default:
+                print("default")
+            }
         } label: {
             Text("로그아웃 하기")
         }

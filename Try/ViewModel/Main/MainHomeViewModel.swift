@@ -13,7 +13,7 @@ import FirebaseStorage
 @MainActor
 class MainHomeViewModel: ObservableObject {
     @Published var userInfoData: UserInfo?
-    @Published var connectionUsers = [Connection]()
+    @Published var connectionUsers = [Friends]()
     @Published var goalContents = [Contents]()
     @Published var friendRequest = [Friends]()
     @Published var contents = [String]()
@@ -30,6 +30,7 @@ class MainHomeViewModel: ObservableObject {
             self.userInfoData = info
         }
         self.getShareGoal()
+        self.getShareUser()
     }
     
     // MARK: 나에게 온 친구요청 확인
@@ -83,7 +84,7 @@ class MainHomeViewModel: ObservableObject {
     // MARK: 나와 연결된 사람 찾기
     func getShareUser() {
         Task {
-            self.connectionUsers = self.connectionToItem(try await ShareInfoService.friendRequests())
+            self.connectionUsers = try await RequestService.friendsList()
         }
     }
     
@@ -94,14 +95,5 @@ class MainHomeViewModel: ObservableObject {
 //        } catch {
 //            print("error")
 //        }
-    }
-    
-    func connectionToItem(_ list: [UserInfo]) -> [Connection] {
-        return list.map { item in
-            return Connection(
-                nickName: item.nickName,
-                profile: item.userProfile
-            )
-        }
     }
 }

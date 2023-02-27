@@ -32,13 +32,6 @@ struct HomeView: View {
         VStack(spacing: 15) {
             HeaderView()
             
-            Button {
-                isTabCard = true
-                cardType = .Additional
-            } label: {
-                Text("추가하기")
-            }
-            
             customCard
         }
         .padding([.horizontal, .top], 15)
@@ -92,7 +85,7 @@ struct HomeView: View {
     func cardContentView(content: Contents) -> some View {
         ZStack {
             VStack(spacing: 0) {
-                if content.otherProfile != "" {
+                if content.profile != "" {
                     WebImageView(url: content.profile, width: device.widthScale(120), height: device.heightScale(120))
                         .clipShape(Circle())
                         .id(content.id)
@@ -109,7 +102,7 @@ struct HomeView: View {
                 }
             }
             
-            Text(content.otherName)
+            Text(content.nickName)
                 .foregroundColor(.white)
                 .defaultFont(size: 18)
                 .frame(maxHeight: .infinity, alignment: .center)
@@ -159,7 +152,6 @@ struct HomeView: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 6)
-                        .padding(.horizontal, 20)
                     }
                 }
             })
@@ -205,11 +197,25 @@ extension HomeView {
                 }
             }
             
-            Text(mainViewModel.userInfoData?.introduce ?? "")
-                .font(.callout)
-                .foregroundColor(.gray)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 15)
+            HStack(spacing: 0) {
+                Text(mainViewModel.userInfoData?.introduce ?? "")
+                    .font(.callout)
+                    .foregroundColor(.gray)
+                    .padding(.vertical, 15)
+                
+                Spacer()
+                
+                Button {
+                    isTabCard = true
+                    cardType = .Additional
+                } label: {
+                    Text("추가하기")
+                        .defaultFont(size: 17)
+                        .foregroundColor(.black)
+                        .shadow(color: Color.white, radius: 0.3)
+                }
+            }
+            .padding(.horizontal, 20)
         }
         .opacity(isTabCard ? 0 : 1)
         .padding(.top, 5)

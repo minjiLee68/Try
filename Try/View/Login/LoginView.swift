@@ -31,6 +31,7 @@ struct LoginView: View {
             Spacer()
             
             Button {
+                ShareVar.loginType = LoginType.kakao.rawValue
                 viewModel.handleKakaoLogin()
             } label: {
                 Image("kakaoLogin")
@@ -40,6 +41,7 @@ struct LoginView: View {
             .padding(.top, 30)
             
             Button {
+                ShareVar.loginType = LoginType.naver.rawValue
                 viewModel.naverLoginDelegate()
                 viewModel.naverLoginInstance?.requestThirdPartyLogin()
             } label: {
@@ -50,7 +52,7 @@ struct LoginView: View {
             .padding(.top, 30)
             
             Button {
-                
+                ShareVar.loginType = LoginType.apple.rawValue
             } label: {
                 Image("AppleLogin")
                     .resizable()

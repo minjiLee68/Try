@@ -33,17 +33,11 @@ class MyPageViewModel: ObservableObject {
     func userInfoFetchData() {
         ShareInfoService.getMyUserInfo { userInfo in
             self.userInfoData = userInfo
+            DispatchQueue.main.async {
+                self.getFriendList()
+                print("getFriendList \(self.friendList), \(self.friendList.count)")
+            }
         }
-//        self.docRef.addSnapshotListener { (docSnapshot, error) in
-//            guard let document = docSnapshot else { return }
-//            do {
-//                self.userInfoData = try document.data(as: UserInfo.self)
-//                print("success Data \(String(describing: self.userInfoData))")
-//            } catch {
-//                print("userInfoFetchData error -> \(error.localizedDescription)")
-//            }
-//        }
-        getFriendList()
     }
     
     // MARK: 나와 연결된 사람 찾기
@@ -54,10 +48,13 @@ class MyPageViewModel: ObservableObject {
     }
     
     //MARK: 친구 리스트 가져오기
-    // MARK: 친구목록
     func getFriendList() {
         Task {
-            self.friendList.append(contentsOf: try await RequestService.friendsList())
+            let friends = try await RequestService.friendsList()
+            let uniqueFriends = Array(Set(friendList + friends))
+            DispatchQueue.main.async {
+                self.friendList = uniqueFriends
+            }
         }
     }
 //    func setContactData(contact: Contact) {

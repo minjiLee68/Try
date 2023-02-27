@@ -28,6 +28,7 @@ class ProfileSettingViewModel: ObservableObject {
             if self.profileImage.isEmpty {
                 self.defaultImageUrl()
             }
+            print("defaultImageUrl \(self.profileImage)")
             try self.collectionRef.setData(from: UserInfo(
                 nickName: nickName,
                 userProfile: self.profileImage,

@@ -53,10 +53,17 @@ struct DetailCardView: View {
             
             VStack(spacing: 15) {
                 ForEach(0..<(selectGoalContent?.content?.count ?? 0), id: \.self) { index in
+                    
+                    
+                    
                     HStack(alignment: .center, spacing: 0) {
                         Text(selectGoalContent?.content?[index] ?? "")
                             .foregroundColor(.white)
+                            .defaultFont(size: 18)
                     }
+                    .padding(.top, 20)
+                    
+                    f
                 }
             }
         }
@@ -171,7 +178,7 @@ extension DetailCardView {
 extension DetailCardView {
     var contactListView: some View {
         Menu {
-            ForEach(0..<mainViewModel.connectionUsers.count, id: \.self) { index in
+            ForEach(mainViewModel.connectionUsers.indices, id: \.self) { index in
                 Button {
                     self.defaultProfile = mainViewModel.connectionUsers[index].profile
                     self.defaultNickName = mainViewModel.connectionUsers[index].nickName

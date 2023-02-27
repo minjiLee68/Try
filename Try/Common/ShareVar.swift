@@ -10,4 +10,5 @@ import SwiftUI
 struct ShareVar {
     static var userUid: String = ""
     static var isMember: Bool = false
+    static var loginType = ""
 }
