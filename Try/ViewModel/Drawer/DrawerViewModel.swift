@@ -41,16 +41,16 @@ class DrawerViewModel: ObservableObject {
     }
     
     // MARK: 친구요청
-    func friendsRequest(nickName: String, state: Int) {
+    func friendsRequest(id: String, state: Int) {
         Task {
-            RequestService.friendsRequest(nickName: nickName, state: state)
+            RequestService.friendsRequest(id: id, state: state)
         }
     }
     
     // MARK: 친구요청 상태
-    func friendStatus(nickName: String) {
+    func friendStatus() {
         Task {
-            try await RequestService.friendsStatus(nickName: nickName)
+            try await RequestService.friendsStatus()
         }
     }
     
@@ -71,7 +71,7 @@ class DrawerViewModel: ObservableObject {
                     if data.nickName == self.userInfoData?.nickName {
                         print("getUserList \(data)")
                     }
-                    self.friendStatus(nickName: data.nickName)
+                    self.friendStatus()
                     self.userList.append(data)
                 }
             } catch {
@@ -89,6 +89,7 @@ class DrawerViewModel: ObservableObject {
             Drawers(drawerList: "로그아웃", type: .Logout)
         ]
     }
+
  }
 
 extension DrawerViewModel {

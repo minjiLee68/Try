@@ -16,6 +16,7 @@ class MainHomeViewModel: ObservableObject {
     @Published var connectionUsers = [Friends]()
     @Published var goalContents = [Contents]()
     @Published var friendRequest = [Friends]()
+    @Published var detailContents = [DetailContent]()
     @Published var contents = [String]()
     
     let db = Firestore.firestore()
@@ -25,12 +26,24 @@ class MainHomeViewModel: ObservableObject {
     func userInfoFetchData() {
         Task {
             newFriendRequest()
+            getFriendList()
         }
         ShareInfoService.getMyUserInfo { info in
             self.userInfoData = info
         }
         self.getShareGoal()
         self.getShareUser()
+    }
+    
+    //MARK: 친구 리스트 가져오기
+    func getFriendList() {
+        Task {
+            let friends = try await RequestService.friendsList()
+            let uniqueFriends = Array(Set(connectionUsers + friends))
+            DispatchQueue.main.async {
+                self.connectionUsers = uniqueFriends
+            }
+        }
     }
     
     // MARK: 나에게 온 친구요청 확인
@@ -46,8 +59,9 @@ class MainHomeViewModel: ObservableObject {
              */
             if let snapshot {
                 for doc in snapshot.documents {
-                    guard let data = try? doc.data(as: Friends.self),
-                          data.state == RequestStatus.wait.rawValue else { continue }
+                    guard let data = try? doc.data(as: Friends.self), data.state == RequestStatus.wait.rawValue else {
+                        continue
+                    }
                     self.friendRequest.append(data)
                 }
             }
@@ -55,14 +69,14 @@ class MainHomeViewModel: ObservableObject {
     }
     
     // MARK: 요청에 대한 답변
-    func friendsResponse(nickName: String, state: Int) {
+    func friendsResponse(id: String, state: Int) {
         Task {
-            RequestService.friendsRequest(nickName: nickName, state: state)
+            RequestService.friendsRequest(id: id, state: state)
         }
     }
     
     // MARK: 목표내용 저장하기
-    func addShareContent(nickName: String, profile: String, content: [String]) {
+    func addShareContent(nickName: String, profile: String, content: [DetailContent]) {
         Task {
             try await ShareInfoService.addShareContent(
                 nickName: nickName,
@@ -88,7 +102,11 @@ class MainHomeViewModel: ObservableObject {
         }
     }
     
-    func addContent(contents: Contents) {
+    // MARK: content update
+    func updateContent(title: String, impression: String, index: Int) {
+        Task {
+            try await ShareInfoService.updateShareContent(title: title, updateData: impression, index: index)
+        }
 //        let addRef = self.docRef.document(ShareVar.userUid).collection(CollectionName.HabitShare.rawValue)
 //        do {
 //            let _ = try addRef.addDocument(from: contents)

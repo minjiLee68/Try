@@ -51,17 +51,8 @@ struct FindingFriendsView: View {
                     
                     Spacer()
                     
-                    if drawerViewModel.userList[index].nickName != drawerViewModel.userInfoData?.nickName ?? "" {
-                        Button {
-                            drawerViewModel.friendsRequest(nickName: drawerViewModel.userList[index].nickName, state: RequestStatus.wait.rawValue)
-                        } label: {
-                            if drawerViewModel.userList[index].status == RequestStatus.wait.rawValue {
-                                requestButton(text: "요청취소")
-                            } else if drawerViewModel.userList[index].status == RequestStatus.defaults.rawValue{
-                                requestButton(text: "친구요청")
-                            }
-                        }
-                    }
+                    // 요청 상태 view
+                    requestStatus(index: index)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 6)
@@ -88,22 +79,45 @@ struct FindingFriendsView: View {
                     
                     Spacer()
                     
-                    Button {
-                        
-                    } label: {
-                        RoundedRectangle(cornerRadius: 5)
-                            .stroke(Color.blue, lineWidth: 1)
-                            .frame(width: device.widthScale(60), height: device.heightScale(30))
-                            .overlay {
-                                Text("친구요청")
-                                    .defaultFont(size: 12)
-                            }
-                    }
+                    // 요청 상태 view
+                    requestStatus(index: index)
 
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 6)
                 .padding(.horizontal, 20)
+            }
+        }
+    }
+    
+    // MARK: 요청 상태
+    @ViewBuilder
+    func requestStatus(index: Int) -> some View {
+        if drawerViewModel.userList[index].id != drawerViewModel.userInfoData?.id ?? "" {
+            Button {
+                if drawerViewModel.userList[index].status == RequestStatus.defaults.rawValue {
+                    drawerViewModel.friendsRequest(id: drawerViewModel.userList[index].id, state: RequestStatus.wait.rawValue)
+                } else {
+                    drawerViewModel.friendsRequest(id: drawerViewModel.userList[index].id, state: RequestStatus.defaults.rawValue)
+                }
+            } label: {
+                if drawerViewModel.userList[index].status == RequestStatus.wait.rawValue {
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(Color.blue)
+                        .frame(width: device.widthScale(60), height: device.heightScale(30))
+                        .overlay {
+                            Text("요청취소")
+                                .defaultFont(size: 12)
+                        }
+                } else if drawerViewModel.userList[index].status == RequestStatus.defaults.rawValue{
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(Color.blue)
+                        .frame(width: device.widthScale(60), height: device.heightScale(30))
+                        .overlay {
+                            Text("친구요청")
+                                .defaultFont(size: 12)
+                        }
+                }
             }
         }
     }

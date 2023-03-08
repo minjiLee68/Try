@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A3543152965503200E9B2FE /* CardContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3543142965503200E9B2FE /* CardContentView.swift */; };
 		0A35431A29658F6F00E9B2FE /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A35431929658F6F00E9B2FE /* View.swift */; };
 		0A35431D2965901800E9B2FE /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A35431C2965901800E9B2FE /* Font.swift */; };
 		0A3543202965936000E9B2FE /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A35431F2965936000E9B2FE /* MyPageView.swift */; };
@@ -15,6 +14,7 @@
 		0A3543262965A9A000E9B2FE /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3543252965A9A000E9B2FE /* Contact.swift */; };
 		0A3543292965B29400E9B2FE /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3543282965B29400E9B2FE /* MainView.swift */; };
 		0A35432D2966B3C000E9B2FE /* ReCommendedCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A35432C2966B3C000E9B2FE /* ReCommendedCodeView.swift */; };
+		0A3FFDEC29AC9F3F00492ADC /* EditorContentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3FFDEB29AC9F3F00492ADC /* EditorContentsView.swift */; };
 		0A428417290191F900E93E2B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A428416290191F900E93E2B /* HomeView.swift */; };
 		0A42841A2901989700E93E2B /* CustomCarousel_new.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4284192901989700E93E2B /* CustomCarousel_new.swift */; };
 		0A435E8B297537C0000A042A /* RxKakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 0A435E8A297537C0000A042A /* RxKakaoSDK */; };
@@ -69,7 +69,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0A3543142965503200E9B2FE /* CardContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContentView.swift; sourceTree = "<group>"; };
 		0A35431929658F6F00E9B2FE /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		0A35431C2965901800E9B2FE /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		0A35431F2965936000E9B2FE /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
@@ -77,6 +76,7 @@
 		0A3543252965A9A000E9B2FE /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		0A3543282965B29400E9B2FE /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		0A35432C2966B3C000E9B2FE /* ReCommendedCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReCommendedCodeView.swift; sourceTree = "<group>"; };
+		0A3FFDEB29AC9F3F00492ADC /* EditorContentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorContentsView.swift; sourceTree = "<group>"; };
 		0A428416290191F900E93E2B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		0A4284192901989700E93E2B /* CustomCarousel_new.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCarousel_new.swift; sourceTree = "<group>"; };
 		0A435E8D2979211C000A042A /* ShareInfoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoService.swift; sourceTree = "<group>"; };
@@ -150,7 +150,6 @@
 		0A3543132965502600E9B2FE /* Card */ = {
 			isa = PBXGroup;
 			children = (
-				0A3543142965503200E9B2FE /* CardContentView.swift */,
 			);
 			path = Card;
 			sourceTree = "<group>";
@@ -384,6 +383,7 @@
 			isa = PBXGroup;
 			children = (
 				0A84710D2960188400CB3432 /* DetailCardView.swift */,
+				0A3FFDEB29AC9F3F00492ADC /* EditorContentsView.swift */,
 			);
 			path = DetailCard;
 			sourceTree = "<group>";
@@ -676,6 +676,7 @@
 				0A7D5572295C4A9900EB2A6F /* WebImageView.swift in Sources */,
 				0A7D5558295C2A3500EB2A6F /* ProfileSettingView.swift in Sources */,
 				0AEC496628E3405000917C53 /* Enums.swift in Sources */,
+				0A3FFDEC29AC9F3F00492ADC /* EditorContentsView.swift in Sources */,
 				0ACD84482967F3D000DDF990 /* LoginService.swift in Sources */,
 				0A3543202965936000E9B2FE /* MyPageView.swift in Sources */,
 				0A9EF2A629928A1A001551A5 /* RequestService.swift in Sources */,
@@ -683,7 +684,6 @@
 				0A42841A2901989700E93E2B /* CustomCarousel_new.swift in Sources */,
 				0AC9504B28DB64B8005B5774 /* ContentView.swift in Sources */,
 				0A9EF29E29922914001551A5 /* DrawerDetailView.swift in Sources */,
-				0A3543152965503200E9B2FE /* CardContentView.swift in Sources */,
 				0ACD84432967F26300DDF990 /* Constant+URL.swift in Sources */,
 				0A9EF29629920ECE001551A5 /* OtherPageViewModel.swift in Sources */,
 				0ACD844E296FC99600DDF990 /* ProfileEditorView.swift in Sources */,

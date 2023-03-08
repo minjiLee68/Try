@@ -11,6 +11,7 @@ import FirebaseFirestoreSwift
 // MARK: 사용자 정보
 struct UserInfo: Codable {
     @DocumentID var uid: String?
+    var id: String = UUID().uuidString
     var nickName: String
     var userProfile: String
     var introduce: String

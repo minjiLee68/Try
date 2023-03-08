@@ -35,7 +35,6 @@ class MyPageViewModel: ObservableObject {
             self.userInfoData = userInfo
             DispatchQueue.main.async {
                 self.getFriendList()
-                print("getFriendList \(self.friendList), \(self.friendList.count)")
             }
         }
     }
@@ -92,6 +91,18 @@ class MyPageViewModel: ObservableObject {
                     }
                 }
             }
+        }
+    }
+    
+    // MARK: MAPPing
+    func friendsToItems(_ list: [UserInfo]) -> [Friends] {
+        return list.map { item in
+            return Friends(
+                uid: item.id,
+                nickName: item.nickName,
+                profile: item.userProfile,
+                state: item.status
+            )
         }
     }
     

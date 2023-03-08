@@ -67,6 +67,7 @@ struct HomeView: View {
                 })
                 .onTapGesture {
                     withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
+                        ShareVar.documentId = contents.id
                         selectGoalContent = contents
                         isTabCard = true
                         cardType = .Editable
@@ -135,18 +136,34 @@ struct HomeView: View {
                             HStack(spacing: 6) {
                                 Button {
                                     mainViewModel.friendsResponse(
-                                        nickName: mainViewModel.friendRequest[i].nickName, state: RequestStatus.refusal.rawValue)
+                                        id: mainViewModel.friendRequest[i].uid,
+                                        state: RequestStatus.refusal.rawValue
+                                    )
                                     isResponse.toggle()
                                 } label: {
-                                    requestButton(text: "거절")
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .stroke(Color.blue)
+                                        .frame(width: device.widthScale(60), height: device.heightScale(30))
+                                        .overlay {
+                                            Text("거절")
+                                                .defaultFont(size: 12)
+                                        }
                                 }
                                 
                                 Button {
                                     mainViewModel.friendsResponse(
-                                        nickName: mainViewModel.friendRequest[i].nickName, state: RequestStatus.accept.rawValue)
+                                        id: mainViewModel.friendRequest[i].uid,
+                                        state: RequestStatus.accept.rawValue
+                                    )
                                     isResponse.toggle()
                                 } label: {
-                                    requestButton(text: "수락")
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .stroke(Color.blue)
+                                        .frame(width: device.widthScale(60), height: device.heightScale(30))
+                                        .overlay {
+                                            Text("수락")
+                                                .defaultFont(size: 12)
+                                        }
                                 }
                             }
                         }
@@ -211,11 +228,9 @@ extension HomeView {
                 } label: {
                     Text("추가하기")
                         .defaultFont(size: 17)
-                        .foregroundColor(.black)
-                        .shadow(color: Color.white, radius: 0.3)
+                        .foregroundColor(.gray)
                 }
             }
-            .padding(.horizontal, 20)
         }
         .opacity(isTabCard ? 0 : 1)
         .padding(.top, 5)

@@ -47,7 +47,7 @@ struct ProfileSettingView: View {
                     hideKeyboard()
                 } label: {
                     Text("완료")
-                        .foregroundColor(nickName.count >= 4 ? .white : .gray)
+                        .foregroundColor(nickName.count >= 3 ? .white : .gray)
                 }
                 .disabled(nickName.count >= 3 ? false : true)
                 .frame(maxWidth: .infinity, alignment: .trailing)

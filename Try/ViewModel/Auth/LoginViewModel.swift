@@ -33,12 +33,13 @@ class LoginViewModel: NSObject, ObservableObject {
             if let error = error {
                 print("파이어베이스 사용자 생성 실패 -> \(error.localizedDescription)")
                 Auth.auth().signIn(withEmail: email, password: password)
+                self.userUid = Auth.auth().currentUser?.uid ?? ""
             } else {
+                self.userUid = Auth.auth().currentUser?.uid ?? ""
                 print("파이어베이스 사용자 생성")
             }
-            self.ifUserDocuments(userUid: Auth.auth().currentUser?.uid ?? "")
-            self.userUid = Auth.auth().currentUser?.uid ?? ""
             ShareVar.userUid = self.userUid
+            self.ifUserDocuments(userUid: self.userUid)
             self.isLoggedIn = true
         }
     }
@@ -49,16 +50,12 @@ class LoginViewModel: NSObject, ObservableObject {
             if let error {
                 print("get document error : \(error.localizedDescription)")
             } else {
-                guard let snapshot = querySnapshot else {
-                    self.isMember = false
-//                    self.isMember = false
-                    return
-                }
+                guard let snapshot = querySnapshot else { return }
                 for doc in snapshot.documents {
                     if userUid == doc.documentID {
                         print("docId \(doc.documentID)")
                         self.isMember = true
-//                        self.isMember = true
+                        return
                     }
                 }
             }

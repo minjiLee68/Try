@@ -21,6 +21,7 @@ class ProfileSettingViewModel: ObservableObject {
     let storageRef = Storage.storage().reference().child("profile/\(ShareVar.userUid)")
     let collectionRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
     
+    // MARK: 프로필 초기 세팅
     func setUserData(image: UIImage, nickName: String, introduce: String) {
 //        self.uniqueCode(code: code)
 //        self.getShareUser(code: code)
