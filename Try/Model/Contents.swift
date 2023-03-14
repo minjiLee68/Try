@@ -17,7 +17,7 @@ struct Contents: Hashable, Codable {
     var achieve: Bool = false
 }
 
-struct DetailContent: Hashable, Codable {
+struct DetailContent: Codable, Hashable {
     var contentTitle: String
     var oneImpression: String
 }

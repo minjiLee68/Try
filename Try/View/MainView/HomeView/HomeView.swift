@@ -59,7 +59,7 @@ struct HomeView: View {
     var customCard: some View {
         CustomCarousel_new(index: $currentIndex, items: mainViewModel.goalContents, cardPadding: 150) { contents, cardSize in
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color.black)
+                .fill(Color.black.opacity(0.9))
                 .shadow(color: .white.opacity(0.2), radius: 6)
                 .frame(width: device.widthScale(cardSize.width), height: device.heightScale(cardSize.height - 50))
                 .overlay(content: {

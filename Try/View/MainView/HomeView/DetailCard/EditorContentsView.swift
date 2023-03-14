@@ -9,8 +9,7 @@ import SwiftUI
 
 struct EditorContentsView: View {
     @State var title: String
-    @State var editorTitle = ""
-    @State var index: Int
+    @State var detailContent: [DetailContent]
     
     @State private var isCardTab = false
     @Environment(\.presentationMode) var mode
@@ -27,7 +26,7 @@ struct EditorContentsView: View {
                 isCardTab = true
             }
             .fullScreenCover(isPresented: $isCardTab) {
-                SubContentView(title: title, index: index, isTab: $isCardTab)
+                SubContentView(detailContent: detailContent, title: title, isTab: $isCardTab)
                 .onDisappear {
                     mode.wrappedValue.dismiss()
                 }
@@ -37,9 +36,9 @@ struct EditorContentsView: View {
 
 struct SubContentView: View {
     @StateObject var mainViewModel = MainHomeViewModel()
+    @State var detailContent: [DetailContent]
     @State var title: String
     @State var impression = ""
-    @State var index: Int
     
     @Binding var isTab: Bool
     
@@ -71,7 +70,10 @@ struct SubContentView: View {
             NavigationCustomBar(naviType: .cardDetail, isButton: $isTab)
             
             Button {
-                mainViewModel.updateContent(title: title, impression: impression, index: index)
+                if let index = detailContent.firstIndex(where: { $0.contentTitle == title }) {
+                    detailContent[index].oneImpression = impression
+                }
+                mainViewModel.updateContent(detailContent: detailContent)
                 isTab.toggle()
             } label: {
                 Text("확인")

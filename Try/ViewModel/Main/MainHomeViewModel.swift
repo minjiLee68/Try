@@ -103,9 +103,9 @@ class MainHomeViewModel: ObservableObject {
     }
     
     // MARK: content update
-    func updateContent(title: String, impression: String, index: Int) {
+    func updateContent(detailContent: [DetailContent]) {
         Task {
-            try await ShareInfoService.updateShareContent(title: title, updateData: impression, index: index)
+            try await ShareInfoService.updateShareContent(detailContent: detailContent)
         }
 //        let addRef = self.docRef.document(ShareVar.userUid).collection(CollectionName.HabitShare.rawValue)
 //        do {

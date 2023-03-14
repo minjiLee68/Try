@@ -55,12 +55,14 @@ struct DetailCardView: View {
             
             VStack(spacing: 15) {
                 ForEach(0..<(selectGoalContent?.content.count ?? 0), id: \.self) { index in
-                    EditorContentsView(title: selectGoalContent?.content[index].contentTitle ?? "", index: index)
+                    EditorContentsView(
+                        title: selectGoalContent?.content[index].contentTitle ?? "",
+                        detailContent: selectGoalContent?.content ?? [DetailContent]())
                 }
             }
         }
-        .matchedGeometryEffect(id: contentId, in: animation)
-        .transition(.asymmetric(insertion: .identity, removal: .offset(y:0.5)))
+//        .matchedGeometryEffect(id: contentId, in: animation)
+//        .transition(.asymmetric(insertion: .identity, removal: .offset(y:0.5)))
     }
     
     var topTitle: some View {

@@ -16,21 +16,21 @@ struct AppBackgroundColor: ViewModifier {
             .background {
                 GeometryReader { proxy in
                     let size = proxy.size
-                    
                     TabView(selection: $currentIndex) {
                         ForEach(0..<viewModel.goalContents.count, id: \.self) { _ in
-                            if viewModel.goalContents[currentIndex].profile == "" {
-                                Image("profile")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: size.width, height: size.height)
-                                    .clipped()
-                            } else {
-                                Image("profile")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: size.width, height: size.height)
-                                    .clipped()
+                            ZStack {
+                                if viewModel.goalContents[currentIndex].profile == "" {
+                                    Image("profile")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: size.width, height: size.height)
+                                        .clipped()
+                                } else {
+                                    WebImageView(url: viewModel.goalContents[currentIndex].profile, width: size.width, height: size.height)
+                                        .clipped()
+                                        .scaledToFill()
+                                        .id(viewModel.goalContents[currentIndex].id)
+                                }
                             }
                         }
                     }
@@ -42,8 +42,8 @@ struct AppBackgroundColor: ViewModifier {
                     
                     LinearGradient(colors: [
                         .clear,
-                        Color.black.opacity(0.7),
-                        Color.black.opacity(0.9)
+                        Color.black.opacity(0.6),
+                        Color.black.opacity(0.7)
                     ], startPoint: .top, endPoint: .bottom)
                 }
                 .ignoresSafeArea()
