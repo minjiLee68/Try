@@ -11,15 +11,19 @@ import SwiftUI
 struct Contents: Hashable, Codable {
     var id: String = UUID().uuidString
     var time: String
+    var uid: String
     var nickName: String
     var profile: String
-    var content: [DetailContent]
+    var otherUid: String
+    var otherNickName: String
+    var otherProfile: String
+    var content: [String]
     var achieve: Bool = false
 }
 
 struct DetailContent: Codable, Hashable {
     var contentTitle: String
-    var oneImpression: String
+    var oneImpression: [String] = []
 }
 
 // MARK: 추천인 코드를 통해 연결된 친구

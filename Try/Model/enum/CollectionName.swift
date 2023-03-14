@@ -11,5 +11,6 @@ enum CollectionName: String {
     case UserInfo = "UserInfo"
     case Contact = "Contact"
     case HabitShare = "HabitShare"
+    case Impression = "Impressions"
     case FriendRequest = "FriendRequest"
 }

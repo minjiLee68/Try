@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct EditorContentsView: View {
+    @StateObject var mainViewModel = MainHomeViewModel()
     @State var title: String
-    @State var detailContent: [DetailContent]
+    @State var detailContent: [String]
     
     @State private var isCardTab = false
     @Environment(\.presentationMode) var mode
@@ -26,43 +27,74 @@ struct EditorContentsView: View {
                 isCardTab = true
             }
             .fullScreenCover(isPresented: $isCardTab) {
-                SubContentView(detailContent: detailContent, title: title, isTab: $isCardTab)
+                SubContentView(title: title, detailContent: mainViewModel.detailContents, isTab: $isCardTab)
                 .onDisappear {
                     mode.wrappedValue.dismiss()
                 }
+            }
+            .onAppear {
+                mainViewModel.getImpression(title: title)
             }
     }
 }
 
 struct SubContentView: View {
     @StateObject var mainViewModel = MainHomeViewModel()
-    @State var detailContent: [DetailContent]
     @State var title: String
+    @State var detailContent: [String]
     @State var impression = ""
+    @State var isMission = false
     
     @Binding var isTab: Bool
     
     var body: some View {
-        VStack {
+        ZStack {
             navigationBar
-            
-            detailContentView
+            VStack {
+                detailContentView
+            }
         }
     }
     
     var detailContentView: some View {
         VStack {
-            Text(title)
-                .font(.title2)
-                .foregroundColor(.white)
+            HStack(spacing: 0) {
+                Text(title)
+                    .font(.title2)
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                Button {
+                    isMission.toggle()
+                } label: {
+                    Text("미션완료")
+                        .font(.title2)
+                        .foregroundColor(isMission ? .white : .gray)
+                }
+            }
             
-            TextField("나의 소감", text: $impression)
+            Divider()
+            
+            ForEach(0..<detailContent.count, id: \.self) { index in
+                Text(detailContent[index])
+                    .foregroundColor(.white)
+            }
+            
+//            if let index = detailContent.firstIndex(where: {$0.contentTitle == title}) {
+//                if !detailContent[index].oneImpression.isEmpty {
+//                    Text(detailContent[index].oneImpression)
+//                }
+//            }
+            
+            TextField("한줄 소감", text: $impression)
                 .padding()
                 .padding(.leading, 6)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(6)
                 .foregroundColor(Color.white)
         }
+        .padding(.horizontal, 20)
     }
     
     var navigationBar: some View {
@@ -70,10 +102,11 @@ struct SubContentView: View {
             NavigationCustomBar(naviType: .cardDetail, isButton: $isTab)
             
             Button {
-                if let index = detailContent.firstIndex(where: { $0.contentTitle == title }) {
-                    detailContent[index].oneImpression = impression
-                }
-                mainViewModel.updateContent(detailContent: detailContent)
+//                if let index = detailContent.firstIndex(where: { $0.contentTitle == title }) {
+//                    detailContent[index].oneImpression.append(impression)
+//                }
+                detailContent.append(impression)
+                mainViewModel.setImpression(detailContent: DetailContent(contentTitle: title, oneImpression: detailContent))
                 isTab.toggle()
             } label: {
                 Text("확인")
@@ -87,5 +120,6 @@ struct SubContentView: View {
         .onChange(of: isTab) { newValue in
             hideKeyboard()
         }
+        .frame(maxHeight: .infinity, alignment: .top)
     }
 }

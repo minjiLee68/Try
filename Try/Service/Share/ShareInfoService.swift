@@ -33,50 +33,70 @@ enum ShareInfoService {
     }
     
     // MARK: 목표내용 저장하기
-    static func addShareContent(nickName: String, profile: String, content: [DetailContent]) async throws {
+    static func addShareContent(nickName: String, profile: String, content: [String]) async throws {
         let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue)
         let userRef = try await docRef.document(ShareVar.userUid).getDocument()
         let userData = try userRef.data(as: UserInfo.self)
-        let query = try await docRef.whereField("nickName", isEqualTo: ShareVar.selectName).getDocuments()
+        let query = try await docRef.whereField("nickName", isEqualTo: nickName).getDocuments()
         let docId = query.documents.last?.documentID ?? ""
-        
-        let ref = docRef.document(ShareVar.userUid).collection(CollectionName.HabitShare.rawValue).document(docId)
+        let ref = Firestore.firestore().collection(CollectionName.HabitShare.rawValue).document()
         try ref.setData(from: Contents(
             time: self.dateString(),
-            nickName: nickName,
-            profile: profile,
+            uid: ShareVar.userUid,
+            nickName: userData.nickName,
+            profile: userData.userProfile,
+            otherUid: docId,
+            otherNickName: nickName,
+            otherProfile: profile,
             content: content)
         )
-        do {
-            for doc in query.documents {
-                let otherRef = docRef.document(doc.documentID).collection(CollectionName.HabitShare.rawValue).document(ShareVar.userUid)
-                try otherRef.setData(from: Contents(
-                    time: self.dateString(),
-                    nickName: userData.nickName,
-                    profile: userData.userProfile,
-                    content: content)
-                )
-            }
-        } catch {
-            print("addContent error \(error.localizedDescription)")
-        }
+        
+//        do {
+//            for doc in query.documents {
+//                let otherRef = docRef.document(doc.documentID).collection(CollectionName.HabitShare.rawValue).document()
+//                try otherRef.setData(from: Contents(
+//                    uid: ShareVar.userUid,
+//                    time: self.dateString(),
+//                    nickName: userData.nickName,
+//                    profile: userData.userProfile,
+//                    content: content)
+//                )
+//            }
+//        } catch {
+//            print("addContent error \(error.localizedDescription)")
+//        }
     }
     
     // MARK: 내용 편집하기
-    static func updateShareContent(detailContent: [DetailContent]) async throws {
-        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
-        let query = try await docRef.collection(CollectionName.HabitShare.rawValue)
-            .whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
-        let doc = query.documents.first
+    static func updateShareContent(detailContent: DetailContent) async throws {
+        let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
+        let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
+        let docId = query.documents.first?.documentID ?? ""
+        let impressionRef = docRef.document(docId).collection(CollectionName.Impression.rawValue)
+        print("docId\(docId)")
+        try await impressionRef.document(detailContent.contentTitle).setData(["impression" : detailContent.oneImpression])
+//        var dicData: [[String: String]] = [[:]]
         // 중첩된 필드 경로 지정
-        try await doc?.reference.updateData(FieldValue.arrayUnion([detailContent]))
-        try await doc?.reference.setData(["content": ["contentTitle": "ㅎㅎ", "oneImpression": "ffff"]])
+//        for i in 0..<detailContent.count {
+//            if i == 0 {
+//                dicData = [
+//                    ["contentTitle": detailContent[i].contentTitle,
+//                     "oneImpression": detailContent[i].oneImpression]
+//                ]
+//            } else {
+//                dicData.append(
+//                    ["contentTitle": detailContent[i].contentTitle,
+//                    "oneImpression": detailContent[i].oneImpression])
+//            }
+//        }
+//        try await doc?.reference.updateData(["content": dicData])
     }
     
     // MARK: 공유된 목표정보 가져오기
     static func getShareInfo(_ completion: @escaping (Contents) -> ()) {
-        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
-        docRef.collection(CollectionName.HabitShare.rawValue).addSnapshotListener { (queryDoc, error) in
+        let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
+            .whereField("uid", isEqualTo: ShareVar.userUid)
+        docRef.addSnapshotListener { (queryDoc, error) in
             guard let document = queryDoc else { return }
             do {
                 for doc in document.documents {
@@ -87,6 +107,17 @@ enum ShareInfoService {
                 print("getShareInfo Error \(error.localizedDescription)")
             }
         }
+    }
+    
+    // MARK: 한줄 소감
+    static func getImpression(title: String) async throws -> [String] {
+        let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
+        let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
+        let docId = query.documents.first?.documentID ?? ""
+        let getDoc = try await docRef.document(docId).collection(CollectionName.Impression.rawValue).document(title).getDocument()
+        var data: [String] = []
+        data.append(try getDoc.data(as: String.self))
+        return data
     }
     
     // MARK: 나와 연결된 사람

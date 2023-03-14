@@ -12,7 +12,7 @@ struct DetailCardView: View {
     @StateObject var mainViewModel: MainHomeViewModel
 
     @State var selectGoalContent: Contents?
-    @State var detailContent = [DetailContent]()
+    @State var titleList = [String]()
     @State var cardType: DetailType
     
     @State var firstContent = ""
@@ -55,9 +55,9 @@ struct DetailCardView: View {
             
             VStack(spacing: 15) {
                 ForEach(0..<(selectGoalContent?.content.count ?? 0), id: \.self) { index in
-                    EditorContentsView(
-                        title: selectGoalContent?.content[index].contentTitle ?? "",
-                        detailContent: selectGoalContent?.content ?? [DetailContent]())
+                    if let content = selectGoalContent?.content {
+                        EditorContentsView(title: content[index], detailContent: mainViewModel.detailContents)
+                    }
                 }
             }
         }
@@ -80,12 +80,12 @@ struct DetailCardView: View {
             Spacer()
             
             VStack(spacing: 8) {
-                WebImageView(url: cardType == .Additional ? ShareVar.selectProfile : selectGoalContent?.profile ?? "",
+                WebImageView(url: cardType == .Additional ? ShareVar.selectProfile : selectGoalContent?.otherProfile ?? "",
                              width: device.widthScale(60), height: device.heightScale(60))
                     .clipShape(Circle())
                     .id(UUID())
                 
-                Text(cardType == .Additional ? ShareVar.selectName : selectGoalContent?.nickName ?? "")
+                Text(cardType == .Additional ? ShareVar.selectName : selectGoalContent?.otherNickName ?? "")
                     .foregroundColor(.white)
                     .defaultFont(size: 13)
             }
@@ -240,17 +240,13 @@ extension DetailCardView {
             
             Button {
                 if cardType == .Additional {
-                    detailContent = [
-                        DetailContent(contentTitle: firstContent, oneImpression: ""),
-                        DetailContent(contentTitle: secondContent, oneImpression: ""),
-                        DetailContent(contentTitle: thirdContent, oneImpression: "")
-                    ]
+                    titleList = [firstContent, secondContent, thirdContent]
                 }
                 
                 mainViewModel.addShareContent(
                     nickName: ShareVar.selectName,
                     profile: ShareVar.selectProfile,
-                    content: detailContent
+                    content: titleList
                 )
                 
                 isTab.toggle()

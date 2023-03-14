@@ -68,6 +68,7 @@ struct HomeView: View {
                 .onTapGesture {
                     withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
                         ShareVar.documentId = contents.id
+                        print("ShareVar.documentId \(contents.id)")
                         selectGoalContent = contents
                         isTabCard = true
                         cardType = .Editable
@@ -86,8 +87,8 @@ struct HomeView: View {
     func cardContentView(content: Contents) -> some View {
         ZStack {
             VStack(spacing: 0) {
-                if content.profile != "" {
-                    WebImageView(url: content.profile, width: device.widthScale(120), height: device.heightScale(120))
+                if content.otherProfile != "" {
+                    WebImageView(url: content.otherProfile, width: device.widthScale(120), height: device.heightScale(120))
                         .clipShape(Circle())
                         .id(content.id)
                         .frame(maxHeight: .infinity, alignment: .top)
@@ -103,7 +104,7 @@ struct HomeView: View {
                 }
             }
             
-            Text(content.nickName)
+            Text(content.otherNickName)
                 .foregroundColor(.white)
                 .defaultFont(size: 18)
                 .frame(maxHeight: .infinity, alignment: .center)

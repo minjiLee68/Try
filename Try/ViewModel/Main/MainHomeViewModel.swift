@@ -16,7 +16,7 @@ class MainHomeViewModel: ObservableObject {
     @Published var connectionUsers = [Friends]()
     @Published var goalContents = [Contents]()
     @Published var friendRequest = [Friends]()
-    @Published var detailContents = [DetailContent]()
+    @Published var detailContents = [String]()
     @Published var contents = [String]()
     
     let db = Firestore.firestore()
@@ -76,7 +76,7 @@ class MainHomeViewModel: ObservableObject {
     }
     
     // MARK: 목표내용 저장하기
-    func addShareContent(nickName: String, profile: String, content: [DetailContent]) {
+    func addShareContent(nickName: String, profile: String, content: [String]) {
         Task {
             try await ShareInfoService.addShareContent(
                 nickName: nickName,
@@ -90,7 +90,19 @@ class MainHomeViewModel: ObservableObject {
     func getShareGoal() {
         Task {
             ShareInfoService.getShareInfo { info in
-                self.goalContents.append(info)
+                if !self.goalContents.contains(where: { $0.id == info.id }) {
+                    self.goalContents.append(info)
+                }
+            }
+        }
+    }
+    
+    // MARK: 한줄소감
+    func getImpression(title: String) {
+        Task {
+            let impression = try await ShareInfoService.getImpression(title: title)
+            if !self.detailContents.contains(where: {$0 == impression.first}) {
+                self.detailContents.append(contentsOf: impression)
             }
         }
     }
@@ -103,7 +115,7 @@ class MainHomeViewModel: ObservableObject {
     }
     
     // MARK: content update
-    func updateContent(detailContent: [DetailContent]) {
+    func setImpression(detailContent: DetailContent) {
         Task {
             try await ShareInfoService.updateShareContent(detailContent: detailContent)
         }
