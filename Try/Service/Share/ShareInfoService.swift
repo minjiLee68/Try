@@ -68,13 +68,20 @@ enum ShareInfoService {
     }
     
     // MARK: 내용 편집하기
-    static func updateShareContent(detailContent: DetailContent) async throws {
+    static func updateShareContent(title: String, detailContent: DetailContent) async throws {
         let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
         let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
         let docId = query.documents.first?.documentID ?? ""
-        let impressionRef = docRef.document(docId).collection(CollectionName.Impression.rawValue)
-        print("docId\(docId)")
-        try await impressionRef.document(detailContent.contentTitle).setData(["impression" : detailContent.oneImpression])
+        let impressionRef = docRef.document(docId).collection(CollectionName.Impression.rawValue).document(title)
+        do {
+            try impressionRef.setData(from: DetailContent(
+                oneImpression: detailContent.oneImpression,
+                nickName: detailContent.nickName,
+                introduce: detailContent.introduce)
+            )
+        } catch {
+            print("Error Impression SetData")
+        }
 //        var dicData: [[String: String]] = [[:]]
         // 중첩된 필드 경로 지정
 //        for i in 0..<detailContent.count {
@@ -110,14 +117,13 @@ enum ShareInfoService {
     }
     
     // MARK: 한줄 소감
-    static func getImpression(title: String) async throws -> [String] {
+    static func getImpression(title: String) async throws -> DetailContent {
         let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
         let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
         let docId = query.documents.first?.documentID ?? ""
         let getDoc = try await docRef.document(docId).collection(CollectionName.Impression.rawValue).document(title).getDocument()
-        var data: [String] = []
-        data.append(try getDoc.data(as: String.self))
-        return data
+        print("getDoc \(docId), \(try getDoc.data(as: DetailContent.self))")
+        return try getDoc.data(as: DetailContent.self)
     }
     
     // MARK: 나와 연결된 사람

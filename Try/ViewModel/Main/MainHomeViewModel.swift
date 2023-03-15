@@ -13,10 +13,11 @@ import FirebaseStorage
 @MainActor
 class MainHomeViewModel: ObservableObject {
     @Published var userInfoData: UserInfo?
+    @Published var detailContent: DetailContent = DetailContent(nickName: "", introduce: "")
     @Published var connectionUsers = [Friends]()
     @Published var goalContents = [Contents]()
     @Published var friendRequest = [Friends]()
-    @Published var detailContents = [String]()
+//    @Published var detailContents = [String]()
     @Published var contents = [String]()
     
     let db = Firestore.firestore()
@@ -100,10 +101,7 @@ class MainHomeViewModel: ObservableObject {
     // MARK: 한줄소감
     func getImpression(title: String) {
         Task {
-            let impression = try await ShareInfoService.getImpression(title: title)
-            if !self.detailContents.contains(where: {$0 == impression.first}) {
-                self.detailContents.append(contentsOf: impression)
-            }
+            self.detailContent = try await ShareInfoService.getImpression(title: title)
         }
     }
     
@@ -115,9 +113,9 @@ class MainHomeViewModel: ObservableObject {
     }
     
     // MARK: content update
-    func setImpression(detailContent: DetailContent) {
+    func setImpression(title: String, detailContent: DetailContent) {
         Task {
-            try await ShareInfoService.updateShareContent(detailContent: detailContent)
+            try await ShareInfoService.updateShareContent(title: title, detailContent: detailContent)
         }
 //        let addRef = self.docRef.document(ShareVar.userUid).collection(CollectionName.HabitShare.rawValue)
 //        do {

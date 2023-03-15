@@ -56,7 +56,7 @@ struct DetailCardView: View {
             VStack(spacing: 15) {
                 ForEach(0..<(selectGoalContent?.content.count ?? 0), id: \.self) { index in
                     if let content = selectGoalContent?.content {
-                        EditorContentsView(title: content[index], detailContent: mainViewModel.detailContents)
+                        EditorContentsView(title: content[index])
                     }
                 }
             }

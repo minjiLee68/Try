@@ -22,8 +22,9 @@ struct Contents: Hashable, Codable {
 }
 
 struct DetailContent: Codable, Hashable {
-    var contentTitle: String
     var oneImpression: [String] = []
+    var nickName: String
+    var introduce: String
 }
 
 // MARK: 추천인 코드를 통해 연결된 친구

@@ -10,7 +10,6 @@ import SwiftUI
 struct EditorContentsView: View {
     @StateObject var mainViewModel = MainHomeViewModel()
     @State var title: String
-    @State var detailContent: [String]
     
     @State private var isCardTab = false
     @Environment(\.presentationMode) var mode
@@ -27,10 +26,10 @@ struct EditorContentsView: View {
                 isCardTab = true
             }
             .fullScreenCover(isPresented: $isCardTab) {
-                SubContentView(title: title, detailContent: mainViewModel.detailContents, isTab: $isCardTab)
-                .onDisappear {
-                    mode.wrappedValue.dismiss()
-                }
+                SubContentView(mainViewModel: mainViewModel, title: title, isTab: $isCardTab)
+                    .onDisappear {
+                        mode.wrappedValue.dismiss()
+                    }
             }
             .onAppear {
                 mainViewModel.getImpression(title: title)
@@ -39,9 +38,8 @@ struct EditorContentsView: View {
 }
 
 struct SubContentView: View {
-    @StateObject var mainViewModel = MainHomeViewModel()
+    @StateObject var mainViewModel: MainHomeViewModel
     @State var title: String
-    @State var detailContent: [String]
     @State var impression = ""
     @State var isMission = false
     
@@ -76,8 +74,8 @@ struct SubContentView: View {
             
             Divider()
             
-            ForEach(0..<detailContent.count, id: \.self) { index in
-                Text(detailContent[index])
+            ForEach(0..<mainViewModel.detailContent.oneImpression.count, id: \.self) { index in
+                Text(mainViewModel.detailContent.oneImpression[index])
                     .foregroundColor(.white)
             }
             
@@ -87,12 +85,22 @@ struct SubContentView: View {
 //                }
 //            }
             
-            TextField("한줄 소감", text: $impression)
-                .padding()
-                .padding(.leading, 6)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(6)
-                .foregroundColor(Color.white)
+            HStack(spacing: 0) {
+                TextField("한줄 소감", text: $impression)
+                    .padding()
+                    .padding(.leading, 6)
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(6)
+                    .foregroundColor(Color.white)
+                
+                Button {
+                    impression = ""
+                    mainViewModel.detailContent.oneImpression.append(impression)
+                } label: {
+                    Text("전송")
+                }
+            }
+            
         }
         .padding(.horizontal, 20)
     }
@@ -105,8 +113,7 @@ struct SubContentView: View {
 //                if let index = detailContent.firstIndex(where: { $0.contentTitle == title }) {
 //                    detailContent[index].oneImpression.append(impression)
 //                }
-                detailContent.append(impression)
-                mainViewModel.setImpression(detailContent: DetailContent(contentTitle: title, oneImpression: detailContent))
+                mainViewModel.setImpression(title: title, detailContent: mainViewModel.detailContent)
                 isTab.toggle()
             } label: {
                 Text("확인")
