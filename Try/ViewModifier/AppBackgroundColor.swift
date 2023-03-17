@@ -19,14 +19,14 @@ struct AppBackgroundColor: ViewModifier {
                     TabView(selection: $currentIndex) {
                         ForEach(0..<viewModel.goalContents.count, id: \.self) { _ in
                             ZStack {
-                                if viewModel.goalContents[currentIndex].profile == "" {
+                                if viewModel.goalContents[currentIndex].otherProfile == "" {
                                     Image("profile")
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: size.width, height: size.height)
                                         .clipped()
                                 } else {
-                                    WebImageView(url: viewModel.goalContents[currentIndex].profile, width: size.width, height: size.height)
+                                    WebImageView(url: viewModel.goalContents[currentIndex].otherProfile, width: size.width, height: size.height)
                                         .clipped()
                                         .scaledToFill()
                                         .id(viewModel.goalContents[currentIndex].id)

@@ -68,7 +68,6 @@ struct HomeView: View {
                 .onTapGesture {
                     withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
                         ShareVar.documentId = contents.id
-                        print("ShareVar.documentId \(contents.id)")
                         selectGoalContent = contents
                         isTabCard = true
                         cardType = .Editable
@@ -80,6 +79,9 @@ struct HomeView: View {
         .padding(.horizontal, -30)
         .padding(.vertical)
         .opacity(isTabCard ? 0 : 1)
+        .onAppear {
+            currentIndex = 0
+        }
     }
     
     // MARK: 카드 안에 들어갈 내용
