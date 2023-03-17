@@ -13,7 +13,7 @@ import FirebaseStorage
 @MainActor
 class MainHomeViewModel: ObservableObject {
     @Published var userInfoData: UserInfo?
-    @Published var detailContent: DetailContent = DetailContent(nickName: "", introduce: "")
+    @Published var detailContent: DetailContent?
     @Published var connectionUsers = [Friends]()
     @Published var goalContents = [Contents]()
     @Published var friendRequest = [Friends]()
@@ -29,13 +29,18 @@ class MainHomeViewModel: ObservableObject {
             newFriendRequest()
             getFriendList()
         }
-        ShareInfoService.getMyUserInfo { info in
-            self.userInfoData = info
-        }
+        self.getUserInfo()
         self.getShareGoal()
         self.getShareUser()
     }
     
+    // MARK: User Info
+    func getUserInfo() {
+        ShareInfoService.getMyUserInfo { info in
+            self.userInfoData = info
+        }
+    }
+ 
     //MARK: 친구 리스트 가져오기
     func getFriendList() {
         Task {
@@ -113,7 +118,7 @@ class MainHomeViewModel: ObservableObject {
     }
     
     // MARK: content update
-    func setImpression(title: String, detailContent: DetailContent) {
+    func setImpression(title: String, detailContent: [Impression]) {
         Task {
             try await ShareInfoService.updateShareContent(title: title, detailContent: detailContent)
         }

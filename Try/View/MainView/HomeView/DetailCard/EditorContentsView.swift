@@ -33,12 +33,14 @@ struct EditorContentsView: View {
             }
             .onAppear {
                 mainViewModel.getImpression(title: title)
+                mainViewModel.getUserInfo()
             }
     }
 }
 
 struct SubContentView: View {
     @StateObject var mainViewModel: MainHomeViewModel
+    @State var impressions = [Impression]()
     @State var title: String
     @State var impression = ""
     @State var isMission = false
@@ -46,10 +48,47 @@ struct SubContentView: View {
     @Binding var isTab: Bool
     
     var body: some View {
-        ZStack {
-            navigationBar
-            VStack {
-                detailContentView
+        VStack {
+            ZStack {
+                navigationBar
+                
+                ScrollView(.vertical) {
+                    detailContentView
+                }
+                
+                HStack(spacing: 0) {
+                    TextField("한줄 소감", text: $impression)
+                        .padding()
+                        .padding(.leading, 6)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(6)
+                        .foregroundColor(Color.white)
+                    
+                    Button {
+                        impressions.append(
+                            Impression(
+                                nickName: mainViewModel.userInfoData?.nickName ?? "",
+                                introduce: mainViewModel.userInfoData?.introduce ?? "",
+                                oneImpression: impression)
+                        )
+                        mainViewModel.setImpression(title: title, detailContent: impressions)
+                        impression = ""
+                    } label: {
+                        Text("전송")
+                    }
+                }
+                .frame(maxHeight: .infinity, alignment: .bottom)
+            }
+            .onTapGesture {
+                hideKeyboard()
+            }
+            .onAppear {
+                if let impressions = mainViewModel.detailContent?.impressions {
+                    impressions.forEach { impression in
+                        self.impressions.append(impression)
+                    }
+                }
+
             }
         }
     }
@@ -74,33 +113,26 @@ struct SubContentView: View {
             
             Divider()
             
-            ForEach(0..<mainViewModel.detailContent.oneImpression.count, id: \.self) { index in
-                Text(mainViewModel.detailContent.oneImpression[index])
-                    .foregroundColor(.white)
-            }
-            
-//            if let index = detailContent.firstIndex(where: {$0.contentTitle == title}) {
-//                if !detailContent[index].oneImpression.isEmpty {
-//                    Text(detailContent[index].oneImpression)
-//                }
-//            }
-            
-            HStack(spacing: 0) {
-                TextField("한줄 소감", text: $impression)
-                    .padding()
-                    .padding(.leading, 6)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(6)
-                    .foregroundColor(Color.white)
-                
-                Button {
-                    impression = ""
-                    mainViewModel.detailContent.oneImpression.append(impression)
-                } label: {
-                    Text("전송")
+            ForEach(0..<impressions.count, id: \.self) { index in
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(spacing: 6) {
+                        Text(impressions[index].nickName)
+                            .foregroundColor(.white)
+                            .defaultFont(size: 16)
+                        
+                        Text(impressions[index].introduce)
+                            .foregroundColor(.gray)
+                            .defaultFont(size: 14)
+                    }
+                    
+                    Text(impressions[index].oneImpression)
+                        .foregroundColor(.white)
+                        .defaultFont(size: 18)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            
+            .padding(.top, 16)
         }
         .padding(.horizontal, 20)
     }
@@ -113,7 +145,6 @@ struct SubContentView: View {
 //                if let index = detailContent.firstIndex(where: { $0.contentTitle == title }) {
 //                    detailContent[index].oneImpression.append(impression)
 //                }
-                mainViewModel.setImpression(title: title, detailContent: mainViewModel.detailContent)
                 isTab.toggle()
             } label: {
                 Text("확인")

@@ -68,35 +68,17 @@ enum ShareInfoService {
     }
     
     // MARK: 내용 편집하기
-    static func updateShareContent(title: String, detailContent: DetailContent) async throws {
+    static func updateShareContent(title: String, detailContent: [Impression]) async throws {
         let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
         let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
         let docId = query.documents.first?.documentID ?? ""
         let impressionRef = docRef.document(docId).collection(CollectionName.Impression.rawValue).document(title)
         do {
-            try impressionRef.setData(from: DetailContent(
-                oneImpression: detailContent.oneImpression,
-                nickName: detailContent.nickName,
-                introduce: detailContent.introduce)
-            )
+            try impressionRef.setData(from: DetailContent(impressions: detailContent))
+            print(detailContent)
         } catch {
             print("Error Impression SetData")
         }
-//        var dicData: [[String: String]] = [[:]]
-        // 중첩된 필드 경로 지정
-//        for i in 0..<detailContent.count {
-//            if i == 0 {
-//                dicData = [
-//                    ["contentTitle": detailContent[i].contentTitle,
-//                     "oneImpression": detailContent[i].oneImpression]
-//                ]
-//            } else {
-//                dicData.append(
-//                    ["contentTitle": detailContent[i].contentTitle,
-//                    "oneImpression": detailContent[i].oneImpression])
-//            }
-//        }
-//        try await doc?.reference.updateData(["content": dicData])
     }
     
     // MARK: 공유된 목표정보 가져오기

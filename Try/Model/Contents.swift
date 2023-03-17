@@ -22,9 +22,13 @@ struct Contents: Hashable, Codable {
 }
 
 struct DetailContent: Codable, Hashable {
-    var oneImpression: [String] = []
+    var impressions: [Impression]
+}
+
+struct Impression: Codable, Hashable {
     var nickName: String
     var introduce: String
+    var oneImpression: String
 }
 
 // MARK: 추천인 코드를 통해 연결된 친구
