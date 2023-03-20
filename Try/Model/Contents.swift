@@ -18,10 +18,10 @@ struct Contents: Hashable, Codable {
     var otherNickName: String
     var otherProfile: String
     var content: [String]
-    var achieve: Bool = false
 }
 
 struct DetailContent: Codable, Hashable {
+    var achieve: Int = 0
     var impressions: [Impression]
 }
 

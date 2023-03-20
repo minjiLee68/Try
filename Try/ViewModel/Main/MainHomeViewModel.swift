@@ -122,11 +122,12 @@ class MainHomeViewModel: ObservableObject {
         Task {
             try await ShareInfoService.updateShareContent(title: title, detailContent: detailContent)
         }
-//        let addRef = self.docRef.document(ShareVar.userUid).collection(CollectionName.HabitShare.rawValue)
-//        do {
-//            let _ = try addRef.addDocument(from: contents)
-//        } catch {
-//            print("error")
-//        }
+    }
+    
+    // MARK: isMissionCheck
+    func setAchieveCheck(title: String, achieve: Int) {
+        Task {
+            try await ShareInfoService.missionCheck(title: title, achieve: achieve)
+        }
     }
 }

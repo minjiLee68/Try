@@ -50,21 +50,6 @@ enum ShareInfoService {
             otherProfile: profile,
             content: content)
         )
-        
-//        do {
-//            for doc in query.documents {
-//                let otherRef = docRef.document(doc.documentID).collection(CollectionName.HabitShare.rawValue).document()
-//                try otherRef.setData(from: Contents(
-//                    uid: ShareVar.userUid,
-//                    time: self.dateString(),
-//                    nickName: userData.nickName,
-//                    profile: userData.userProfile,
-//                    content: content)
-//                )
-//            }
-//        } catch {
-//            print("addContent error \(error.localizedDescription)")
-//        }
     }
     
     // MARK: 내용 편집하기
@@ -73,12 +58,16 @@ enum ShareInfoService {
         let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
         let docId = query.documents.first?.documentID ?? ""
         let impressionRef = docRef.document(docId).collection(CollectionName.Impression.rawValue).document(title)
-        do {
-            try impressionRef.setData(from: DetailContent(impressions: detailContent))
-            print(detailContent)
-        } catch {
-            print("Error Impression SetData")
-        }
+        try await impressionRef.updateData(["impressions": detailContent])
+    }
+    
+    // MARK: isMissionCheck
+    static func missionCheck(title: String, achieve: Int) async throws {
+        let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
+        let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
+        let docId = query.documents.first?.documentID ?? ""
+        let achieveRef = docRef.document(docId).collection(CollectionName.Impression.rawValue).document(title)
+        try await achieveRef.updateData(["achieve": achieve])
     }
     
     // MARK: 공유된 목표정보 가져오기

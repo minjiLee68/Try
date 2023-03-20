@@ -12,6 +12,7 @@ struct EditorContentsView: View {
     @State var title: String
     
     @State private var isCardTab = false
+    
     @Environment(\.presentationMode) var mode
     
     var body: some View {
@@ -45,84 +46,78 @@ struct SubContentView: View {
     @State var impression = ""
     @State var isMission = false
     
+    @State private var achieve = 0
+    @State private var scrollingCellIndex = 0
+    @State private var index = 0
+    
     @Binding var isTab: Bool
     
     var body: some View {
         VStack {
-            ZStack {
-                navigationBar
-                
-                ScrollView(.vertical) {
-                    detailContentView
-                }
-                
-                HStack(spacing: 0) {
-                    TextField("한줄 소감", text: $impression)
-                        .padding()
-                        .padding(.leading, 6)
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(6)
-                        .foregroundColor(Color.white)
-                    
-                    Button {
-                        impressions.append(
-                            Impression(
-                                nickName: mainViewModel.userInfoData?.nickName ?? "",
-                                introduce: mainViewModel.userInfoData?.introduce ?? "",
-                                oneImpression: impression)
-                        )
-                        mainViewModel.setImpression(title: title, detailContent: impressions)
-                        impression = ""
-                    } label: {
-                        Text("전송")
-                    }
-                }
-                .frame(maxHeight: .infinity, alignment: .bottom)
-            }
-            .onTapGesture {
-                hideKeyboard()
-            }
-            .onAppear {
-                if let impressions = mainViewModel.detailContent?.impressions {
-                    impressions.forEach { impression in
-                        self.impressions.append(impression)
-                    }
-                }
-
-            }
-        }
-    }
-    
-    var detailContentView: some View {
-        VStack {
-            HStack(spacing: 0) {
-                Text(title)
-                    .font(.title2)
-                    .foregroundColor(.white)
-                
-                Spacer()
-                
-                Button {
-                    isMission.toggle()
-                } label: {
-                    Text("미션완료")
-                        .font(.title2)
-                        .foregroundColor(isMission ? .white : .gray)
-                }
-            }
+            navigationBar
+            
+            missionSave
             
             Divider()
             
+            ScrollViewReader { proxy in
+                ScrollView(.vertical, showsIndicators: false) {
+                    detailContentView(proxy: proxy)
+                }
+            }
+            commentSendView
+        }
+        .onTapGesture {
+            scrollingCellIndex = 0
+            hideKeyboard()
+        }
+        .onAppear {
+            if let impressions = mainViewModel.detailContent?.impressions {
+                impressions.forEach { impression in
+                    self.impressions.append(impression)
+                }
+            }
+
+        }
+    }
+    
+    var missionSave: some View {
+        HStack(spacing: 0) {
+            Text(title)
+                .font(.title2)
+                .foregroundColor(.white)
+            
+            Spacer()
+            
+            Button {
+                isMission.toggle()
+                if isMission {
+                    achieve = (mainViewModel.detailContent?.achieve ?? 0) + 1
+                } else {
+                    achieve = (mainViewModel.detailContent?.achieve ?? 0) - 1
+                }
+            } label: {
+                Text("미션완료")
+                    .font(.title2)
+                    .foregroundColor(isMission ? .white : .gray)
+            }
+        }
+        .padding(.horizontal, 20)
+    }
+    
+    @ViewBuilder
+    func detailContentView(proxy: ScrollViewProxy) -> some View {
+        LazyVStack {
             ForEach(0..<impressions.count, id: \.self) { index in
                 VStack(alignment: .leading, spacing: 10) {
                     HStack(spacing: 6) {
                         Text(impressions[index].nickName)
                             .foregroundColor(.white)
-                            .defaultFont(size: 16)
+                            .defaultFont(size: 14)
                         
                         Text(impressions[index].introduce)
                             .foregroundColor(.gray)
-                            .defaultFont(size: 14)
+                            .defaultFont(size: 12)
                     }
                     
                     Text(impressions[index].oneImpression)
@@ -131,10 +126,56 @@ struct SubContentView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .onChange(of: scrollingCellIndex) { newValue in
+                    // MARK: 답변 달았을 때 -> 내가 작성한 답글이 있는 인덱스로 scroll이동
+                    withAnimation {
+                        proxy.scrollTo(newValue, anchor: .top)
+                    }
+                }
             }
             .padding(.top, 16)
         }
         .padding(.horizontal, 20)
+    }
+    
+    var commentSendView: some View {
+        HStack(spacing: 8) {
+            TextField("한줄 소감", text: $impression)
+                .padding()
+                .padding(.leading, 6)
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(6)
+                .foregroundColor(Color.white)
+                .onTapGesture {
+                    // MARK: 답변 달았을 때 -> 내가 작성한 답글이 있는 인덱스로 scroll이동
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                        scrollingCellIndex = impressions.count - 1
+                    }
+                }
+                .onChange(of: impression) { newValue in
+                    // MARK: 답변 달았을 때 -> 내가 작성한 답글이 있는 인덱스로 scroll이동
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                        scrollingCellIndex = impressions.count - 1
+                    }
+                }
+            
+            Button {
+                impressions.append(
+                    Impression(
+                        nickName: mainViewModel.userInfoData?.nickName ?? "",
+                        introduce: mainViewModel.userInfoData?.introduce ?? "",
+                        oneImpression: impression)
+                )
+                mainViewModel.setImpression(title: title, detailContent: impressions)
+                mainViewModel.getImpression(title: title)
+                impression = ""
+            } label: {
+                Text("전송")
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .bottom)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 5)
     }
     
     var navigationBar: some View {
@@ -145,19 +186,20 @@ struct SubContentView: View {
 //                if let index = detailContent.firstIndex(where: { $0.contentTitle == title }) {
 //                    detailContent[index].oneImpression.append(impression)
 //                }
+                mainViewModel.setAchieveCheck(title: title, achieve: achieve)
                 isTab.toggle()
             } label: {
                 Text("확인")
-                    .foregroundColor(!title.isEmpty ? .white : .gray)
+                    .foregroundColor(isMission ? .white : .gray)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.trailing, 20)
-            .disabled(!title.isEmpty ? false : true)
+            .disabled(isMission ? false : true)
         }
         .padding(.top, 10)
         .onChange(of: isTab) { newValue in
             hideKeyboard()
         }
-        .frame(maxHeight: .infinity, alignment: .top)
+        .frame(maxWidth: .infinity, alignment: .top)
     }
 }

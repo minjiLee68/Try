@@ -59,8 +59,6 @@ struct CustomCarousel_new<Content: View,Item>: View where Item: RandomAccessColl
                         .offset(y: offsetY(index: index, cardWidth: cardWidth))
                         .frame(width: size.width - cardPadding, height: size.height)
                         .contentShape(Rectangle())
-                    
-                    let _ = print("customCard \(index), \(rotation), \(offsetY(index: index, cardWidth: cardWidth))")
                 }
             }
             .padding(.horizontal, spacing)
