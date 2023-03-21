@@ -15,4 +15,5 @@ struct ShareVar {
     static var selectName = ""
     static var selectProfile = ""
     static var documentId = ""
+    static var isMainCheck = false
 }

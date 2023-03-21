@@ -80,12 +80,14 @@ struct DetailCardView: View {
             Spacer()
             
             VStack(spacing: 8) {
-                WebImageView(url: cardType == .Additional ? ShareVar.selectProfile : selectGoalContent?.otherProfile ?? "",
+                WebImageView(url: cardType == .Additional ? ShareVar.selectProfile :
+                                !ShareVar.isMainCheck ? selectGoalContent?.profile ?? "" : selectGoalContent?.subProfile ?? "",
                              width: device.widthScale(60), height: device.heightScale(60))
                     .clipShape(Circle())
                     .id(UUID())
                 
-                Text(cardType == .Additional ? ShareVar.selectName : selectGoalContent?.otherNickName ?? "")
+                Text(cardType == .Additional ? ShareVar.selectName :
+                        !ShareVar.isMainCheck ? selectGoalContent?.nickName ?? "" : selectGoalContent?.subNickName ?? "")
                     .foregroundColor(.white)
                     .defaultFont(size: 13)
             }

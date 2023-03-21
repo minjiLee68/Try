@@ -14,9 +14,9 @@ struct Contents: Hashable, Codable {
     var uid: String
     var nickName: String
     var profile: String
-    var otherUid: String
-    var otherNickName: String
-    var otherProfile: String
+    var subUid: String
+    var subNickName: String
+    var subProfile: String
     var content: [String]
 }
 

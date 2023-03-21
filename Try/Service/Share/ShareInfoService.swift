@@ -45,9 +45,9 @@ enum ShareInfoService {
             uid: ShareVar.userUid,
             nickName: userData.nickName,
             profile: userData.userProfile,
-            otherUid: docId,
-            otherNickName: nickName,
-            otherProfile: profile,
+            subUid: docId,
+            subNickName: nickName,
+            subProfile: profile,
             content: content)
         )
     }
@@ -63,7 +63,7 @@ enum ShareInfoService {
             try impressionRef.setData(
                 from: DetailContent(
                     mainCheck: [try content.data(as: Contents.self).uid: 0],
-                    subCheck: [try content.data(as: Contents.self).otherUid: 0],
+                    subCheck: [try content.data(as: Contents.self).subUid: 0],
                     impressions: detailContent),
                 merge: true)
         } catch {
@@ -96,14 +96,34 @@ enum ShareInfoService {
     
     // MARK: 공유된 목표정보 가져오기
     static func getShareInfo(_ completion: @escaping (Contents) -> ()) {
-        let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
+        let mainDocRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
             .whereField("uid", isEqualTo: ShareVar.userUid)
-        docRef.addSnapshotListener { (queryDoc, error) in
+        
+        let subDocRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
+            .whereField("subUid", isEqualTo: ShareVar.userUid)
+        
+        mainDocRef.addSnapshotListener { (queryDoc, error) in
             guard let document = queryDoc else { return }
             do {
-                for doc in document.documents {
-                    let data = try doc.data(as: Contents.self)
-                    completion(data)
+                if document.documents.isEmpty {
+                    subDocRef.addSnapshotListener { queryDoc, error in
+                        guard let document = queryDoc else { return }
+                        do {
+                            for doc in document.documents {
+                                ShareVar.isMainCheck = false
+                                let data = try doc.data(as: Contents.self)
+                                completion(data)
+                            }
+                        } catch {
+                            print("getShareInfo Error \(error.localizedDescription)")
+                        }
+                    }
+                } else {
+                    for doc in document.documents {
+                        ShareVar.isMainCheck = true
+                        let data = try doc.data(as: Contents.self)
+                        completion(data)
+                    }
                 }
             } catch {
                 print("getShareInfo Error \(error.localizedDescription)")

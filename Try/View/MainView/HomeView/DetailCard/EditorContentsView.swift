@@ -90,51 +90,69 @@ struct SubContentView: View {
                 .font(.title2)
                 .frame(maxWidth: .infinity, alignment: .center)
             
-            HStack(spacing: 0) {
-                Text(mainViewModel.contents?.nickName ?? "")
+            if ShareVar.isMainCheck {
+                missionEditorView(nickName: mainViewModel.contents?.nickName ?? "")
+            } else {
+                missionEditorView(nickName: mainViewModel.contents?.subNickName ?? "")
+            }
+            
+            if ShareVar.isMainCheck {
+                missionTexterView(nickName: mainViewModel.contents?.subNickName ?? "")
+            } else {
+                missionTexterView(nickName: mainViewModel.contents?.nickName ?? "")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func missionEditorView(nickName: String) -> some View {
+        HStack(spacing: 0) {
+            Text(nickName)
+                .font(.title2)
+                .foregroundColor(.white)
+            
+            Spacer()
+            
+            Button {
+                isMission.toggle()
+                if isMission {
+                    is_Check()
+                } else {
+                    is_NotCheck()
+                }
+            } label: {
+                Text("미션완료")
                     .font(.title2)
-                    .foregroundColor(.white)
-                
-                Spacer()
-                
-                Button {
-                    isMission.toggle()
-                    if isMission {
-                        is_Check()
-                    } else {
-                        is_NotCheck()
-                    }
-                } label: {
+                    .foregroundColor(isMission ? .white : .gray)
+            }
+        }
+        .padding(.horizontal, 20)
+    }
+    
+    @ViewBuilder
+    func missionTexterView(nickName: String) -> some View {
+        HStack(spacing: 0) {
+            Text(nickName)
+                .font(.title2)
+                .foregroundColor(.white)
+            
+            Spacer()
+            
+            if ShareVar.isMainCheck {
+                if let mainCheck = mainViewModel.detailContent?.mainCheck {
                     Text("미션완료")
                         .font(.title2)
-                        .foregroundColor(isMission ? .white : .gray)
+                        .foregroundColor((mainCheck.first(where: {$0.value == 1}) != nil) ? .white : .gray)
+                }
+            } else {
+                if let subCheck = mainViewModel.detailContent?.subCheck {
+                    Text("미션완료")
+                        .font(.title2)
+                        .foregroundColor((subCheck.first(where: {$0.value == 1}) != nil) ? .white : .gray)
                 }
             }
-            .padding(.horizontal, 20)
-            
-            HStack(spacing: 0) {
-                Text(mainViewModel.contents?.otherNickName ?? "")
-                    .font(.title2)
-                    .foregroundColor(.white)
-                
-                Spacer()
-                
-                if isContentUid() {
-                    if let subCheck = mainViewModel.detailContent?.subCheck {
-                        Text("미션완료")
-                            .font(.title2)
-                            .foregroundColor((subCheck.first(where: {$0.value == 1}) != nil) ? .white : .gray)
-                    }
-                } else {
-                    if let mainCheck = mainViewModel.detailContent?.mainCheck {
-                        Text("미션완료")
-                            .font(.title2)
-                            .foregroundColor((mainCheck.first(where: {$0.value == 1}) != nil) ? .white : .gray)
-                    }
-                }
-            }
-            .padding(.horizontal, 20)
         }
+        .padding(.horizontal, 20)
     }
     
     @ViewBuilder
@@ -216,6 +234,7 @@ struct SubContentView: View {
             
             Button {
                 mainViewModel.setAchieveCheck(title: title, achieve: achieve)
+                mainViewModel.getImpression(title: title)
                 isTab.toggle()
             } label: {
                 Text("확인")
@@ -234,7 +253,7 @@ struct SubContentView: View {
     
     // MARK: 미션완료 main인지 sub인지 구분하기
     func isMainOrSub() {
-        if isContentUid() {
+        if ShareVar.isMainCheck {
             if let check = mainViewModel.detailContent?.mainCheck[ShareVar.userUid] {
                 if check == 1 {
                     isMission = true
@@ -254,7 +273,7 @@ struct SubContentView: View {
     }
     
     func is_Check() {
-        if isContentUid() {
+        if ShareVar.isMainCheck {
             if let check = mainViewModel.detailContent?.mainCheck[ShareVar.userUid] {
                 achieve = check + 1
             }
@@ -266,7 +285,7 @@ struct SubContentView: View {
     }
     
     func is_NotCheck() {
-        if isContentUid() {
+        if ShareVar.isMainCheck {
             if let check = mainViewModel.detailContent?.mainCheck[ShareVar.userUid] {
                 achieve = check - 1
             }
@@ -277,11 +296,12 @@ struct SubContentView: View {
         }
     }
     
-    func isContentUid() -> Bool {
-        if ((mainViewModel.detailContent?.mainCheck.first(where: {$0.key == ShareVar.userUid})) != nil) {
-            return true
-        } else {
-            return false
-        }
-    }
+    // MARK: main user / sub user
+//    func isContentUid() -> Bool {
+//        if ((mainViewModel.detailContent?.mainCheck.first(where: {$0.key == ShareVar.userUid})) != nil) {
+//            return true
+//        } else {
+//            return false
+//        }
+//    }
 }
