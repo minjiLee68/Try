@@ -21,7 +21,8 @@ struct Contents: Hashable, Codable {
 }
 
 struct DetailContent: Codable, Hashable {
-    var achieve: Int = 0
+    var mainCheck: [String: Int]
+    var subCheck: [String: Int]
     var impressions: [Impression]
 }
 

@@ -57,8 +57,18 @@ enum ShareInfoService {
         let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
         let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
         let docId = query.documents.first?.documentID ?? ""
+        let content = try await docRef.document(docId).getDocument()
         let impressionRef = docRef.document(docId).collection(CollectionName.Impression.rawValue).document(title)
-        try await impressionRef.updateData(["impressions": detailContent])
+        do {
+            try impressionRef.setData(
+                from: DetailContent(
+                    mainCheck: [try content.data(as: Contents.self).uid: 0],
+                    subCheck: [try content.data(as: Contents.self).otherUid: 0],
+                    impressions: detailContent),
+                merge: true)
+        } catch {
+            print("Error UpdateShareContent")
+        }
     }
     
     // MARK: isMissionCheck
@@ -67,7 +77,21 @@ enum ShareInfoService {
         let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
         let docId = query.documents.first?.documentID ?? ""
         let achieveRef = docRef.document(docId).collection(CollectionName.Impression.rawValue).document(title)
-        try await achieveRef.updateData(["achieve": achieve])
+        let content = try await docRef.document(docId).getDocument()
+        if try content.data(as: Contents.self).uid == ShareVar.userUid {
+            try await achieveRef.updateData(["mainCheck": [ShareVar.userUid: achieve]])
+        } else {
+            try await achieveRef.updateData(["subCheck": [ShareVar.userUid: achieve]])
+        }
+    }
+    
+    // MARK: 해당 콘텐츠 가져오기
+    static func getContents() async throws -> Contents {
+        let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
+        let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
+        let docId = query.documents.first?.documentID ?? ""
+        let content = try await docRef.document(docId).getDocument()
+        return try content.data(as: Contents.self)
     }
     
     // MARK: 공유된 목표정보 가져오기

@@ -35,6 +35,7 @@ struct EditorContentsView: View {
             .onAppear {
                 mainViewModel.getImpression(title: title)
                 mainViewModel.getUserInfo()
+                mainViewModel.getContents()
             }
     }
 }
@@ -45,6 +46,7 @@ struct SubContentView: View {
     @State var title: String
     @State var impression = ""
     @State var isMission = false
+    @State var isMainCheck = false
     
     @State private var achieve = 0
     @State private var scrollingCellIndex = 0
@@ -72,37 +74,67 @@ struct SubContentView: View {
             hideKeyboard()
         }
         .onAppear {
+            isMainOrSub()
             if let impressions = mainViewModel.detailContent?.impressions {
                 impressions.forEach { impression in
                     self.impressions.append(impression)
                 }
             }
-
         }
     }
     
     var missionSave: some View {
-        HStack(spacing: 0) {
+        VStack(spacing: 12) {
             Text(title)
-                .font(.title2)
                 .foregroundColor(.white)
+                .font(.title2)
+                .frame(maxWidth: .infinity, alignment: .center)
             
-            Spacer()
-            
-            Button {
-                isMission.toggle()
-                if isMission {
-                    achieve = (mainViewModel.detailContent?.achieve ?? 0) + 1
-                } else {
-                    achieve = (mainViewModel.detailContent?.achieve ?? 0) - 1
-                }
-            } label: {
-                Text("미션완료")
+            HStack(spacing: 0) {
+                Text(mainViewModel.contents?.nickName ?? "")
                     .font(.title2)
-                    .foregroundColor(isMission ? .white : .gray)
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                Button {
+                    isMission.toggle()
+                    if isMission {
+                        is_Check()
+                    } else {
+                        is_NotCheck()
+                    }
+                } label: {
+                    Text("미션완료")
+                        .font(.title2)
+                        .foregroundColor(isMission ? .white : .gray)
+                }
             }
+            .padding(.horizontal, 20)
+            
+            HStack(spacing: 0) {
+                Text(mainViewModel.contents?.otherNickName ?? "")
+                    .font(.title2)
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                if isContentUid() {
+                    if let subCheck = mainViewModel.detailContent?.subCheck {
+                        Text("미션완료")
+                            .font(.title2)
+                            .foregroundColor((subCheck.first(where: {$0.value == 1}) != nil) ? .white : .gray)
+                    }
+                } else {
+                    if let mainCheck = mainViewModel.detailContent?.mainCheck {
+                        Text("미션완료")
+                            .font(.title2)
+                            .foregroundColor((mainCheck.first(where: {$0.value == 1}) != nil) ? .white : .gray)
+                    }
+                }
+            }
+            .padding(.horizontal, 20)
         }
-        .padding(.horizontal, 20)
     }
     
     @ViewBuilder
@@ -183,9 +215,6 @@ struct SubContentView: View {
             NavigationCustomBar(naviType: .cardDetail, isButton: $isTab)
             
             Button {
-//                if let index = detailContent.firstIndex(where: { $0.contentTitle == title }) {
-//                    detailContent[index].oneImpression.append(impression)
-//                }
                 mainViewModel.setAchieveCheck(title: title, achieve: achieve)
                 isTab.toggle()
             } label: {
@@ -201,5 +230,58 @@ struct SubContentView: View {
             hideKeyboard()
         }
         .frame(maxWidth: .infinity, alignment: .top)
+    }
+    
+    // MARK: 미션완료 main인지 sub인지 구분하기
+    func isMainOrSub() {
+        if isContentUid() {
+            if let check = mainViewModel.detailContent?.mainCheck[ShareVar.userUid] {
+                if check == 1 {
+                    isMission = true
+                } else {
+                    isMission = false
+                }
+            }
+        } else {
+            if let check = mainViewModel.detailContent?.subCheck[ShareVar.userUid] {
+                if check == 1 {
+                    isMission = true
+                } else {
+                    isMission = false
+                }
+            }
+        }
+    }
+    
+    func is_Check() {
+        if isContentUid() {
+            if let check = mainViewModel.detailContent?.mainCheck[ShareVar.userUid] {
+                achieve = check + 1
+            }
+        } else {
+            if let check = mainViewModel.detailContent?.subCheck[ShareVar.userUid] {
+                achieve = check + 1
+            }
+        }
+    }
+    
+    func is_NotCheck() {
+        if isContentUid() {
+            if let check = mainViewModel.detailContent?.mainCheck[ShareVar.userUid] {
+                achieve = check - 1
+            }
+        } else {
+            if let check = mainViewModel.detailContent?.subCheck[ShareVar.userUid] {
+                achieve = check - 1
+            }
+        }
+    }
+    
+    func isContentUid() -> Bool {
+        if ((mainViewModel.detailContent?.mainCheck.first(where: {$0.key == ShareVar.userUid})) != nil) {
+            return true
+        } else {
+            return false
+        }
     }
 }

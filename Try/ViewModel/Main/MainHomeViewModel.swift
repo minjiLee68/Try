@@ -14,11 +14,10 @@ import FirebaseStorage
 class MainHomeViewModel: ObservableObject {
     @Published var userInfoData: UserInfo?
     @Published var detailContent: DetailContent?
+    @Published var contents: Contents?
     @Published var connectionUsers = [Friends]()
     @Published var goalContents = [Contents]()
     @Published var friendRequest = [Friends]()
-//    @Published var detailContents = [String]()
-    @Published var contents = [String]()
     
     let db = Firestore.firestore()
     let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue)
@@ -128,6 +127,13 @@ class MainHomeViewModel: ObservableObject {
     func setAchieveCheck(title: String, achieve: Int) {
         Task {
             try await ShareInfoService.missionCheck(title: title, achieve: achieve)
+        }
+    }
+    
+    // MARK: 선택된 컨텐츠 가져오기
+    func getContents() {
+        Task {
+            contents = try await ShareInfoService.getContents()
         }
     }
 }
