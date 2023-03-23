@@ -53,7 +53,7 @@ enum ShareInfoService {
     }
     
     // MARK: 내용 편집하기
-    static func updateShareContent(title: String, detailContent: [Impression]) async throws {
+    static func updateShareContent(title: String, mainCheck: [String:Int], subCheck: [String:Int], detailContent: [Impression]) async throws {
         let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
         let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
         let docId = query.documents.first?.documentID ?? ""
@@ -62,8 +62,8 @@ enum ShareInfoService {
         do {
             try impressionRef.setData(
                 from: DetailContent(
-                    mainCheck: [try content.data(as: Contents.self).uid: 0],
-                    subCheck: [try content.data(as: Contents.self).subUid: 0],
+                    mainCheck: mainCheck,
+                    subCheck: subCheck,
                     impressions: detailContent),
                 merge: true)
         } catch {
@@ -91,7 +91,8 @@ enum ShareInfoService {
         let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
         let docId = query.documents.first?.documentID ?? ""
         let content = try await docRef.document(docId).getDocument()
-        return try content.data(as: Contents.self)
+        let transformedContents = self.contentMapping(try content.data(as: Contents.self))
+        return transformedContents
     }
     
     // MARK: 공유된 목표정보 가져오기
@@ -99,34 +100,32 @@ enum ShareInfoService {
         let mainDocRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
             .whereField("uid", isEqualTo: ShareVar.userUid)
         
-        let subDocRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
-            .whereField("subUid", isEqualTo: ShareVar.userUid)
-        
-        mainDocRef.addSnapshotListener { (queryDoc, error) in
-            guard let document = queryDoc else { return }
-            do {
-                if document.documents.isEmpty {
-                    subDocRef.addSnapshotListener { queryDoc, error in
-                        guard let document = queryDoc else { return }
-                        do {
-                            for doc in document.documents {
-                                ShareVar.isMainCheck = false
-                                let data = try doc.data(as: Contents.self)
-                                completion(data)
-                            }
-                        } catch {
-                            print("getShareInfo Error \(error.localizedDescription)")
-                        }
-                    }
-                } else {
-                    for doc in document.documents {
-                        ShareVar.isMainCheck = true
-                        let data = try doc.data(as: Contents.self)
-                        completion(data)
+        mainDocRef.getDocuments { querySnapshot, error in
+            if let documents = querySnapshot?.documents, !documents.isEmpty {
+                ShareVar.isMainCheck = true
+                for doc in documents {
+                    if let data = try? doc.data(as: Contents.self) {
+                        // MARK: Mapping !!
+                        let transformedContents = self.contentMapping(data)
+                        completion(transformedContents)
                     }
                 }
-            } catch {
-                print("getShareInfo Error \(error.localizedDescription)")
+            } else {
+                let subDocRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
+                    .whereField("subUid", isEqualTo: ShareVar.userUid)
+                
+                subDocRef.getDocuments { querySnapshot, error in
+                    if let documents = querySnapshot?.documents, !documents.isEmpty {
+                        ShareVar.isMainCheck = false
+                        for doc in documents {
+                            if let data = try? doc.data(as: Contents.self) {
+                                // MARK: Mapping !!
+                                let transformedContents = self.contentMapping(data)
+                                completion(transformedContents)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -141,44 +140,26 @@ enum ShareInfoService {
         return try getDoc.data(as: DetailContent.self)
     }
     
-    // MARK: 나와 연결된 사람
-//    static func friendRequests(_ completion: @escaping([UserInfo]) -> ()) {
-//        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
-//        let query = docRef.collection(CollectionName.FriendRequest.rawValue).whereField("state", isEqualTo: 1)
-//        query.addSnapshotListener { (querySnapshot, error) in
-//            do {
-//                if let querySnapshot {
-//                    for doc in querySnapshot.documents {
-//                        completion([try doc.data(as: UserInfo.self)])
-//                    }
-//                }
-//            } catch {
-//                print("friendRequest error \(error.localizedDescription)")
-//            }
-//        }
-//    }
-    
-//    static func friendRequests() async throws -> [UserInfo] {
-//        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue).document(ShareVar.userUid)
-//        let query = docRef.collection(CollectionName.FriendRequest.rawValue).whereField("state", isEqualTo: 1)
-//        let document = try await query.getDocuments()
-//        return document.documents.compactMap({ doc in
-//            try? doc.data(as: UserInfo.self)
-//        })
-//    }
-    
-    // MARK: 내가 연결하고 싶은 사람
-//    static func otherUserConnect(code: String) async throws {
-//        let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue)
-//        let query = try await docRef.whereField("myCode", isEqualTo: code).getDocuments()
-//        for doc in query.documents {
-//            let data = try doc.data(as: Contents.self)
-//            let ref = docRef.document(ShareVar.userUid).collection(CollectionName.ShareGoal.rawValue).document(code)
-//            try ref.setData(from: Contents(
-//                nickName: data.nickName,
-//                profile: data.profile,
-//                content: data.content)
-//            )
-//        }
-//    }
+    // MARK: content item mapping
+    static func contentMapping(_ contents: Contents) -> Contents {
+        let uid = ShareVar.isMainCheck ? contents.uid : contents.subUid
+        let nickName = ShareVar.isMainCheck ? contents.nickName : contents.subNickName
+        let profile = ShareVar.isMainCheck ? contents.profile : contents.subProfile
+        let subUid = ShareVar.isMainCheck ? contents.subUid : contents.uid
+        let subNickName = ShareVar.isMainCheck ? contents.subNickName : contents.nickName
+        let subProfile = ShareVar.isMainCheck ? contents.subProfile : contents.profile
+        
+        let transformedContents = Contents(
+            id: contents.id,
+            time: contents.time,
+            uid: uid,
+            nickName: nickName,
+            profile: profile,
+            subUid: subUid,
+            subNickName: subNickName,
+            subProfile: subProfile,
+            content: contents.content
+        )
+        return transformedContents
+    }
 }

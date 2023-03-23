@@ -89,46 +89,42 @@ struct HomeView: View {
     func cardContentView(content: Contents) -> some View {
         ZStack {
             VStack(spacing: 0) {
-                if ShareVar.isMainCheck {
-                    if !content.subProfile.isEmpty {
-                        WebImageView(url: content.subProfile, width: device.widthScale(120), height: device.heightScale(120))
-                            .clipShape(Circle())
-                            .id(content.id)
-                            .frame(maxHeight: .infinity, alignment: .top)
-                            .padding(.top, 50)
-                    } else {
-                        Image("profile")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: device.widthScale(120), height: device.heightScale(120))
-                            .clipShape(Circle())
-                            .frame(maxHeight: .infinity, alignment: .top)
-                            .padding(.top, 50)
-                    }
+                if !content.profile.isEmpty {
+                    WebImageView( url: content.profile, width: device.widthScale(120), height: device.heightScale(120))
+                        .clipShape(Circle())
+                        .id(content.id)
+                        .frame(maxHeight: .infinity, alignment: .top)
+                        .padding(.top, 50)
                 } else {
-                    if !content.profile.isEmpty {
-                        WebImageView(url: content.profile, width: device.widthScale(120), height: device.heightScale(120))
-                            .clipShape(Circle())
-                            .id(content.id)
-                            .frame(maxHeight: .infinity, alignment: .top)
-                            .padding(.top, 50)
-                    } else {
-                        Image("profile")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: device.widthScale(120), height: device.heightScale(120))
-                            .clipShape(Circle())
-                            .frame(maxHeight: .infinity, alignment: .top)
-                            .padding(.top, 50)
-                    }
+                    defaultProfile
+                }
+                
+                if !content.subProfile.isEmpty {
+                    WebImageView( url: content.subProfile, width: device.widthScale(120), height: device.heightScale(120))
+                        .clipShape(Circle())
+                        .id(content.id)
+                        .frame(maxHeight: .infinity, alignment: .top)
+                        .padding(.top, 50)
+                } else {
+                    defaultProfile
                 }
             }
             
-            Text(!ShareVar.isMainCheck ? content.nickName: content.subNickName)
-                .foregroundColor(.white)
-                .defaultFont(size: 18)
-                .frame(maxHeight: .infinity, alignment: .center)
+//            Text(!ShareVar.isMainCheck ? content.nickName: content.subNickName)
+//                .foregroundColor(.white)
+//                .defaultFont(size: 18)
+//                .frame(maxHeight: .infinity, alignment: .center)
         }
+    }
+    
+    var defaultProfile: some View {
+        Image("profile")
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: device.widthScale(120), height: device.heightScale(120))
+            .clipShape(Circle())
+            .frame(maxHeight: .infinity, alignment: .top)
+            .padding(.top, 50)
     }
     
     // MARK: 새로운 친구요청

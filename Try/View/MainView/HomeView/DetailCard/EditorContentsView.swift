@@ -76,6 +76,7 @@ struct SubContentView: View {
         .onAppear {
             isMainOrSub()
             if let impressions = mainViewModel.detailContent?.impressions {
+//                mainCheckOrSubCheck()
                 impressions.forEach { impression in
                     self.impressions.append(impression)
                 }
@@ -90,17 +91,9 @@ struct SubContentView: View {
                 .font(.title2)
                 .frame(maxWidth: .infinity, alignment: .center)
             
-            if ShareVar.isMainCheck {
-                missionEditorView(nickName: mainViewModel.contents?.nickName ?? "")
-            } else {
-                missionEditorView(nickName: mainViewModel.contents?.subNickName ?? "")
-            }
-            
-            if ShareVar.isMainCheck {
-                missionTexterView(nickName: mainViewModel.contents?.subNickName ?? "")
-            } else {
-                missionTexterView(nickName: mainViewModel.contents?.nickName ?? "")
-            }
+            missionEditorView(nickName: mainViewModel.contents?.nickName ?? "")
+
+            missionTexterView(nickName: mainViewModel.contents?.subNickName ?? "")
         }
     }
     
@@ -142,13 +135,13 @@ struct SubContentView: View {
                 if let mainCheck = mainViewModel.detailContent?.mainCheck {
                     Text("미션완료")
                         .font(.title2)
-                        .foregroundColor((mainCheck.first(where: {$0.value == 1}) != nil) ? .white : .gray)
+                        .foregroundColor(mainCheck[ShareVar.userUid] == 1 ? .white : .gray)
                 }
             } else {
                 if let subCheck = mainViewModel.detailContent?.subCheck {
                     Text("미션완료")
                         .font(.title2)
-                        .foregroundColor((subCheck.first(where: {$0.value == 1}) != nil) ? .white : .gray)
+                        .foregroundColor(subCheck[ShareVar.userUid] == 1 ? .white : .gray)
                 }
             }
         }
@@ -216,7 +209,8 @@ struct SubContentView: View {
                         introduce: mainViewModel.userInfoData?.introduce ?? "",
                         oneImpression: impression)
                 )
-                mainViewModel.setImpression(title: title, detailContent: impressions)
+                
+                mainCheckOrSubCheck()
                 mainViewModel.getImpression(title: title)
                 impression = ""
             } label: {
@@ -233,7 +227,8 @@ struct SubContentView: View {
             NavigationCustomBar(naviType: .cardDetail, isButton: $isTab)
             
             Button {
-                mainViewModel.setAchieveCheck(title: title, achieve: achieve)
+                mainCheckOrSubCheck()
+//                mainViewModel.setAchieveCheck(title: title, achieve: achieve)
                 mainViewModel.getImpression(title: title)
                 isTab.toggle()
             } label: {
@@ -294,6 +289,30 @@ struct SubContentView: View {
                 achieve = check - 1
             }
         }
+    }
+    
+    // MARK: mainCheck / subCheck
+    func mainCheckOrSubCheck() {
+        let subUid = mainViewModel.contents?.subUid ?? ""
+        
+        let subAchieve = ShareVar.isMainCheck ?
+        mainViewModel.detailContent?.subCheck[subUid] ?? 0:
+        mainViewModel.detailContent?.mainCheck[subUid] ?? 0
+        
+        self.achieve = ShareVar.isMainCheck ?
+        mainViewModel.detailContent?.mainCheck[ShareVar.userUid] ?? 0:
+        mainViewModel.detailContent?.subCheck[ShareVar.userUid] ?? 0
+        
+        let mainCheck = ShareVar.isMainCheck ? [ShareVar.userUid: achieve]: [subUid: subAchieve]
+        let subCheck = ShareVar.isMainCheck ? [subUid: subAchieve]: [ShareVar.userUid: achieve]
+        
+        print("mainCheck \(mainCheck), \(subCheck)")
+        
+        mainViewModel.setImpression(
+            title: title,
+            mainCheck: mainCheck,
+            subCheck: subCheck,
+            detailContent: impressions)
     }
     
     // MARK: main user / sub user

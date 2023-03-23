@@ -93,11 +93,10 @@ class MainHomeViewModel: ObservableObject {
     
     // MARK: 공유된 목표정보 가져오기
     func getShareGoal() {
-        Task {
-            ShareInfoService.getShareInfo { info in
-                if !self.goalContents.contains(where: { $0.id == info.id }) {
-                    self.goalContents.append(info)
-                }
+        ShareInfoService.getShareInfo { contents in
+            if !self.goalContents.contains(where: { $0.id == contents.id }) {
+//                let transformedContents = self.contentMapping(contents)
+                self.goalContents.append(contents)
             }
         }
     }
@@ -117,9 +116,14 @@ class MainHomeViewModel: ObservableObject {
     }
     
     // MARK: content update
-    func setImpression(title: String, detailContent: [Impression]) {
+    func setImpression(title: String, mainCheck: [String:Int], subCheck: [String:Int], detailContent: [Impression]) {
         Task {
-            try await ShareInfoService.updateShareContent(title: title, detailContent: detailContent)
+            try await ShareInfoService.updateShareContent(
+                title: title,
+                mainCheck: mainCheck,
+                subCheck: subCheck,
+                detailContent: detailContent
+            )
         }
     }
     
