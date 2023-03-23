@@ -10,14 +10,8 @@ import SwiftUI
 struct DetailCardView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var mainViewModel: MainHomeViewModel
-
-    @State var selectGoalContent: Contents?
-    @State var titleList = [String]()
     @State var cardType: DetailType
-    
-    @State var firstContent = ""
-    @State var secondContent = ""
-    @State var thirdContent = ""
+    @State var selectGoalContent: Contents?
     
     @State var isShowContent = false
     @State var isContactList = false
@@ -33,9 +27,12 @@ struct DetailCardView: View {
             navigationBar
             
             if cardType == .Editable {
-                detailContents
+                DetailCardEditionView(
+                    mainViewModel: mainViewModel,
+                    cardType: cardType,
+                    isTab: $isTab)
             } else {
-                goalListSetting
+                detailContents
             }
             
             Spacer()
@@ -80,12 +77,12 @@ struct DetailCardView: View {
             Spacer()
             
             VStack(spacing: 8) {
-                WebImageView(url: cardType == .Additional ? ShareVar.selectProfile : selectGoalContent?.subProfile ?? "",
+                WebImageView(url: cardType == .Editable ? ShareVar.selectProfile : selectGoalContent?.subProfile ?? "",
                              width: device.widthScale(60), height: device.heightScale(60))
                     .clipShape(Circle())
                     .id(UUID())
                 
-                Text(cardType == .Additional ? ShareVar.selectName : selectGoalContent?.subNickName ?? "")
+                Text(cardType == .Editable ? ShareVar.selectName : selectGoalContent?.subNickName ?? "")
                     .foregroundColor(.white)
                     .defaultFont(size: 13)
             }
@@ -94,91 +91,8 @@ struct DetailCardView: View {
     }
 }
 
-// MARK: 친구 선택, 목표 설정
+// MARK: 기록보기
 extension DetailCardView {
-    var goalListSetting: some View {
-        VStack(spacing: 25) {
-            HStack {
-                VStack(spacing: 8) {
-                    WebImageView(url: mainViewModel.userInfoData?.userProfile ?? "", width: device.widthScale(60), height: device.heightScale(60))
-                        .clipShape(Circle())
-                        .id(mainViewModel.userInfoData?.uid ?? "")
-                    
-                    Text(mainViewModel.userInfoData?.nickName ?? "")
-                        .foregroundColor(.white)
-                        .defaultFont(size: 13)
-                }
-                
-                Spacer()
-                
-                contactListView
-            }
-            .padding(.horizontal, 20)
-            
-            Divider()
-            
-            notificationEnabledView
-            
-            VStack(spacing: 20) {
-                TextField("첫번째 습관 만들기", text: $firstContent)
-                    .padding()
-                    .padding(.leading, 6)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(6)
-                    .foregroundColor(Color.white)
-                
-                TextField("두번째 습관 만들기", text: $secondContent)
-                    .padding()
-                    .padding(.leading, 6)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(6)
-                    .foregroundColor(Color.white)
-                
-                TextField("세번째 습관 만들기", text: $thirdContent)
-                    .padding()
-                    .padding(.leading, 6)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(6)
-                    .foregroundColor(Color.white)
-            }
-        }
-//        .matchedGeometryEffect(id: contentId, in: animation)
-//        .transition(.asymmetric(insertion: .identity, removal: .offset(y:0.5)))
-    }
-}
-
-// MARK: 알림, 기간 설정
-extension DetailCardView {
-    // MARK: 알림, 기간 정하기
-    var notificationEnabledView: some View {
-        HStack(spacing: 18) {
-            Button {
-                
-            } label: {
-                HStack(spacing: 6) {
-                    Image("alarm")
-                    
-                    Text("알림 추가하기")
-                        .foregroundColor(.white)
-                        .defaultFont(size: 16)
-                }
-            }
-            
-            Button {
-                
-            } label: {
-                HStack(spacing: 6) {
-                    Image("routine")
-                    
-                    Text("기간 정하기")
-                        .foregroundColor(.white)
-                        .defaultFont(size: 16)
-                }
-            }
-        }
-        .padding(.top, 5)
-    }
-    
     // MARK: 기록 보기
     var recordExplorationView: some View {
         HStack(spacing: 0) {
@@ -200,67 +114,25 @@ extension DetailCardView {
 }
 
 
-// MARK: dropdown menu and navigation bar
+// MARK: navigation bar
 extension DetailCardView {
-    var contactListView: some View {
-        Menu {
-            ForEach(mainViewModel.connectionUsers.indices, id: \.self) { index in
-                Button {
-                    ShareVar.selectProfile = mainViewModel.connectionUsers[index].profile
-                    ShareVar.selectName = mainViewModel.connectionUsers[index].nickName
-                    isUserTab = true
-                } label: {
-                    Text(mainViewModel.connectionUsers[index].nickName)
-                        .foregroundColor(.white)
-                        .defaultFont(size: 13)
-                }
-            }
-        } label: {
-            VStack(spacing: 8) {
-                if ShareVar.selectProfile.count == 0 {
-                    Image("profile")
-                        .mask(Circle().frame(width: device.widthScale(60), height: device.heightScale(60)))
-                        .frame(width: device.widthScale(60), height: device.heightScale(60))
-                } else {
-                    WebImageView(url: ShareVar.selectProfile, width: device.widthScale(60), height: device.heightScale(60))
-                        .clipShape(Circle())
-                        .id(UUID())
-                }
-                
-                Text(ShareVar.selectName)
-                    .foregroundColor(.white.opacity(0.8))
-                    .defaultFont(size: 13)
-            }
-        }
-    }
-    
     var navigationBar: some View {
         ZStack {
             NavigationCustomBar(naviType: .cardDetail, isButton: $isTab)
             
-            Button {
-                if cardType == .Additional {
-                    titleList = [firstContent, secondContent, thirdContent]
+            if cardType == .Details {
+                NavigationLink {
+                    DetailCardEditionView(
+                        mainViewModel: mainViewModel,
+                        cardType: cardType,
+                        isTab: $isTab)
+                } label: {
+                    Text("편집")
                 }
-                
-                mainViewModel.addShareContent(
-                    nickName: ShareVar.selectName,
-                    profile: ShareVar.selectProfile,
-                    content: titleList
-                )
-                
-                isTab.toggle()
-            } label: {
-                Text("확인")
-                    .foregroundColor(isUserTab ? .white : .gray)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.trailing, 20)
             }
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .padding(.trailing, 20)
-            .disabled(isUserTab ? false : true)
         }
         .padding(.top, 10)
-        .onChange(of: isTab) { newValue in
-            hideKeyboard()
-        }
     }
 }

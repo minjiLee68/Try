@@ -19,6 +19,7 @@ enum Tab: String, CaseIterable {
 enum NaviType {
     case profileSetting
     case cardDetail
+    case cardEditor
     case drawerDetail
     case mypage
     case profileEditor
@@ -49,7 +50,7 @@ enum RequestStatus: Int {
 // MARK: detail page Type
 enum DetailType {
     case Editable
-    case Additional
+    case Details
 }
 
 // MARK: Login Type

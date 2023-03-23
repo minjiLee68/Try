@@ -33,27 +33,36 @@ enum ShareInfoService {
     }
     
     // MARK: 목표내용 저장하기
-    static func addShareContent(nickName: String, profile: String, content: [String]) async throws {
+    static func addShareContent(type: DetailType, content: [String]) async throws {
         let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue)
         let userRef = try await docRef.document(ShareVar.userUid).getDocument()
         let userData = try userRef.data(as: UserInfo.self)
-        let query = try await docRef.whereField("nickName", isEqualTo: nickName).getDocuments()
+        let query = try await docRef.whereField("nickName", isEqualTo: ShareVar.selectName).getDocuments()
         let docId = query.documents.last?.documentID ?? ""
-        let ref = Firestore.firestore().collection(CollectionName.HabitShare.rawValue).document()
-        try ref.setData(from: Contents(
-            time: self.dateString(),
-            uid: ShareVar.userUid,
-            nickName: userData.nickName,
-            profile: userData.userProfile,
-            subUid: docId,
-            subNickName: nickName,
-            subProfile: profile,
-            content: content)
-        )
+        
+        if type == .Editable {
+            let ref = Firestore.firestore().collection(CollectionName.HabitShare.rawValue).document()
+            try ref.setData(from: Contents(
+                time: self.dateString(),
+                uid: ShareVar.userUid,
+                nickName: userData.nickName,
+                profile: userData.userProfile,
+                subUid: docId,
+                subNickName: ShareVar.selectName,
+                subProfile: ShareVar.selectProfile,
+                content: content)
+            )
+        } else {
+            let query = try await Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
+                .whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
+            let docId = query.documents.first?.documentID ?? ""
+            let ref = Firestore.firestore().collection(CollectionName.HabitShare.rawValue).document(docId)
+            try await ref.updateData(["content": content])
+        }
     }
     
     // MARK: 내용 편집하기
-    static func updateShareContent(title: String, mainCheck: [String:Int], subCheck: [String:Int], detailContent: [Impression]) async throws {
+    static func updateShareContent(title: String, mainCheck: [String: Int], subCheck: [String: Int], detailContent: [Impression]) async throws {
         let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
         let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
         let docId = query.documents.first?.documentID ?? ""
@@ -136,7 +145,7 @@ enum ShareInfoService {
         let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
         let docId = query.documents.first?.documentID ?? ""
         let getDoc = try await docRef.document(docId).collection(CollectionName.Impression.rawValue).document(title).getDocument()
-        print("getDoc \(docId), \(try getDoc.data(as: DetailContent.self))")
+        print("getDoc \(try getDoc.data(as: DetailContent.self))")
         return try getDoc.data(as: DetailContent.self)
     }
     

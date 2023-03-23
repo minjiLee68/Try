@@ -65,6 +65,8 @@
 		0ACD844B2967F43F00DDF990 /* NaverLoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD844A2967F43F00DDF990 /* NaverLoginModel.swift */; };
 		0ACD844E296FC99600DDF990 /* ProfileEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD844D296FC99600DDF990 /* ProfileEditorView.swift */; };
 		0AEC496628E3405000917C53 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC496528E3405000917C53 /* Enums.swift */; };
+		0AF7DC9429CC76FD00E25CC6 /* NewFriendRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF7DC9329CC76FD00E25CC6 /* NewFriendRequestView.swift */; };
+		0AF7DC9629CC7E8400E25CC6 /* DetailCardEditionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF7DC9529CC7E8400E25CC6 /* DetailCardEditionView.swift */; };
 		A34026DFCAC0609AF95E13B3 /* Pods_Try.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56ABA32DCD6DB90FA0EB03A6 /* Pods_Try.framework */; };
 /* End PBXBuildFile section */
 
@@ -119,6 +121,8 @@
 		0ACD844A2967F43F00DDF990 /* NaverLoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginModel.swift; sourceTree = "<group>"; };
 		0ACD844D296FC99600DDF990 /* ProfileEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditorView.swift; sourceTree = "<group>"; };
 		0AEC496528E3405000917C53 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		0AF7DC9329CC76FD00E25CC6 /* NewFriendRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFriendRequestView.swift; sourceTree = "<group>"; };
+		0AF7DC9529CC7E8400E25CC6 /* DetailCardEditionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCardEditionView.swift; sourceTree = "<group>"; };
 		56ABA32DCD6DB90FA0EB03A6 /* Pods_Try.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Try.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		787404724E8190271A5B28C1 /* Pods-Try.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Try.release.xcconfig"; path = "Target Support Files/Pods-Try/Pods-Try.release.xcconfig"; sourceTree = "<group>"; };
 		FDA935E6EE99B51D725DFF2C /* Pods-Try.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Try.debug.xcconfig"; path = "Target Support Files/Pods-Try/Pods-Try.debug.xcconfig"; sourceTree = "<group>"; };
@@ -192,6 +196,7 @@
 		0A3543272965B26500E9B2FE /* HomeView */ = {
 			isa = PBXGroup;
 			children = (
+				0AF7DC9229CC76EF00E25CC6 /* Alert */,
 				0A3543132965502600E9B2FE /* Card */,
 				0A84710C2960187600CB3432 /* DetailCard */,
 				0A428416290191F900E93E2B /* HomeView.swift */,
@@ -384,6 +389,7 @@
 			children = (
 				0A84710D2960188400CB3432 /* DetailCardView.swift */,
 				0A3FFDEB29AC9F3F00492ADC /* EditorContentsView.swift */,
+				0AF7DC9529CC7E8400E25CC6 /* DetailCardEditionView.swift */,
 			);
 			path = DetailCard;
 			sourceTree = "<group>";
@@ -507,6 +513,14 @@
 				0ACD844D296FC99600DDF990 /* ProfileEditorView.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		0AF7DC9229CC76EF00E25CC6 /* Alert */ = {
+			isa = PBXGroup;
+			children = (
+				0AF7DC9329CC76FD00E25CC6 /* NewFriendRequestView.swift */,
+			);
+			path = Alert;
 			sourceTree = "<group>";
 		};
 		FBA8E0ECCC17FFB0B34A5A15 /* Pods */ = {
@@ -677,6 +691,7 @@
 				0A7D5558295C2A3500EB2A6F /* ProfileSettingView.swift in Sources */,
 				0AEC496628E3405000917C53 /* Enums.swift in Sources */,
 				0A3FFDEC29AC9F3F00492ADC /* EditorContentsView.swift in Sources */,
+				0AF7DC9429CC76FD00E25CC6 /* NewFriendRequestView.swift in Sources */,
 				0ACD84482967F3D000DDF990 /* LoginService.swift in Sources */,
 				0A3543202965936000E9B2FE /* MyPageView.swift in Sources */,
 				0A9EF2A629928A1A001551A5 /* RequestService.swift in Sources */,
@@ -686,6 +701,7 @@
 				0A9EF29E29922914001551A5 /* DrawerDetailView.swift in Sources */,
 				0ACD84432967F26300DDF990 /* Constant+URL.swift in Sources */,
 				0A9EF29629920ECE001551A5 /* OtherPageViewModel.swift in Sources */,
+				0AF7DC9629CC7E8400E25CC6 /* DetailCardEditionView.swift in Sources */,
 				0ACD844E296FC99600DDF990 /* ProfileEditorView.swift in Sources */,
 				0A3543262965A9A000E9B2FE /* Contact.swift in Sources */,
 				0A3543232965A8D100E9B2FE /* MyPageViewModel.swift in Sources */,

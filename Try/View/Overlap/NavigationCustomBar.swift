@@ -19,6 +19,8 @@ struct NavigationCustomBar: View {
                 naviContents(title: "프로필 설정")
             case .cardDetail:
                 naviContents(leadingBtn: "취소")
+            case .cardEditor:
+                naviContents(leadingBtn: "취소")
             case .drawerDetail:
                 naviContents(leadingBtn: "취소")
             case .mypage:

@@ -19,15 +19,15 @@ class MainHomeViewModel: ObservableObject {
     @Published var goalContents = [Contents]()
     @Published var friendRequest = [Friends]()
     
+    // MARK: 로딩
+    @Published var getContentsLoading = false
+    
     let db = Firestore.firestore()
     let docRef = Firestore.firestore().collection(CollectionName.UserInfo.rawValue)
     
     // MARK: 내 정보 가져오기
     func userInfoFetchData() {
-        Task {
-            newFriendRequest()
-            getFriendList()
-        }
+        self.getFriendList()
         self.getUserInfo()
         self.getShareGoal()
         self.getShareUser()
@@ -81,13 +81,9 @@ class MainHomeViewModel: ObservableObject {
     }
     
     // MARK: 목표내용 저장하기
-    func addShareContent(nickName: String, profile: String, content: [String]) {
+    func addShareContent(type: DetailType, content: [String]) {
         Task {
-            try await ShareInfoService.addShareContent(
-                nickName: nickName,
-                profile: profile,
-                content: content
-            )
+            try await ShareInfoService.addShareContent(type: type, content: content)
         }
     }
     

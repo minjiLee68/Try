@@ -38,15 +38,16 @@ struct HomeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .overlay {
             if !mainViewModel.friendRequest.isEmpty {
-                newFriendRequestView
+                // MARK: 새로운 친구요청 여부
+                NewFriendRequestView(isResponse: $isResponse)
                     .opacity(isResponse ? 0 : 1)
             }
             
             if isTabCard {
                 DetailCardView(
                     mainViewModel: mainViewModel,
-                    selectGoalContent: selectGoalContent,
                     cardType: cardType,
+                    selectGoalContent: selectGoalContent,
                     contentId: selectGoalContent?.id ?? "",
                     isTab: $isTabCard,
                     animation: smooth
@@ -70,7 +71,7 @@ struct HomeView: View {
                         ShareVar.documentId = contents.id
                         selectGoalContent = contents
                         isTabCard = true
-                        cardType = .Editable
+                        cardType = .Details
                     }
                 }
                 .matchedGeometryEffect(id: contents.id, in: smooth)
@@ -126,72 +127,6 @@ struct HomeView: View {
             .frame(maxHeight: .infinity, alignment: .top)
             .padding(.top, 50)
     }
-    
-    // MARK: 새로운 친구요청
-    var newFriendRequestView: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .fill(Color.black)
-            .shadow(color: .white.opacity(0.2), radius: 5)
-            .overlay(content: {
-                VStack(alignment: .center ,spacing: 0) {
-                    Text("새로운 친구요청이 있습니다!")
-                        .font(.title3)
-                        .defaultFont(size: 16)
-                        .foregroundColor(.white)
-                    
-                    ForEach(mainViewModel.friendRequest.indices, id: \.self) { i in
-                        HStack(spacing: 15) {
-                            WebImageView(url: mainViewModel.friendRequest[i].profile, width: device.widthScale(40), height: device.heightScale(40))
-                                .clipShape(Circle())
-                                .id(mainViewModel.friendRequest[i].uid)
-                            
-                            Text(mainViewModel.friendRequest[i].nickName)
-                                .foregroundColor(.white)
-                            
-                            Spacer()
-                            
-                            HStack(spacing: 6) {
-                                Button {
-                                    mainViewModel.friendsResponse(
-                                        id: mainViewModel.friendRequest[i].uid,
-                                        state: RequestStatus.refusal.rawValue
-                                    )
-                                    isResponse.toggle()
-                                } label: {
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.blue)
-                                        .frame(width: device.widthScale(60), height: device.heightScale(30))
-                                        .overlay {
-                                            Text("거절")
-                                                .defaultFont(size: 12)
-                                        }
-                                }
-                                
-                                Button {
-                                    mainViewModel.friendsResponse(
-                                        id: mainViewModel.friendRequest[i].uid,
-                                        state: RequestStatus.accept.rawValue
-                                    )
-                                    isResponse.toggle()
-                                } label: {
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.blue)
-                                        .frame(width: device.widthScale(60), height: device.heightScale(30))
-                                        .overlay {
-                                            Text("수락")
-                                                .defaultFont(size: 12)
-                                        }
-                                }
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 6)
-                    }
-                }
-            })
-            .frame(width: device.screenWidth - 30)
-            .frame(maxHeight: .infinity)
-    }
 }
 
 
@@ -241,7 +176,7 @@ extension HomeView {
                 
                 Button {
                     isTabCard = true
-                    cardType = .Additional
+                    cardType = .Editable
                 } label: {
                     Text("추가하기")
                         .defaultFont(size: 17)

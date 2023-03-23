@@ -48,6 +48,7 @@ struct SubContentView: View {
     @State var isMission = false
     @State var isMainCheck = false
     
+    @State private var isSave = false
     @State private var achieve = 0
     @State private var scrollingCellIndex = 0
     @State private var index = 0
@@ -75,12 +76,22 @@ struct SubContentView: View {
         }
         .onAppear {
             isMainOrSub()
+            
+            self.achieve = ShareVar.isMainCheck ?
+            mainViewModel.detailContent?.mainCheck[ShareVar.userUid] ?? 0:
+            mainViewModel.detailContent?.subCheck[ShareVar.userUid] ?? 0
+            
+            // MARK: 미션완료 여부?
+            mainCheckOrSubCheck()
+            
             if let impressions = mainViewModel.detailContent?.impressions {
-//                mainCheckOrSubCheck()
                 impressions.forEach { impression in
                     self.impressions.append(impression)
                 }
             }
+        }
+        .onDisappear {
+            mainViewModel.getImpression(title: title)
         }
     }
     
@@ -107,6 +118,7 @@ struct SubContentView: View {
             Spacer()
             
             Button {
+                isSave.toggle()
                 isMission.toggle()
                 if isMission {
                     is_Check()
@@ -131,17 +143,18 @@ struct SubContentView: View {
             
             Spacer()
             
+            let subUid = mainViewModel.contents?.subUid ?? ""
             if ShareVar.isMainCheck {
-                if let mainCheck = mainViewModel.detailContent?.mainCheck {
+                if let otherCheck = mainViewModel.detailContent?.subCheck {
                     Text("미션완료")
                         .font(.title2)
-                        .foregroundColor(mainCheck[ShareVar.userUid] == 1 ? .white : .gray)
+                        .foregroundColor(otherCheck[subUid] == 1 ? .white : .gray)
                 }
             } else {
-                if let subCheck = mainViewModel.detailContent?.subCheck {
+                if let otherCheck = mainViewModel.detailContent?.mainCheck {
                     Text("미션완료")
                         .font(.title2)
-                        .foregroundColor(subCheck[ShareVar.userUid] == 1 ? .white : .gray)
+                        .foregroundColor(otherCheck[subUid] == 1 ? .white : .gray)
                 }
             }
         }
@@ -209,9 +222,7 @@ struct SubContentView: View {
                         introduce: mainViewModel.userInfoData?.introduce ?? "",
                         oneImpression: impression)
                 )
-                
                 mainCheckOrSubCheck()
-                mainViewModel.getImpression(title: title)
                 impression = ""
             } label: {
                 Text("전송")
@@ -228,16 +239,14 @@ struct SubContentView: View {
             
             Button {
                 mainCheckOrSubCheck()
-//                mainViewModel.setAchieveCheck(title: title, achieve: achieve)
-                mainViewModel.getImpression(title: title)
                 isTab.toggle()
             } label: {
                 Text("확인")
-                    .foregroundColor(isMission ? .white : .gray)
+                    .foregroundColor(isSave ? .white : .gray)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.trailing, 20)
-            .disabled(isMission ? false : true)
+            .disabled(isSave ? false : true)
         }
         .padding(.top, 10)
         .onChange(of: isTab) { newValue in
@@ -267,6 +276,7 @@ struct SubContentView: View {
         }
     }
     
+    // MARK: 미션완료 !
     func is_Check() {
         if ShareVar.isMainCheck {
             if let check = mainViewModel.detailContent?.mainCheck[ShareVar.userUid] {
@@ -279,6 +289,7 @@ struct SubContentView: View {
         }
     }
     
+    // MARK: 미션완료 취소
     func is_NotCheck() {
         if ShareVar.isMainCheck {
             if let check = mainViewModel.detailContent?.mainCheck[ShareVar.userUid] {
@@ -299,10 +310,6 @@ struct SubContentView: View {
         mainViewModel.detailContent?.subCheck[subUid] ?? 0:
         mainViewModel.detailContent?.mainCheck[subUid] ?? 0
         
-        self.achieve = ShareVar.isMainCheck ?
-        mainViewModel.detailContent?.mainCheck[ShareVar.userUid] ?? 0:
-        mainViewModel.detailContent?.subCheck[ShareVar.userUid] ?? 0
-        
         let mainCheck = ShareVar.isMainCheck ? [ShareVar.userUid: achieve]: [subUid: subAchieve]
         let subCheck = ShareVar.isMainCheck ? [subUid: subAchieve]: [ShareVar.userUid: achieve]
         
@@ -314,13 +321,4 @@ struct SubContentView: View {
             subCheck: subCheck,
             detailContent: impressions)
     }
-    
-    // MARK: main user / sub user
-//    func isContentUid() -> Bool {
-//        if ((mainViewModel.detailContent?.mainCheck.first(where: {$0.key == ShareVar.userUid})) != nil) {
-//            return true
-//        } else {
-//            return false
-//        }
-//    }
 }
