@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: Contents - 각 사람들과 나에 목표에 대한 컨텐츠
 struct Contents: Hashable, Codable {
     var id: String = UUID().uuidString
-    var today: String
     var startDate: String
     var endDate: String
     var uid: String

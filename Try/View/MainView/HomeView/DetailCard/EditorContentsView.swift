@@ -145,17 +145,13 @@ struct SubContentView: View {
             
             let subUid = mainViewModel.contents?.subUid ?? ""
             if ShareVar.isMainCheck {
-                if let otherCheck = mainViewModel.detailContent?.subCheck {
-                    Text("미션완료")
-                        .font(.title2)
-                        .foregroundColor(otherCheck[subUid] == 1 ? .white : .gray)
-                }
+                Text("미션완료")
+                    .font(.title2)
+                    .foregroundColor((mainViewModel.detailContent?.subCheck[subUid] ?? 0) == 1 ? .white : .gray)
             } else {
-                if let otherCheck = mainViewModel.detailContent?.mainCheck {
-                    Text("미션완료")
-                        .font(.title2)
-                        .foregroundColor(otherCheck[subUid] == 1 ? .white : .gray)
-                }
+                Text("미션완료")
+                    .font(.title2)
+                    .foregroundColor((mainViewModel.detailContent?.mainCheck[subUid] ?? 0) == 1 ? .white : .gray)
             }
         }
         .padding(.horizontal, 20)

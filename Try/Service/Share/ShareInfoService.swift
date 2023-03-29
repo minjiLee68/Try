@@ -43,7 +43,6 @@ enum ShareInfoService {
         if type == .Editable {
             let ref = Firestore.firestore().collection(CollectionName.HabitShare.rawValue).document()
             try ref.setData(from: Contents(
-                today: self.dateString(),
                 startDate: ShareVar.startDate,
                 endDate: ShareVar.endDate,
                 uid: ShareVar.userUid,
@@ -162,9 +161,8 @@ enum ShareInfoService {
         
         let transformedContents = Contents(
             id: contents.id,
-            today: contents.today,
-            startDate: ShareVar.startDate,
-            endDate: ShareVar.endDate,
+            startDate: contents.startDate,
+            endDate: contents.endDate,
             uid: uid,
             nickName: nickName,
             profile: profile,

@@ -30,7 +30,7 @@ class CalendarModule: UIViewController, FSCalendarDelegate {
     
     private func calendarStyle() {
         calendar.locale = Locale(identifier: "en-US")
-        calendar.frame = CGRect(x: 0, y: 0, width: device.screenWidth, height: device.screenWidth + 120)
+        calendar.frame = CGRect(x: 0, y: 0, width: device.screenWidth, height: device.screenWidth)
         
         calendar.headerHeight = 66
         calendar.weekdayHeight = 55

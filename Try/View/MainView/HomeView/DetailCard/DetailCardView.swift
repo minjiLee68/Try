@@ -20,6 +20,9 @@ struct DetailCardView: View {
     @State var contentId: String
     @Binding var isTab: Bool
     
+    // MARK: 기록보기
+    @State private var isRecord = false
+    
     var animation: Namespace.ID
     
     var body: some View {
@@ -50,11 +53,20 @@ struct DetailCardView: View {
             
             recordExplorationView
             
-            VStack(spacing: 15) {
-                ForEach(0..<(selectGoalContent?.content.count ?? 0), id: \.self) { index in
-                    if let content = selectGoalContent?.content {
-                        EditorContentsView(title: content[index])
+            ZStack {
+                VStack(spacing: 15) {
+                    ForEach(0..<(selectGoalContent?.content.count ?? 0), id: \.self) { index in
+                        if let content = selectGoalContent?.content {
+                            EditorContentsView(title: content[index])
+                        }
                     }
+                }
+                
+                // MARK: 기록보기
+                if isRecord {
+                    CalendarView()
+                        .background(Color.black)
+                        .padding(.horizontal, 10)
                 }
             }
         }
@@ -96,14 +108,15 @@ extension DetailCardView {
     // MARK: 기록 보기
     var recordExplorationView: some View {
         HStack(spacing: 0) {
-            Text("2023.02.10 ~ 2023.03.10")
+            // MARK: 기간 
+            Text("\(selectGoalContent?.startDate ?? "") ~ \(selectGoalContent?.endDate ?? "")")
                 .foregroundColor(.white)
                 .defaultFont(size: 16)
             
             Spacer()
             
             Button {
-                
+                isRecord.toggle()
             } label: {
                 Image("record")
             }
