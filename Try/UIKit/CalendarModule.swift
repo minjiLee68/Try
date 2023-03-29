@@ -18,14 +18,38 @@ class CalendarModule: UIViewController, FSCalendarDelegate {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        initCalendar()
+        calendarStyle()
         view.addSubview(calendar)
     }
     
     private func initCalendar() {
-        calendar.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.width)
+        calendar.frame = CGRect(x: 0, y: 0, width: device.screenWidth, height: device.screenWidth)
         calendar.appearance.todayColor = UIColor.systemGreen
         calendar.appearance.selectionColor = UIColor.systemBlue
+    }
+    
+    private func calendarStyle() {
+        calendar.locale = Locale(identifier: "en-US")
+        calendar.frame = CGRect(x: 0, y: 0, width: device.screenWidth, height: device.screenWidth + 120)
+        
+        calendar.headerHeight = 66
+        calendar.weekdayHeight = 55
+        calendar.appearance.headerMinimumDissolvedAlpha = 0.25
+        calendar.appearance.headerTitleColor = .secondary
+        calendar.appearance.headerDateFormat = "YYYY.MM"
+        calendar.appearance.caseOptions = .weekdayUsesSingleUpperCase
+        calendar.appearance.borderRadius = 0
+        calendar.placeholderType = .none
+        
+        calendar.appearance.weekdayTextColor = .secondary
+        calendar.appearance.selectionColor = .containColor
+        calendar.appearance.titleWeekendColor = .secondary
+        calendar.appearance.titleDefaultColor = .secondary
+        calendar.appearance.borderDefaultColor = .borderColor
+        
+        calendar.appearance.titleTodayColor = .secondary
+        calendar.appearance.todayColor = .none
+//        calendar.appearance.weekdayFont = UIFont(name: "Apple Color Emoji", size: 18.0)
     }
 }
 

@@ -394,7 +394,7 @@
 			isa = PBXGroup;
 			children = (
 				0AF7DC9A29D420A800E25CC6 /* Period */,
-				0AF7DC9729D41BB600E25CC6 /* Alarm */,
+				0AF7DC9729D41BB600E25CC6 /* Setting */,
 				0A84710D2960188400CB3432 /* DetailCardView.swift */,
 				0A3FFDEB29AC9F3F00492ADC /* EditorContentsView.swift */,
 				0AF7DC9529CC7E8400E25CC6 /* DetailCardEditionView.swift */,
@@ -540,12 +540,12 @@
 			path = Alert;
 			sourceTree = "<group>";
 		};
-		0AF7DC9729D41BB600E25CC6 /* Alarm */ = {
+		0AF7DC9729D41BB600E25CC6 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
 				0AF7DC9829D41BED00E25CC6 /* PushNotificationView.swift */,
 			);
-			path = Alarm;
+			path = Setting;
 			sourceTree = "<group>";
 		};
 		0AF7DC9A29D420A800E25CC6 /* Period */ = {
@@ -622,6 +622,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"ko-KR",
 			);
 			mainGroup = 0AC9503028DB5C18005B5774;
 			packageReferences = (

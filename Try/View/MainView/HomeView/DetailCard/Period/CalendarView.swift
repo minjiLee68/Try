@@ -9,19 +9,8 @@ import SwiftUI
 
 struct CalendarView: View {
     var body: some View {
-        NavigationView {
-            VStack{
-                VStack {
-                    Spacer()
-                    CalendarModuleView()
-                    Spacer()
-                }
-                VStack {
-                    Spacer()
-                    Text("Details")
-                    Spacer()
-                }
-            }
+        VStack{
+            CalendarModuleView()
         }
     }
 }

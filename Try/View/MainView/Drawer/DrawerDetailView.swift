@@ -20,6 +20,8 @@ struct DrawerDetailView: View {
             switch drawerType {
             case .FindingFriends:
                 FindingFriendsView()
+            case .Observation:
+                CalendarView()
             default:
                 let _ = print("default")
             }

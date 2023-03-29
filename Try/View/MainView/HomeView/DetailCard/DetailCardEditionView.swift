@@ -13,6 +13,7 @@ struct DetailCardEditionView: View {
     
     @State var titleList = [String]()
     
+    // MARK: Content
     @State var firstContent = ""
     @State var secondContent = ""
     @State var thirdContent = ""
@@ -20,6 +21,16 @@ struct DetailCardEditionView: View {
     @State var isUserTab = false
     @State var cardType: DetailType
     
+    // MARK: Date Picker
+    @State private var picDate = Date()
+    @State private var isPicDate = false
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        return formatter
+    }
+    
+    // MARK: Binding
     @Binding var isTab: Bool
     
     var body: some View {
@@ -51,33 +62,8 @@ struct DetailCardEditionView: View {
             
             Divider()
             
-            notificationEnabledView
-            
-            VStack(spacing: 20) {
-                TextField("첫번째 습관 만들기", text: $firstContent)
-                    .padding()
-                    .padding(.leading, 6)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(6)
-                    .foregroundColor(Color.white)
-                    .disabled(cardType == .Editable ? false : true)
-                
-                TextField("두번째 습관 만들기", text: $secondContent)
-                    .padding()
-                    .padding(.leading, 6)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(6)
-                    .foregroundColor(Color.white)
-                    .disabled(cardType == .Editable ? false : true)
-                
-                TextField("세번째 습관 만들기", text: $thirdContent)
-                    .padding()
-                    .padding(.leading, 6)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(6)
-                    .foregroundColor(Color.white)
-                    .disabled(cardType == .Editable ? false : true)
-            }
+            // MARK: Setting and Content View
+            settingAndContentView
         }
         .navigationBarBackButtonHidden()
         .frame(maxHeight: .infinity, alignment: .top)
@@ -91,32 +77,84 @@ struct DetailCardEditionView: View {
         }
     }
     
-    // MARK: 알림, 기간 정하기
-    var notificationEnabledView: some View {
-        HStack(spacing: 18) {
-            Button {
-                
-            } label: {
-                HStack(spacing: 6) {
-                    Image("alarm")
+    // MARK: Setting and Content View
+    var settingAndContentView: some View {
+        VStack(spacing: 0) {
+            notificationEnabledView
+            ZStack {
+                VStack(spacing: 20) {
+                    TextField("첫번째 습관 만들기", text: $firstContent)
+                        .padding()
+                        .padding(.leading, 6)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(6)
+                        .foregroundColor(Color.white)
+                        .disabled(cardType == .Editable ? false : true)
                     
-                    Text("알림 추가하기")
-                        .foregroundColor(.white)
-                        .defaultFont(size: 16)
+                    TextField("두번째 습관 만들기", text: $secondContent)
+                        .padding()
+                        .padding(.leading, 6)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(6)
+                        .foregroundColor(Color.white)
+                        .disabled(cardType == .Editable ? false : true)
+                    
+                    TextField("세번째 습관 만들기", text: $thirdContent)
+                        .padding()
+                        .padding(.leading, 6)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(6)
+                        .foregroundColor(Color.white)
+                        .disabled(cardType == .Editable ? false : true)
                 }
-            }
-            
-            NavigationLink(destination: CalendarView()) {
-                HStack(spacing: 6) {
-                    Image("routine")
-                    
-                    Text("기간 정하기")
-                        .foregroundColor(.white)
-                        .defaultFont(size: 16)
+                .padding(.top, 25)
+                
+                // MARK: DatePicker
+                if isPicDate {
+                    DatePicker("", selection: $picDate, in: Date()..., displayedComponents: .date)
+                        .labelsHidden()
+                        .datePickerStyle(GraphicalDatePickerStyle())
+                        .padding(.top, 10)
+                        .background(Color.black, in: RoundedRectangle(cornerRadius: 20))
+                        .onChange(of: picDate) { newValue in
+                            ShareVar.startDate = mainViewModel.dateString(date: Date())
+                            ShareVar.endDate = mainViewModel.dateString(date: picDate)
+                        }
                 }
             }
         }
-        .padding(.top, 5)
+    }
+    
+    // MARK: 알림, 기간 정하기
+    var notificationEnabledView: some View {
+        VStack {
+            HStack(spacing: 20) {
+                Button {
+                    
+                } label: {
+                    HStack(spacing: 6) {
+                        Image("alarm")
+                        
+                        Text("알림 추가하기")
+                            .foregroundColor(.white)
+                            .defaultFont(size: 16)
+                    }
+                }
+                
+                Button {
+                    isPicDate.toggle()
+                } label: {
+                    HStack(spacing: 6) {
+                        Image("routine")
+                        
+                        Text("기간 정하기")
+                            .foregroundColor(.white)
+                            .defaultFont(size: 16)
+                    }
+                }
+            }
+            .padding(.top, 5)
+        }
     }
     
     // MARK: 친구 선택
@@ -184,7 +222,6 @@ struct DetailCardEditionView: View {
                     
                     mainViewModel.addShareContent(type: cardType, content: titleList)
                 }
-                
                 dismiss()
                 hideKeyboard()
             } label: {
