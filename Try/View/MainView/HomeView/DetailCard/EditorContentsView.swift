@@ -112,8 +112,8 @@ struct SubContentView: View {
     func missionEditorView(nickName: String) -> some View {
         HStack(spacing: 0) {
             Text(nickName)
-                .font(.title2)
                 .foregroundColor(.white)
+                .defaultFont(size: 16)
             
             Spacer()
             
@@ -127,7 +127,7 @@ struct SubContentView: View {
                 }
             } label: {
                 Text("미션완료")
-                    .font(.title2)
+                    .defaultFont(size: 18)
                     .foregroundColor(isMission ? .white : .gray)
             }
         }
@@ -138,19 +138,19 @@ struct SubContentView: View {
     func missionTexterView(nickName: String) -> some View {
         HStack(spacing: 0) {
             Text(nickName)
-                .font(.title2)
                 .foregroundColor(.white)
+                .defaultFont(size: 16)
             
             Spacer()
             
             let subUid = mainViewModel.contents?.subUid ?? ""
             if ShareVar.isMainCheck {
                 Text("미션완료")
-                    .font(.title2)
+                    .defaultFont(size: 18)
                     .foregroundColor((mainViewModel.detailContent?.subCheck[subUid] ?? 0) == 1 ? .white : .gray)
             } else {
                 Text("미션완료")
-                    .font(.title2)
+                    .defaultFont(size: 18)
                     .foregroundColor((mainViewModel.detailContent?.mainCheck[subUid] ?? 0) == 1 ? .white : .gray)
             }
         }
@@ -308,8 +308,6 @@ struct SubContentView: View {
         
         let mainCheck = ShareVar.isMainCheck ? [ShareVar.userUid: achieve]: [subUid: subAchieve]
         let subCheck = ShareVar.isMainCheck ? [subUid: subAchieve]: [ShareVar.userUid: achieve]
-        
-        print("mainCheck \(mainCheck), \(subCheck)")
         
         mainViewModel.setImpression(
             title: title,

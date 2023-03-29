@@ -102,6 +102,8 @@ enum ShareInfoService {
         let docId = query.documents.first?.documentID ?? ""
         let content = try await docRef.document(docId).getDocument()
         let transformedContents = self.contentMapping(try content.data(as: Contents.self))
+        ShareVar.startDate = transformedContents.startDate
+        ShareVar.endDate = transformedContents.endDate
         return transformedContents
     }
     

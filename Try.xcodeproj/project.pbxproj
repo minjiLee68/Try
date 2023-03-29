@@ -65,6 +65,7 @@
 		0ACD844B2967F43F00DDF990 /* NaverLoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD844A2967F43F00DDF990 /* NaverLoginModel.swift */; };
 		0ACD844E296FC99600DDF990 /* ProfileEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD844D296FC99600DDF990 /* ProfileEditorView.swift */; };
 		0AE1E6D529D42C460059CFDC /* CalendarModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE1E6D429D42C460059CFDC /* CalendarModule.swift */; };
+		0AE1E6DA29D49B4C0059CFDC /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE1E6D929D49B4C0059CFDC /* CalendarViewModel.swift */; };
 		0AEC496628E3405000917C53 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC496528E3405000917C53 /* Enums.swift */; };
 		0AF7DC9429CC76FD00E25CC6 /* NewFriendRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF7DC9329CC76FD00E25CC6 /* NewFriendRequestView.swift */; };
 		0AF7DC9629CC7E8400E25CC6 /* DetailCardEditionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF7DC9529CC7E8400E25CC6 /* DetailCardEditionView.swift */; };
@@ -124,6 +125,7 @@
 		0ACD844A2967F43F00DDF990 /* NaverLoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginModel.swift; sourceTree = "<group>"; };
 		0ACD844D296FC99600DDF990 /* ProfileEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditorView.swift; sourceTree = "<group>"; };
 		0AE1E6D429D42C460059CFDC /* CalendarModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModule.swift; sourceTree = "<group>"; };
+		0AE1E6D929D49B4C0059CFDC /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		0AEC496528E3405000917C53 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		0AF7DC9329CC76FD00E25CC6 /* NewFriendRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFriendRequestView.swift; sourceTree = "<group>"; };
 		0AF7DC9529CC7E8400E25CC6 /* DetailCardEditionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCardEditionView.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 		0A61418F295ADBF300A8EFBB /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				0AE1E6D829D49B3E0059CFDC /* Setting */,
 				0A9EF29F29922E12001551A5 /* Drawer */,
 				0A3543212965A8C700E9B2FE /* MyPage */,
 				0A60F6C8295EB719004F56B9 /* Main */,
@@ -532,6 +535,14 @@
 			path = UIKit;
 			sourceTree = "<group>";
 		};
+		0AE1E6D829D49B3E0059CFDC /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				0AE1E6D929D49B4C0059CFDC /* CalendarViewModel.swift */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
 		0AF7DC9229CC76EF00E25CC6 /* Alert */ = {
 			isa = PBXGroup;
 			children = (
@@ -705,6 +716,7 @@
 				0A35432D2966B3C000E9B2FE /* ReCommendedCodeView.swift in Sources */,
 				0A7D5577295C4B3700EB2A6F /* ImageView.swift in Sources */,
 				0A9EF29929921AD0001551A5 /* DrawerView.swift in Sources */,
+				0AE1E6DA29D49B4C0059CFDC /* CalendarViewModel.swift in Sources */,
 				0A7D556F295C4A4A00EB2A6F /* Constant.swift in Sources */,
 				0A9EF2A429927A26001551A5 /* FindingFriendsView.swift in Sources */,
 				0A9EF29429920C5B001551A5 /* OtherPageView.swift in Sources */,

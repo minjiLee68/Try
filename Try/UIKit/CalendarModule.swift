@@ -9,7 +9,19 @@ import SwiftUI
 import FSCalendar
 
 class CalendarModule: UIViewController, FSCalendarDelegate {
+    var viewModel = CalendarViewModel.shared
     var calendar = FSCalendar()
+//    var dateFormatter = DateFormatter()
+    
+    var startDate = Date()
+    var endDate = Date()
+    
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.timeZone = TimeZone(identifier: "UTC")
+        return formatter
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,8 +65,23 @@ class CalendarModule: UIViewController, FSCalendarDelegate {
     }
 }
 
+extension CalendarModule: FSCalendarDelegateAppearance {
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
+        
+        let startDate = dateFormatter.date(from: ShareVar.startDate) ?? Date()
+        let endDate = dateFormatter.date(from: ShareVar.endDate) ?? Date()
+        
+        print("calendar -> \(startDate) \(endDate)")
+        
+        if date >= startDate && date <= endDate {
+            return UIColor.blue
+        } else {
+            return UIColor.clear
+        }
+    }
+}
+
 struct CalendarModuleViewController: UIViewControllerRepresentable {
-    
     typealias UIViewControllerType = UIViewController
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<CalendarModuleViewController>) -> UIViewController {
