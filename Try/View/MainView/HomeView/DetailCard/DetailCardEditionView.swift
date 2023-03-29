@@ -106,9 +106,7 @@ struct DetailCardEditionView: View {
                 }
             }
             
-            Button {
-                
-            } label: {
+            NavigationLink(destination: CalendarView()) {
                 HStack(spacing: 6) {
                     Image("routine")
                     

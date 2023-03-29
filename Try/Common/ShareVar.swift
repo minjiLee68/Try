@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct ShareVar {
-    static var userUid: String = ""
-    static var isMember: Bool = false
+    static var userUid = ""
+    static var isMember = false
     static var loginType = ""
-    static var friendList: [String] = []
+    static var startDate = ""
+    static var endDate = ""
     static var selectName = ""
     static var selectProfile = ""
     static var documentId = ""

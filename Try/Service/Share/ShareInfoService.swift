@@ -43,7 +43,9 @@ enum ShareInfoService {
         if type == .Editable {
             let ref = Firestore.firestore().collection(CollectionName.HabitShare.rawValue).document()
             try ref.setData(from: Contents(
-                time: self.dateString(),
+                today: self.dateString(),
+                startDate: ShareVar.startDate,
+                endDate: ShareVar.endDate,
                 uid: ShareVar.userUid,
                 nickName: userData.nickName,
                 profile: userData.userProfile,
@@ -66,7 +68,7 @@ enum ShareInfoService {
         let docRef = Firestore.firestore().collection(CollectionName.HabitShare.rawValue)
         let query = try await docRef.whereField("id", isEqualTo: ShareVar.documentId).getDocuments()
         let docId = query.documents.first?.documentID ?? ""
-        let content = try await docRef.document(docId).getDocument()
+//        let content = try await docRef.document(docId).getDocument()
         let impressionRef = docRef.document(docId).collection(CollectionName.Impression.rawValue).document(title)
         do {
             try impressionRef.setData(
@@ -160,7 +162,9 @@ enum ShareInfoService {
         
         let transformedContents = Contents(
             id: contents.id,
-            time: contents.time,
+            today: contents.today,
+            startDate: ShareVar.startDate,
+            endDate: ShareVar.endDate,
             uid: uid,
             nickName: nickName,
             profile: profile,

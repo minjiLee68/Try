@@ -64,9 +64,12 @@
 		0ACD84482967F3D000DDF990 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD84472967F3D000DDF990 /* LoginService.swift */; };
 		0ACD844B2967F43F00DDF990 /* NaverLoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD844A2967F43F00DDF990 /* NaverLoginModel.swift */; };
 		0ACD844E296FC99600DDF990 /* ProfileEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD844D296FC99600DDF990 /* ProfileEditorView.swift */; };
+		0AE1E6D529D42C460059CFDC /* CalendarModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE1E6D429D42C460059CFDC /* CalendarModule.swift */; };
 		0AEC496628E3405000917C53 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC496528E3405000917C53 /* Enums.swift */; };
 		0AF7DC9429CC76FD00E25CC6 /* NewFriendRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF7DC9329CC76FD00E25CC6 /* NewFriendRequestView.swift */; };
 		0AF7DC9629CC7E8400E25CC6 /* DetailCardEditionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF7DC9529CC7E8400E25CC6 /* DetailCardEditionView.swift */; };
+		0AF7DC9929D41BED00E25CC6 /* PushNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF7DC9829D41BED00E25CC6 /* PushNotificationView.swift */; };
+		0AF7DC9C29D420B600E25CC6 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF7DC9B29D420B600E25CC6 /* CalendarView.swift */; };
 		A34026DFCAC0609AF95E13B3 /* Pods_Try.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56ABA32DCD6DB90FA0EB03A6 /* Pods_Try.framework */; };
 /* End PBXBuildFile section */
 
@@ -120,9 +123,12 @@
 		0ACD84472967F3D000DDF990 /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		0ACD844A2967F43F00DDF990 /* NaverLoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginModel.swift; sourceTree = "<group>"; };
 		0ACD844D296FC99600DDF990 /* ProfileEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditorView.swift; sourceTree = "<group>"; };
+		0AE1E6D429D42C460059CFDC /* CalendarModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModule.swift; sourceTree = "<group>"; };
 		0AEC496528E3405000917C53 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		0AF7DC9329CC76FD00E25CC6 /* NewFriendRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFriendRequestView.swift; sourceTree = "<group>"; };
 		0AF7DC9529CC7E8400E25CC6 /* DetailCardEditionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCardEditionView.swift; sourceTree = "<group>"; };
+		0AF7DC9829D41BED00E25CC6 /* PushNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationView.swift; sourceTree = "<group>"; };
+		0AF7DC9B29D420B600E25CC6 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		56ABA32DCD6DB90FA0EB03A6 /* Pods_Try.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Try.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		787404724E8190271A5B28C1 /* Pods-Try.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Try.release.xcconfig"; path = "Target Support Files/Pods-Try/Pods-Try.release.xcconfig"; sourceTree = "<group>"; };
 		FDA935E6EE99B51D725DFF2C /* Pods-Try.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Try.debug.xcconfig"; path = "Target Support Files/Pods-Try/Pods-Try.debug.xcconfig"; sourceTree = "<group>"; };
@@ -387,6 +393,8 @@
 		0A84710C2960187600CB3432 /* DetailCard */ = {
 			isa = PBXGroup;
 			children = (
+				0AF7DC9A29D420A800E25CC6 /* Period */,
+				0AF7DC9729D41BB600E25CC6 /* Alarm */,
 				0A84710D2960188400CB3432 /* DetailCardView.swift */,
 				0A3FFDEB29AC9F3F00492ADC /* EditorContentsView.swift */,
 				0AF7DC9529CC7E8400E25CC6 /* DetailCardEditionView.swift */,
@@ -459,6 +467,7 @@
 		0AC9503B28DB5C18005B5774 /* Try */ = {
 			isa = PBXGroup;
 			children = (
+				0AE1E6D329D42C280059CFDC /* UIKit */,
 				0A435E8F29792412000A042A /* Service */,
 				0A35431829658F6300E9B2FE /* Extenstion */,
 				0A7D556A295C4A2B00EB2A6F /* Common */,
@@ -515,12 +524,36 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		0AE1E6D329D42C280059CFDC /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				0AE1E6D429D42C460059CFDC /* CalendarModule.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
 		0AF7DC9229CC76EF00E25CC6 /* Alert */ = {
 			isa = PBXGroup;
 			children = (
 				0AF7DC9329CC76FD00E25CC6 /* NewFriendRequestView.swift */,
 			);
 			path = Alert;
+			sourceTree = "<group>";
+		};
+		0AF7DC9729D41BB600E25CC6 /* Alarm */ = {
+			isa = PBXGroup;
+			children = (
+				0AF7DC9829D41BED00E25CC6 /* PushNotificationView.swift */,
+			);
+			path = Alarm;
+			sourceTree = "<group>";
+		};
+		0AF7DC9A29D420A800E25CC6 /* Period */ = {
+			isa = PBXGroup;
+			children = (
+				0AF7DC9B29D420B600E25CC6 /* CalendarView.swift */,
+			);
+			path = Period;
 			sourceTree = "<group>";
 		};
 		FBA8E0ECCC17FFB0B34A5A15 /* Pods */ = {
@@ -681,6 +714,7 @@
 				0A435E8E2979211C000A042A /* ShareInfoService.swift in Sources */,
 				0A9EF2A129922E1D001551A5 /* DrawerViewModel.swift in Sources */,
 				0A35431D2965901800E9B2FE /* Font.swift in Sources */,
+				0AF7DC9C29D420B600E25CC6 /* CalendarView.swift in Sources */,
 				0A7D5568295C483300EB2A6F /* NavigationCustomBar.swift in Sources */,
 				0A35431A29658F6F00E9B2FE /* View.swift in Sources */,
 				0ACD844B2967F43F00DDF990 /* NaverLoginModel.swift in Sources */,
@@ -689,6 +723,7 @@
 				0A7D557E295CA52400EB2A6F /* ShareVar.swift in Sources */,
 				0A7D5572295C4A9900EB2A6F /* WebImageView.swift in Sources */,
 				0A7D5558295C2A3500EB2A6F /* ProfileSettingView.swift in Sources */,
+				0AE1E6D529D42C460059CFDC /* CalendarModule.swift in Sources */,
 				0AEC496628E3405000917C53 /* Enums.swift in Sources */,
 				0A3FFDEC29AC9F3F00492ADC /* EditorContentsView.swift in Sources */,
 				0AF7DC9429CC76FD00E25CC6 /* NewFriendRequestView.swift in Sources */,
@@ -706,6 +741,7 @@
 				0A3543262965A9A000E9B2FE /* Contact.swift in Sources */,
 				0A3543232965A8D100E9B2FE /* MyPageViewModel.swift in Sources */,
 				0A4EC88F295AC98400A4BB86 /* UserInfo.swift in Sources */,
+				0AF7DC9929D41BED00E25CC6 /* PushNotificationView.swift in Sources */,
 				0A84710E2960188400CB3432 /* DetailCardView.swift in Sources */,
 				0A7D5555295C23DD00EB2A6F /* LoginView.swift in Sources */,
 				0A3543292965B29400E9B2FE /* MainView.swift in Sources */,

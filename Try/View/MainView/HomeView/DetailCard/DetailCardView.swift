@@ -24,14 +24,14 @@ struct DetailCardView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            navigationBar
-            
             if cardType == .Editable {
                 DetailCardEditionView(
                     mainViewModel: mainViewModel,
                     cardType: cardType,
                     isTab: $isTab)
             } else {
+                navigationBar
+                
                 detailContents
             }
             
@@ -120,18 +120,18 @@ extension DetailCardView {
         ZStack {
             NavigationCustomBar(naviType: .cardDetail, isButton: $isTab)
             
-            if cardType == .Details {
-                NavigationLink {
-                    DetailCardEditionView(
-                        mainViewModel: mainViewModel,
-                        cardType: cardType,
-                        isTab: $isTab)
-                } label: {
-                    Text("편집")
-                }
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .padding(.trailing, 20)
-            }
+//            if cardType == .Details {
+//                NavigationLink {
+//                    DetailCardEditionView(
+//                        mainViewModel: mainViewModel,
+//                        cardType: cardType,
+//                        isTab: $isTab)
+//                } label: {
+//                    Text("편집")
+//                }
+//                .frame(maxWidth: .infinity, alignment: .trailing)
+//                .padding(.trailing, 20)
+//            }
         }
         .padding(.top, 10)
     }

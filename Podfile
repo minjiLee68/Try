@@ -9,6 +9,7 @@ pod 'KakaoSDKCommon'
 pod 'KakaoSDKAuth'
 pod 'KakaoSDKUser'
 pod 'naveridlogin-sdk-ios'
+pod 'FSCalendar'
 
   # Pods for Try
 

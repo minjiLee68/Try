@@ -82,7 +82,7 @@ struct SubContentView: View {
             mainViewModel.detailContent?.subCheck[ShareVar.userUid] ?? 0
             
             // MARK: 미션완료 여부?
-            mainCheckOrSubCheck()
+//            mainCheckOrSubCheck()
             
             if let impressions = mainViewModel.detailContent?.impressions {
                 impressions.forEach { impression in

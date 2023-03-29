@@ -12,12 +12,21 @@ import SwiftUI
 struct device {
     // MARK: 노치 디자인인지 아닌지
     static var isNotch: Bool {
-        return Double(UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? -1) > 0
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+            return false
+        }
+        let windows = windowScene.windows
+        return Double(windows.first?.safeAreaInsets.bottom ?? -1) > 0
     }
+
     
     // MARK: 상태바 높이
     static var statusBarHeight: CGFloat {
-        return UIApplication.shared.windows.first?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+            return 0
+        }
+        let windows = windowScene.windows
+        return windows.first?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
     }
     
     // MARK: 네비게이션 바 높이
@@ -33,7 +42,11 @@ struct device {
     // MARK: 디바이스의 위쪽 여백 (Safe Area 위쪽 여백)
     // ** 위쪽 여백의 전체 높이 : topInset + statusBarHeight + navigationBarHeight(존재하는 경우) **
     static var topInset: CGFloat {
-        return UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+            return 0
+        }
+        let windows = windowScene.windows
+        return windows.first?.safeAreaInsets.top ?? 0
     }
     static var topHeight: CGFloat {
         return statusBarHeight + navigationBarHeight
@@ -42,7 +55,11 @@ struct device {
     // MARK: 디바이스의 아래쪽 여백 (Safe Area 아래쪽 여백)
     // ** 아래쪽 여백의 전체 높이 : bottomInset + tabBarHeight(존재하는 경우) **
     static var bottomInset: CGFloat {
-        return UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+            return 0
+        }
+        let windows = windowScene.windows
+        return windows.first?.safeAreaInsets.bottom ?? 0
     }
 
     
